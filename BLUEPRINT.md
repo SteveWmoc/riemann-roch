@@ -25,7 +25,7 @@ Status legend:
 - [x] Add a minimal library root.
 - [x] Add GitHub Actions CI.
 - [x] Verify that `Proj` and abstract sheaf cohomology can be imported together.
-- [ ] Inventory the exact Mathlib definitions needed for graded polynomial rings.
+- [x] Inventory the exact Mathlib definitions needed for graded polynomial rings.
 - [ ] Inventory the exact Mathlib definitions for homogeneous basic opens.
 - [ ] Inventory available sheaves of modules and Cech-complex infrastructure.
 - [ ] Record gaps that are likely to belong upstream in Mathlib.
