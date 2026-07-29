@@ -1,2 +1,3 @@
 import RiemannRoch.Basic
+import RiemannRoch.ProjectiveLine.GradedPolynomialRing
 import RiemannRoch.ProjectiveLine.Target
