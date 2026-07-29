@@ -1,5 +1,6 @@
 import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic
 import Mathlib.CategoryTheory.Sites.SheafCohomology.Basic
+import RiemannRoch.ProjectiveLine.GradedPolynomialRing
 
 /-!
 # Riemann-Roch on the projective line
@@ -10,14 +11,12 @@ The first flagship theorem of this project is
 
 for every field `k` and every integer `n`.
 
-This initial file is intentionally only an import boundary. It verifies that the
-project can simultaneously depend on Mathlib's `Proj` infrastructure and its
-abstract sheaf-cohomology infrastructure. Precise definitions will be introduced
-incrementally as the required APIs are mapped.
+This file is the integration boundary for the projective-line construction,
+Mathlib's `Proj` infrastructure, and abstract sheaf cohomology.
 
-Planned first steps:
+Current sequence:
 
-1. Define the graded polynomial ring used to construct `P^1_k`.
+1. Package the standard graded coordinate ring `k[X0, X1]`.
 2. Define a stable project-local abbreviation for the resulting `Proj`.
 3. Identify the two standard homogeneous basic opens.
 4. Prove that they cover `P^1_k`.
