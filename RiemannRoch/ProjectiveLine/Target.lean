@@ -1,6 +1,5 @@
-import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic
 import Mathlib.CategoryTheory.Sites.SheafCohomology.Basic
-import RiemannRoch.ProjectiveLine.GradedPolynomialRing
+import RiemannRoch.ProjectiveLine.BasicOpens
 
 /-!
 # Riemann-Roch on the projective line
@@ -17,12 +16,11 @@ Mathlib's `Proj` infrastructure, and abstract sheaf cohomology.
 Current sequence:
 
 1. Package the standard graded coordinate ring `k[X0, X1]`.
-2. Define a stable project-local abbreviation for the resulting `Proj`.
-3. Identify the two standard homogeneous basic opens.
-4. Prove that they cover `P^1_k`.
-5. Identify their coordinate rings and their intersection.
-6. Construct the twisting objects needed for `O(n)`.
-7. Calculate the resulting two-open Cech complex.
+2. Define `P^1_k` as its `Proj`.
+3. Package `D_+(X0)` and `D_+(X1)` and prove that they cover.
+4. Identify their coordinate rings and their intersection.
+5. Construct the twisting objects needed for `O(n)`.
+6. Calculate the resulting two-open Cech complex.
 -/
 
 namespace RiemannRoch.ProjectiveLine

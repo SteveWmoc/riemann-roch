@@ -26,7 +26,7 @@ Status legend:
 - [x] Add GitHub Actions CI.
 - [x] Verify that `Proj` and abstract sheaf cohomology can be imported together.
 - [x] Inventory the exact Mathlib definitions needed for graded polynomial rings.
-- [ ] Inventory the exact Mathlib definitions for homogeneous basic opens.
+- [x] Inventory the exact Mathlib definitions for homogeneous basic opens.
 - [ ] Inventory available sheaves of modules and Cech-complex infrastructure.
 - [ ] Record gaps that are likely to belong upstream in Mathlib.
 
@@ -37,11 +37,11 @@ represent every object in the first geometric milestone.
 
 ## Phase 1: The projective line
 
-- [ ] Construct the standard grading on `k[X0, X1]`.
-- [ ] Define a project-local abbreviation for `P^1_k = Proj k[X0, X1]`.
-- [ ] Define the homogeneous coordinates `X0` and `X1`.
-- [ ] Define the basic opens `D_+(X0)` and `D_+(X1)`.
-- [ ] Prove `D_+(X0) sup D_+(X1) = top`.
+- [x] Construct the standard grading on `k[X0, X1]`.
+- [x] Define a project-local abbreviation for `P^1_k = Proj k[X0, X1]`.
+- [x] Define the homogeneous coordinates `X0` and `X1`.
+- [x] Define the basic opens `D_+(X0)` and `D_+(X1)`.
+- [x] Prove `D_+(X0) sup D_+(X1) = top`.
 - [ ] Identify each standard open with an affine line.
 - [ ] Identify the overlap with the Laurent polynomial coordinate ring.
 - [ ] Package the standard two-open cover as a reusable object.
