@@ -46,7 +46,8 @@ lemma adjoin_coordinates_eq_top (k : Type*) [CommRing k] :
     Algebra.adjoin (grading k 0) (Set.range (coordinate k)) = ⊤ := by
   let S := Algebra.adjoin (grading k 0) (Set.range (coordinate k))
   change S = ⊤
-  refine top_unique fun p _ => ?_
+  refine top_unique fun p hp => ?_
+  clear hp
   induction p using MvPolynomial.induction_on with
   | C r =>
       exact S.algebraMap_mem ⟨MvPolynomial.C r, MvPolynomial.isHomogeneous_C Variable r⟩
