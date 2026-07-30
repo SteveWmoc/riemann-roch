@@ -110,8 +110,14 @@ The bridge from an `O_X`-module is
 SheafOfModules.toSheaf X.ringCatSheaf
 ```
 
-which forgets the module structure while retaining the sheaf condition.
-Abstract cohomology is then
+which forgets the module structure while retaining the sheaf condition. The
+project packages this bridge as
+
+```lean
+underlyingAbelianSheaf M
+```
+
+Abstract cohomology is then expressed by
 
 ```lean
 CategoryTheory.Sheaf.H F n
@@ -120,12 +126,19 @@ CategoryTheory.Sheaf.H F n
 where `F` is the underlying abelian sheaf. Internally this is an `Ext` group
 from the constant sheaf associated to `ULift ℤ`.
 
-The project packages this route as
+The declaration `Sheaf.H` has explicit `HasSheafify` and `HasExt` requirements.
+A direct project abbreviation for
 
 ```lean
-underlyingAbelianSheaf M
-abstractCohomology M n
+Sheaf.H (underlyingAbelianSheaf M) n
 ```
+
+was tested during this inventory. Typeclass search reached the derived-category
+localization requirement `Localization.HasSmallLocalizedHom` and did not
+synthesize within the default heartbeat budget. We therefore expose the
+forgetful bridge but do not conceal the derived-category requirements behind a
+project abbreviation. Establishing a stable scheme-module cohomology wrapper is
+a later infrastructure task.
 
 ## General Cech-complex infrastructure
 
@@ -175,7 +188,9 @@ standardCechComplexFunctor k
 standardCechComplex M
 ```
 
-for `M : (scheme k).Modules`.
+for `M : (scheme k).Modules`. The target category and universe must be stated
+explicitly as `AddCommGrpCat.{u}` for typeclass inference to recognize the
+required preadditive and product instances.
 
 ## Important limitation: the complex is unnormalized
 
@@ -204,7 +219,8 @@ For the project, these must be treated as distinct goals:
 
 1. compute an explicit normalized two-open complex;
 2. compare it with Mathlib's canonical unnormalized Cech complex;
-3. prove that the resulting Cech cohomology agrees with abstract sheaf
+3. establish the derived-category instances needed to use `Sheaf.H` reliably;
+4. prove that the resulting Cech cohomology agrees with abstract sheaf
    cohomology for the sheaves and cover under consideration.
 
 ## Design decision
@@ -219,4 +235,5 @@ comparison theorem. The likely upstream contributions are:
 - a scheme/open-cover wrapper around `cechComplexFunctor`;
 - a normalized finite-cover Cech complex with convenient formulas;
 - comparison maps between normalized and unnormalized Cech complexes;
+- an ergonomic scheme-module interface to derived sheaf cohomology;
 - an acyclic-cover theorem comparing Cech cohomology with `Sheaf.H`.
