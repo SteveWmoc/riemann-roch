@@ -1,5 +1,4 @@
-import Mathlib.CategoryTheory.Sites.SheafCohomology.Basic
-import RiemannRoch.ProjectiveLine.BasicOpens
+import RiemannRoch.ProjectiveLine.SheavesAndCech
 
 /-!
 # Riemann-Roch on the projective line
@@ -11,7 +10,8 @@ The first flagship theorem of this project is
 for every field `k` and every integer `n`.
 
 This file is the integration boundary for the projective-line construction,
-Mathlib's `Proj` infrastructure, and abstract sheaf cohomology.
+Mathlib's `Proj` infrastructure, sheaves of modules, Cech complexes, and
+abstract sheaf cohomology.
 
 Current sequence:
 
@@ -20,7 +20,8 @@ Current sequence:
 3. Package `D_+(X0)` and `D_+(X1)` and prove that they cover.
 4. Identify their coordinate rings and their intersection.
 5. Construct the twisting objects needed for `O(n)`.
-6. Calculate the resulting two-open Cech complex.
+6. Build and calculate a normalized two-open Cech complex.
+7. Compare it with Mathlib's canonical Cech complex and abstract cohomology.
 -/
 
 namespace RiemannRoch.ProjectiveLine

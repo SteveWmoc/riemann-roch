@@ -27,8 +27,8 @@ Status legend:
 - [x] Verify that `Proj` and abstract sheaf cohomology can be imported together.
 - [x] Inventory the exact Mathlib definitions needed for graded polynomial rings.
 - [x] Inventory the exact Mathlib definitions for homogeneous basic opens.
-- [ ] Inventory available sheaves of modules and Cech-complex infrastructure.
-- [ ] Record gaps that are likely to belong upstream in Mathlib.
+- [x] Inventory available sheaves of modules and Cech-complex infrastructure.
+- [x] Record gaps that are likely to belong upstream in Mathlib.
 
 ### Exit criterion
 
@@ -68,14 +68,16 @@ restriction data for an explicit Cech calculation.
 
 ## Phase 3: The two-open Cech calculation
 
+- [ ] Construct a normalized project-local two-open Cech complex.
 - [ ] Construct the degree-zero Cech differential.
 - [ ] Construct the degree-one Cech differential.
 - [ ] Identify global sections for `n >= 0`.
 - [ ] Prove vanishing of global sections for `n < 0`.
 - [ ] Compute first cohomology for all integers `n`.
-- [ ] Prove vanishing above degree one for this cover.
-- [ ] Reconcile the explicit calculation with Mathlib's abstract sheaf
-      cohomology.
+- [ ] Prove vanishing above degree one for the normalized complex.
+- [ ] Compare the normalized complex with Mathlib's canonical unnormalized
+      `standardCechComplex`.
+- [ ] Reconcile Cech cohomology with Mathlib's abstract sheaf cohomology.
 
 ### Expected dimension formulas
 
