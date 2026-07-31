@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "Riemann-Roch in Lean"
+type: software
+authors:
+  - family-names: "Sabean"
+    given-names: "Steven"
+repository-code: "https://github.com/SteveWmoc/riemann-roch"
+license: "MIT"
+version: "0.1.0"
+keywords:
+  - "Lean 4"
+  - "formalized mathematics"
+  - "algebraic geometry"
+  - "Riemann-Roch"
+  - "sheaf cohomology"
