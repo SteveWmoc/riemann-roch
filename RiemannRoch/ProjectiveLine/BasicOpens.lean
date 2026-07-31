@@ -1,5 +1,11 @@
-import RiemannRoch.ProjectiveLine.GradedPolynomialRing
+/-
+Copyright (c) 2026 Steven Sabean. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: Steven Sabean
+-/
+
 import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic
+import RiemannRoch.ProjectiveLine.GradedPolynomialRing
 
 /-!
 # The standard homogeneous basic opens of the projective line
@@ -36,6 +42,7 @@ abbrev x0BasicOpen (k : Type*) [CommRing k] : (scheme k).Opens :=
 abbrev x1BasicOpen (k : Type*) [CommRing k] : (scheme k).Opens :=
   standardBasicOpen k 1
 
+/-- Every homogeneous coordinate belongs to the degree-one component. -/
 lemma coordinate_mem_grading_one (k : Type*) [CommRing k] (i : Variable) :
     coordinate k i ∈ grading k 1 :=
   MvPolynomial.isHomogeneous_X k i
