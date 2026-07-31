@@ -32,8 +32,9 @@ Status legend:
 
 ### Exit criterion
 
-A short design note identifies the exact Lean types and declarations that will
-represent every object in the first geometric milestone.
+Focused design notes identify the exact Lean types and declarations that will
+represent every object in the first geometric milestone, together with the
+principal API gaps.
 
 ## Phase 1: The projective line
 
@@ -42,7 +43,11 @@ represent every object in the first geometric milestone.
 - [x] Define the homogeneous coordinates `X0` and `X1`.
 - [x] Define the basic opens `D_+(X0)` and `D_+(X1)`.
 - [x] Prove `D_+(X0) sup D_+(X1) = top`.
-- [ ] Identify each standard open with an affine line.
+- [x] Package the canonical affine presentation
+      `D_+(X_i) = Spec ((k[X0, X1]_(X_i))_0)`.
+- [~] Identify each homogeneous localization with a polynomial ring `k[t]`.
+- [ ] Compose the ring and scheme isomorphisms to identify each standard open
+      with an affine line.
 - [ ] Identify the overlap with the Laurent polynomial coordinate ring.
 - [ ] Package the standard two-open cover as a reusable object.
 
