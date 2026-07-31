@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 Steven Sabean. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: Steven Sabean
+-/
+
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic
 import RiemannRoch.ProjectiveLine.BasicOpens
@@ -49,6 +55,7 @@ noncomputable def standardAwayOpenImmersion (k : Type u) [CommRing k] (i : Varia
   AlgebraicGeometry.Proj.awayι (grading k) (coordinate k i)
     (coordinate_mem_grading_one k i) (by positivity)
 
+/-- The canonical chart map is an open immersion. -/
 instance (k : Type u) [CommRing k] (i : Variable) :
     IsOpenImmersion (standardAwayOpenImmersion k i) := by
   dsimp [standardAwayOpenImmersion]
@@ -86,6 +93,7 @@ noncomputable def chartPolynomialMap (k : Type u) [CommRing k] (i j : Variable) 
     Polynomial (grading k 0) →ₐ[grading k 0] standardAway k i :=
   Polynomial.aeval (chartCoordinate k i j)
 
+/-- Evaluation sends the polynomial variable to the corresponding ratio coordinate. -/
 @[simp]
 theorem chartPolynomialMap_X (k : Type u) [CommRing k] (i j : Variable) :
     chartPolynomialMap k i j Polynomial.X = chartCoordinate k i j := by
