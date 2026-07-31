@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 Steven Sabean. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: Steven Sabean
+-/
+
 import Mathlib.Algebra.Category.ModuleCat.Sheaf.LocallyFree
 import Mathlib.AlgebraicGeometry.Modules.Sheaf
 import Mathlib.AlgebraicGeometry.Modules.Tilde
