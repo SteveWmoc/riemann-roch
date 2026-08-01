@@ -45,7 +45,10 @@ principal API gaps.
 - [x] Prove `D_+(X0) sup D_+(X1) = top`.
 - [x] Package the canonical affine presentation
       `D_+(X_i) = Spec ((k[X0, X1]_(X_i))_0)`.
-- [~] Identify each homogeneous localization with a polynomial ring `k[t]`.
+- [x] Construct the map `k[t] -> (k[X0, X1]_(X0))_0`, its dehomogenization
+      left inverse, and prove injectivity.
+- [ ] Prove surjectivity and package the `X0` chart-ring equivalence.
+- [ ] Construct the corresponding `X1` chart-ring equivalence.
 - [ ] Compose the ring and scheme isomorphisms to identify each standard open
       with an affine line.
 - [ ] Identify the overlap with the Laurent polynomial coordinate ring.
