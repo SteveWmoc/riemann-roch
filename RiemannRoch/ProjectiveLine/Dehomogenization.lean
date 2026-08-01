@@ -20,7 +20,7 @@ k[t] -> (k[X_0, X_1]_(X_0))_0,   t |-> X_1 / X_0,
 
 together with a dehomogenization map in the reverse direction obtained by
 setting `X_0 = 1` and `X_1 = t`. The first milestone is to prove that
- dehomogenization is a left inverse, hence that the polynomial map is injective.
+dehomogenization is a left inverse, hence that the polynomial map is injective.
 
 Surjectivity, and therefore the full ring equivalence, is intentionally deferred
 to the next step.
@@ -85,7 +85,7 @@ theorem x0CoordinateRingDehomogenizeHom_x1 (k : Type u) [CommRing k] :
 noncomputable def x0LocalizationDehomogenizeHom (k : Type u) [CommRing k] :
     Localization.Away (coordinate k 0) →+* Polynomial k :=
   Localization.awayLift (x0CoordinateRingDehomogenizeHom k) (coordinate k 0) (by
-    simpa using (isUnit_one : IsUnit (1 : Polynomial k)))
+    simp)
 
 /-- Restrict dehomogenization to the degree-zero homogeneous localization. -/
 noncomputable def x0DehomogenizeHom (k : Type u) [CommRing k] :
@@ -96,17 +96,26 @@ noncomputable def x0DehomogenizeHom (k : Type u) [CommRing k] :
 @[simp]
 theorem x0DehomogenizeHom_affineCoordinate (k : Type u) [CommRing k] :
     x0DehomogenizeHom k (x0AffineCoordinate k) = Polynomial.X := by
-  simp [x0DehomogenizeHom, x0LocalizationDehomogenizeHom, x0AffineCoordinate,
-    chartCoordinate, x0CoordinateRingDehomogenizeHom, coordinate,
-    Localization.awayLift_mk]
+  let g := x0CoordinateRingDehomogenizeHom k
+  have hg : g (coordinate k 0) * (1 : Polynomial k) = 1 := by
+    simp [g]
+  have h := Localization.awayLift_mk g (coordinate k 0) (coordinate k 1)
+    (1 : Polynomial k) hg 1
+  simpa [x0DehomogenizeHom, x0LocalizationDehomogenizeHom, x0AffineCoordinate,
+    chartCoordinate, g, x0CoordinateRingDehomogenizeHom, coordinate] using h
 
 @[simp]
 theorem x0DehomogenizeHom_coefficient (k : Type u) [CommRing k] (r : k) :
     x0DehomogenizeHom k (coefficientToStandardAway k 0 r) = Polynomial.C r := by
-  simp [x0DehomogenizeHom, x0LocalizationDehomogenizeHom,
+  let g := x0CoordinateRingDehomogenizeHom k
+  have hg : g (coordinate k 0) * (1 : Polynomial k) = 1 := by
+    simp [g]
+  have h := Localization.awayLift_mk g (coordinate k 0) (MvPolynomial.C r)
+    (1 : Polynomial k) hg 0
+  simpa [x0DehomogenizeHom, x0LocalizationDehomogenizeHom,
     coefficientToStandardAway, degreeZeroCoefficientMap,
-    HomogeneousLocalization.fromZeroRingHom, x0CoordinateRingDehomogenizeHom,
-    Localization.awayLift_mk]
+    HomogeneousLocalization.fromZeroRingHom, g,
+    x0CoordinateRingDehomogenizeHom, coordinate] using h
 
 /-- Dehomogenization is a left inverse to the polynomial chart map. -/
 theorem x0DehomogenizeHom_leftInverse (k : Type u) [CommRing k] :
