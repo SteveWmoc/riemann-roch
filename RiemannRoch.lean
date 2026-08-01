@@ -8,6 +8,7 @@ import RiemannRoch.Basic
 import RiemannRoch.ProjectiveLine.GradedPolynomialRing
 import RiemannRoch.ProjectiveLine.BasicOpens
 import RiemannRoch.ProjectiveLine.AffineCharts
+import RiemannRoch.ProjectiveLine.Dehomogenization
 import RiemannRoch.ProjectiveLine.SheavesAndCech
 import RiemannRoch.ProjectiveLine.Target
 
@@ -16,6 +17,6 @@ import RiemannRoch.ProjectiveLine.Target
 
 This is the main import file for the public Riemann-Roch development. It exports
 the current projective-line construction, its standard homogeneous opens and
-affine presentations, and the module-sheaf and Cech-complex interfaces used by
-the planned cohomology calculation.
+affine presentations, the first dehomogenization maps, and the module-sheaf and
+Cech-complex interfaces used by the planned cohomology calculation.
 -/
