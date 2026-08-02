@@ -70,7 +70,8 @@ theorem x0Homogenize_C_mul_X_pow (k : Type u) [CommRing k]
     (r : k) {m n : ℕ} (h : m ≤ n) :
     x0Homogenize k (Polynomial.C r * Polynomial.X ^ m) n =
       MvPolynomial.C r * coordinate k 1 ^ m * coordinate k 0 ^ (n - m) := by
-  simp [x0Homogenize, Polynomial.homogenize_X_pow h, coordinate, swapVariable]
+  simpa [x0Homogenize, Polynomial.homogenize_X_pow h, coordinate, swapVariable,
+    mul_assoc]
 
 /-- Embed coefficients into the degree-zero part of the homogeneous coordinate
 ring. -/
@@ -152,22 +153,29 @@ homogeneous degree. -/
 noncomputable def x0HomogeneousFraction (k : Type u) [CommRing k]
     (p : Polynomial k) (n : ℕ) : standardAway k 0 :=
   HomogeneousLocalization.Away.mk (grading k)
-    (coordinate_mem_grading_one k 0) n (x0Homogenize k p n)
-    (x0Homogenize_mem_grading k p n)
+    (coordinate_mem_grading_one k 0) n (x0Homogenize k p n) (by
+      simpa using x0Homogenize_mem_grading k p n)
 
 @[simp]
 theorem x0HomogeneousFraction_zero (k : Type u) [CommRing k] (n : ℕ) :
     x0HomogeneousFraction k 0 n = 0 := by
-  ext
-  simp [x0HomogeneousFraction]
+  apply HomogeneousLocalization.val_injective
+  rw [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
+    Localization.mk_eq_mk']
+  exact IsLocalization.mk'_zero _
 
 @[simp]
 theorem x0HomogeneousFraction_add (k : Type u) [CommRing k]
     (p q : Polynomial k) (n : ℕ) :
     x0HomogeneousFraction k (p + q) n =
       x0HomogeneousFraction k p n + x0HomogeneousFraction k q n := by
-  ext
-  simp [x0HomogeneousFraction, Localization.add_mk]
+  apply HomogeneousLocalization.val_injective
+  simp only [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
+    x0Homogenize_add, HomogeneousLocalization.val_add]
+  rw [Localization.add_mk]
+  simp_rw [Localization.mk_eq_mk']
+  apply IsLocalization.mk'_eq_of_eq
+  ring
 
 /-- Extend dehomogenization to the ordinary localization away from `X_0`. -/
 noncomputable def x0LocalizationDehomogenizeHom (k : Type u) [CommRing k] :
