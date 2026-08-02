@@ -33,6 +33,38 @@ noncomputable section
 
 universe u
 
+/-- Swap the two homogeneous coordinate variables. -/
+def swapVariable : Variable → Variable := ![1, 0]
+
+@[simp]
+theorem swapVariable_zero : swapVariable 0 = 1 := rfl
+
+@[simp]
+theorem swapVariable_one : swapVariable 1 = 0 := rfl
+
+/-- Homogenize a polynomial using `X_0` as the homogenizing variable and `X_1`
+as the affine variable. -/
+noncomputable def x0Homogenize (k : Type u) [CommRing k]
+    (p : Polynomial k) (n : ℕ) : CoordinateRing k :=
+  MvPolynomial.rename swapVariable (Polynomial.homogenize p n)
+
+/-- The `X_0`-homogenization of a polynomial is homogeneous of the requested degree. -/
+theorem x0Homogenize_mem_grading (k : Type u) [CommRing k]
+    (p : Polynomial k) (n : ℕ) :
+    x0Homogenize k p n ∈ grading k n := by
+  exact (Polynomial.isHomogeneous_homogenize p).rename_isHomogeneous
+
+@[simp]
+theorem x0Homogenize_zero (k : Type u) [CommRing k] (n : ℕ) :
+    x0Homogenize k 0 n = 0 := by
+  simp [x0Homogenize]
+
+@[simp]
+theorem x0Homogenize_add (k : Type u) [CommRing k]
+    (p q : Polynomial k) (n : ℕ) :
+    x0Homogenize k (p + q) n = x0Homogenize k p n + x0Homogenize k q n := by
+  simp [x0Homogenize]
+
 /-- Embed coefficients into the degree-zero part of the homogeneous coordinate
 ring. -/
 noncomputable def degreeZeroCoefficientMap (k : Type u) [CommRing k] :
