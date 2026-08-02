@@ -161,7 +161,7 @@ theorem x0HomogeneousFraction_zero (k : Type u) [CommRing k] (n : ℕ) :
     x0HomogeneousFraction k 0 n = 0 := by
   apply HomogeneousLocalization.val_injective
   rw [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
-    Localization.mk_eq_mk']
+    x0Homogenize_zero, HomogeneousLocalization.val_zero, Localization.mk_eq_mk']
   exact IsLocalization.mk'_zero
     (M := Submonoid.powers (coordinate k 0))
     (S := Localization.Away (coordinate k 0))
