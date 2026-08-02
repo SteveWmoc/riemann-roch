@@ -5,6 +5,7 @@ Authors: Steven Sabean
 -/
 
 import Mathlib.Algebra.MvPolynomial.Eval
+import Mathlib.Algebra.Polynomial.Homogenize
 import Mathlib.RingTheory.Localization.Away.Basic
 import RiemannRoch.ProjectiveLine.AffineCharts
 
