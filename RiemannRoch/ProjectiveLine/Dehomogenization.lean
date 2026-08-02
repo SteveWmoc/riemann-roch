@@ -162,7 +162,10 @@ theorem x0HomogeneousFraction_zero (k : Type u) [CommRing k] (n : ℕ) :
   apply HomogeneousLocalization.val_injective
   rw [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
     Localization.mk_eq_mk']
-  exact IsLocalization.mk'_zero (S := Localization.Away (coordinate k 0)) _
+  exact IsLocalization.mk'_zero
+    (M := Submonoid.powers (coordinate k 0))
+    (S := Localization.Away (coordinate k 0))
+    ⟨coordinate k 0 ^ n, ⟨n, rfl⟩⟩
 
 @[simp]
 theorem x0HomogeneousFraction_add (k : Type u) [CommRing k]
@@ -176,7 +179,6 @@ theorem x0HomogeneousFraction_add (k : Type u) [CommRing k]
   simp_rw [Localization.mk_eq_mk']
   apply IsLocalization.mk'_eq_of_eq
   simp only [Submonoid.coe_mul]
-  rw [mul_two, pow_add]
   ring
 
 /-- Extend dehomogenization to the ordinary localization away from `X_0`. -/
