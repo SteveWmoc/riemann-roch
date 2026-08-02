@@ -126,9 +126,13 @@ theorem x0Homogenize_dehomogenize_of_isHomogeneous
       MvPolynomial.aeval ![Polynomial.X, (1 : Polynomial k)]
           (MvPolynomial.rename swapVariable p) =
         x0CoordinateRingDehomogenizeHom k p := by
-    simpa [x0CoordinateRingDehomogenizeHom, Function.comp_def, swapVariable] using
-      (MvPolynomial.aeval_rename swapVariable
-        ![Polynomial.X, (1 : Polynomial k)] p)
+    rw [MvPolynomial.aeval_rename]
+    change MvPolynomial.eval₂ Polynomial.C
+        (![Polynomial.X, (1 : Polynomial k)] ∘ swapVariable) p =
+      MvPolynomial.eval₂ Polynomial.C ![1, Polynomial.X] p
+    apply congr_arg (fun g => MvPolynomial.eval₂ Polynomial.C g p)
+    funext i
+    fin_cases i <;> rfl
   have h := Polynomial.homogenize_eq_of_isHomogeneous hp' heval
   rw [x0Homogenize, h, MvPolynomial.rename_rename]
   have hswap : swapVariable ∘ swapVariable = id := by
