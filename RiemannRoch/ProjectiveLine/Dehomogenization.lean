@@ -218,7 +218,8 @@ theorem x0DehomogenizeHom_eq_zero_iff (k : Type u) [CommRing k]
       simp [hdp]
     rw [← hrep]
     apply HomogeneousLocalization.val_injective
-    simp [HomogeneousLocalization.Away.val_mk, hpzero]
+    rw [HomogeneousLocalization.Away.val_mk, hpzero, Localization.mk_zero,
+      HomogeneousLocalization.val_zero]
   · rintro rfl
     simp
 
