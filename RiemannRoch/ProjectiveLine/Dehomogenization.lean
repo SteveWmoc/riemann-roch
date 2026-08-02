@@ -65,6 +65,13 @@ theorem x0Homogenize_add (k : Type u) [CommRing k]
     x0Homogenize k (p + q) n = x0Homogenize k p n + x0Homogenize k q n := by
   simp [x0Homogenize]
 
+@[simp]
+theorem x0Homogenize_C_mul_X_pow (k : Type u) [CommRing k]
+    (r : k) {m n : ℕ} (h : m ≤ n) :
+    x0Homogenize k (Polynomial.C r * Polynomial.X ^ m) n =
+      MvPolynomial.C r * coordinate k 1 ^ m * coordinate k 0 ^ (n - m) := by
+  simp [x0Homogenize, Polynomial.homogenize_X_pow h, coordinate, swapVariable]
+
 /-- Embed coefficients into the degree-zero part of the homogeneous coordinate
 ring. -/
 noncomputable def degreeZeroCoefficientMap (k : Type u) [CommRing k] :
@@ -139,6 +146,28 @@ theorem x0Homogenize_dehomogenize_of_isHomogeneous
     funext i
     fin_cases i <;> rfl
   rw [hswap, MvPolynomial.rename_id_apply]
+
+/-- The standard degree-zero fraction obtained from a polynomial and a chosen
+homogeneous degree. -/
+noncomputable def x0HomogeneousFraction (k : Type u) [CommRing k]
+    (p : Polynomial k) (n : ℕ) : standardAway k 0 :=
+  HomogeneousLocalization.Away.mk (grading k)
+    (coordinate_mem_grading_one k 0) n (x0Homogenize k p n)
+    (x0Homogenize_mem_grading k p n)
+
+@[simp]
+theorem x0HomogeneousFraction_zero (k : Type u) [CommRing k] (n : ℕ) :
+    x0HomogeneousFraction k 0 n = 0 := by
+  ext
+  simp [x0HomogeneousFraction]
+
+@[simp]
+theorem x0HomogeneousFraction_add (k : Type u) [CommRing k]
+    (p q : Polynomial k) (n : ℕ) :
+    x0HomogeneousFraction k (p + q) n =
+      x0HomogeneousFraction k p n + x0HomogeneousFraction k q n := by
+  ext
+  simp [x0HomogeneousFraction, Localization.add_mk]
 
 /-- Extend dehomogenization to the ordinary localization away from `X_0`. -/
 noncomputable def x0LocalizationDehomogenizeHom (k : Type u) [CommRing k] :
