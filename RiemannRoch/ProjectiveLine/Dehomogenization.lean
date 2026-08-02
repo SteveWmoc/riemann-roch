@@ -12,19 +12,18 @@ import RiemannRoch.ProjectiveLine.AffineCharts
 /-!
 # Dehomogenization on the first standard chart
 
-This file begins the explicit identification of the standard chart `D_+(X_0)`
-with the affine line. It defines the polynomial map
+This file identifies the degree-zero homogeneous localization on the first
+standard chart with a one-variable polynomial ring. It defines the polynomial
+map
 
 ```text
 k[t] -> (k[X_0, X_1]_(X_0))_0,   t |-> X_1 / X_0,
 ```
 
-together with a dehomogenization map in the reverse direction obtained by
-setting `X_0 = 1` and `X_1 = t`. The first milestone is to prove that
-dehomogenization is a left inverse, hence that the polynomial map is injective.
-
-Surjectivity, and therefore the full ring equivalence, is intentionally deferred
-to the next step.
+and the reverse dehomogenization map obtained by setting `X_0 = 1` and
+`X_1 = t`. Homogenization with respect to `X_0` reconstructs every homogeneous
+numerator, which proves that dehomogenization is injective. The two maps are
+therefore inverse ring equivalences.
 -/
 
 namespace RiemannRoch.ProjectiveLine
@@ -58,20 +57,6 @@ theorem x0Homogenize_mem_grading (k : Type u) [CommRing k]
 theorem x0Homogenize_zero (k : Type u) [CommRing k] (n : ℕ) :
     x0Homogenize k 0 n = 0 := by
   simp [x0Homogenize]
-
-@[simp]
-theorem x0Homogenize_add (k : Type u) [CommRing k]
-    (p q : Polynomial k) (n : ℕ) :
-    x0Homogenize k (p + q) n = x0Homogenize k p n + x0Homogenize k q n := by
-  simp [x0Homogenize]
-
-@[simp]
-theorem x0Homogenize_C_mul_X_pow (k : Type u) [CommRing k]
-    (r : k) {m n : ℕ} (h : m ≤ n) :
-    x0Homogenize k (Polynomial.C r * Polynomial.X ^ m) n =
-      MvPolynomial.C r * coordinate k 1 ^ m * coordinate k 0 ^ (n - m) := by
-  simpa [x0Homogenize, Polynomial.homogenize_X_pow h, coordinate, swapVariable,
-    mul_assoc]
 
 /-- Embed coefficients into the degree-zero part of the homogeneous coordinate
 ring. -/
@@ -148,39 +133,6 @@ theorem x0Homogenize_dehomogenize_of_isHomogeneous
     fin_cases i <;> rfl
   rw [hswap, MvPolynomial.rename_id_apply]
 
-/-- The standard degree-zero fraction obtained from a polynomial and a chosen
-homogeneous degree. -/
-noncomputable def x0HomogeneousFraction (k : Type u) [CommRing k]
-    (p : Polynomial k) (n : ℕ) : standardAway k 0 :=
-  HomogeneousLocalization.Away.mk (grading k)
-    (coordinate_mem_grading_one k 0) n (x0Homogenize k p n) (by
-      simpa using x0Homogenize_mem_grading k p n)
-
-@[simp]
-theorem x0HomogeneousFraction_zero (k : Type u) [CommRing k] (n : ℕ) :
-    x0HomogeneousFraction k 0 n = 0 := by
-  apply HomogeneousLocalization.val_injective
-  rw [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
-    x0Homogenize_zero, HomogeneousLocalization.val_zero, Localization.mk_eq_mk']
-  exact IsLocalization.mk'_zero
-    (M := Submonoid.powers (coordinate k 0))
-    (S := Localization.Away (coordinate k 0))
-    ⟨coordinate k 0 ^ n, ⟨n, rfl⟩⟩
-
-@[simp]
-theorem x0HomogeneousFraction_add (k : Type u) [CommRing k]
-    (p q : Polynomial k) (n : ℕ) :
-    x0HomogeneousFraction k (p + q) n =
-      x0HomogeneousFraction k p n + x0HomogeneousFraction k q n := by
-  apply HomogeneousLocalization.val_injective
-  simp only [x0HomogeneousFraction, HomogeneousLocalization.Away.val_mk,
-    x0Homogenize_add, HomogeneousLocalization.val_add]
-  rw [Localization.add_mk]
-  simp_rw [Localization.mk_eq_mk']
-  apply IsLocalization.mk'_eq_of_eq
-  simp only [Submonoid.coe_mul]
-  ring
-
 /-- Extend dehomogenization to the ordinary localization away from `X_0`. -/
 noncomputable def x0LocalizationDehomogenizeHom (k : Type u) [CommRing k] :
     Localization.Away (coordinate k 0) →+* Polynomial k :=
@@ -192,6 +144,21 @@ noncomputable def x0DehomogenizeHom (k : Type u) [CommRing k] :
     standardAway k 0 →+* Polynomial k :=
   (x0LocalizationDehomogenizeHom k).comp
     (algebraMap (standardAway k 0) (Localization.Away (coordinate k 0)))
+
+@[simp]
+theorem x0DehomogenizeHom_awayMk (k : Type u) [CommRing k]
+    (n : ℕ) (p : CoordinateRing k) (hp : p ∈ grading k n) :
+    x0DehomogenizeHom k
+        (HomogeneousLocalization.Away.mk (grading k)
+          (coordinate_mem_grading_one k 0) n p (by simpa using hp)) =
+      x0CoordinateRingDehomogenizeHom k p := by
+  let g := x0CoordinateRingDehomogenizeHom k
+  have hg : g (coordinate k 0) * (1 : Polynomial k) = 1 := by
+    simp [g]
+  have h := Localization.awayLift_mk g (coordinate k 0) p
+    (1 : Polynomial k) hg n
+  simpa [x0DehomogenizeHom, x0LocalizationDehomogenizeHom,
+    HomogeneousLocalization.algebraMap_apply, g] using h
 
 @[simp]
 theorem x0DehomogenizeHom_affineCoordinate (k : Type u) [CommRing k] :
@@ -231,6 +198,72 @@ theorem x0DehomogenizeHom_leftInverse (k : Type u) [CommRing k] :
 theorem x0PolynomialMap_injective (k : Type u) [CommRing k] :
     Function.Injective (x0PolynomialMap k) :=
   (x0DehomogenizeHom_leftInverse k).injective
+
+/-- An element of the first chart ring dehomogenizes to zero exactly when it is zero. -/
+theorem x0DehomogenizeHom_eq_zero_iff (k : Type u) [CommRing k]
+    (z : standardAway k 0) :
+    x0DehomogenizeHom k z = 0 ↔ z = 0 := by
+  constructor
+  · intro hz
+    obtain ⟨n, p, hp, hrep⟩ :=
+      HomogeneousLocalization.Away.mk_surjective (grading k)
+        (coordinate_mem_grading_one k 0) z
+    have hp' : p ∈ grading k n := by
+      simpa using hp
+    have hdp : x0CoordinateRingDehomogenizeHom k p = 0 := by
+      rw [← x0DehomogenizeHom_awayMk k n p hp', hrep]
+      exact hz
+    have hpzero : p = 0 := by
+      rw [← x0Homogenize_dehomogenize_of_isHomogeneous k p n hp']
+      simp [hdp]
+    rw [← hrep]
+    apply HomogeneousLocalization.val_injective
+    simp [HomogeneousLocalization.Away.val_mk, hpzero]
+  · rintro rfl
+    simp
+
+/-- Dehomogenization on the first chart ring is injective. -/
+theorem x0DehomogenizeHom_injective (k : Type u) [CommRing k] :
+    Function.Injective (x0DehomogenizeHom k) := by
+  intro z w h
+  apply sub_eq_zero.mp
+  apply (x0DehomogenizeHom_eq_zero_iff k (z - w)).mp
+  rw [map_sub, h, sub_self]
+
+/-- Dehomogenization is also a right inverse to the polynomial chart map. -/
+theorem x0DehomogenizeHom_rightInverse (k : Type u) [CommRing k] :
+    Function.RightInverse (x0DehomogenizeHom k) (x0PolynomialMap k) := by
+  intro z
+  apply x0DehomogenizeHom_injective k
+  exact x0DehomogenizeHom_leftInverse k (x0DehomogenizeHom k z)
+
+/-- The polynomial map into the first standard chart ring is surjective. -/
+theorem x0PolynomialMap_surjective (k : Type u) [CommRing k] :
+    Function.Surjective (x0PolynomialMap k) :=
+  (x0DehomogenizeHom_rightInverse k).surjective
+
+/-- The first standard chart ring is the one-variable polynomial ring. -/
+noncomputable def x0ChartRingEquiv (k : Type u) [CommRing k] :
+    Polynomial k ≃+* standardAway k 0 :=
+  RingEquiv.ofBijective (x0PolynomialMap k)
+    ⟨x0PolynomialMap_injective k, x0PolynomialMap_surjective k⟩
+
+@[simp]
+theorem x0ChartRingEquiv_apply (k : Type u) [CommRing k] (p : Polynomial k) :
+    x0ChartRingEquiv k p = x0PolynomialMap k p :=
+  rfl
+
+@[simp]
+theorem x0ChartRingEquiv_symm_apply (k : Type u) [CommRing k]
+    (z : standardAway k 0) :
+    (x0ChartRingEquiv k).symm z = x0DehomogenizeHom k z := by
+  apply x0PolynomialMap_injective k
+  calc
+    x0PolynomialMap k ((x0ChartRingEquiv k).symm z) = z := by
+      change x0ChartRingEquiv k ((x0ChartRingEquiv k).symm z) = z
+      exact (x0ChartRingEquiv k).apply_symm_apply z
+    _ = x0PolynomialMap k (x0DehomogenizeHom k z) :=
+      (x0DehomogenizeHom_rightInverse k z).symm
 
 end
 
