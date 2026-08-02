@@ -114,6 +114,28 @@ theorem x0CoordinateRingDehomogenizeHom_x1 (k : Type u) [CommRing k] :
     x0CoordinateRingDehomogenizeHom k (coordinate k 1) = Polynomial.X := by
   simp [x0CoordinateRingDehomogenizeHom, coordinate]
 
+/-- A homogeneous bivariate polynomial is recovered by dehomogenizing at
+`X_0 = 1` and then homogenizing again with `X_0`. -/
+theorem x0Homogenize_dehomogenize_of_isHomogeneous
+    (k : Type u) [CommRing k] (p : CoordinateRing k) (n : ℕ)
+    (hp : p ∈ grading k n) :
+    x0Homogenize k (x0CoordinateRingDehomogenizeHom k p) n = p := by
+  have hp' : (MvPolynomial.rename swapVariable p).IsHomogeneous n :=
+    hp.rename_isHomogeneous
+  have heval :
+      MvPolynomial.aeval ![Polynomial.X, (1 : Polynomial k)]
+          (MvPolynomial.rename swapVariable p) =
+        x0CoordinateRingDehomogenizeHom k p := by
+    simpa [x0CoordinateRingDehomogenizeHom, Function.comp_def, swapVariable] using
+      (MvPolynomial.aeval_rename swapVariable
+        ![Polynomial.X, (1 : Polynomial k)] p)
+  have h := Polynomial.homogenize_eq_of_isHomogeneous hp' heval
+  rw [x0Homogenize, h, MvPolynomial.rename_rename]
+  have hswap : swapVariable ∘ swapVariable = id := by
+    funext i
+    fin_cases i <;> rfl
+  rw [hswap, MvPolynomial.rename_id_apply]
+
 /-- Extend dehomogenization to the ordinary localization away from `X_0`. -/
 noncomputable def x0LocalizationDehomogenizeHom (k : Type u) [CommRing k] :
     Localization.Away (coordinate k 0) →+* Polynomial k :=
