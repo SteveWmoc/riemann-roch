@@ -36,12 +36,12 @@ The repository currently provides:
 - the standard opens `D_+(X0)` and `D_+(X1)` and a proof that they cover;
 - canonical affine presentations of the standard opens as spectra of degree-zero homogeneous localizations;
 - the ratio coordinates `X1 / X0` and `X0 / X1` in those chart rings;
-- a ring equivalence `k[t] ≃+* (k[X0, X1]_(X0))_0` sending `t` to `X1 / X0`, with inverse given by dehomogenization at `X0 = 1`;
+- ring equivalences from `k[t]` to both standard chart rings, sending `t` to `X1 / X0` on the first chart and to `X0 / X1` on the second, with inverses given by the corresponding dehomogenization maps;
 - the category of sheaves of modules on `P^1_k` and the structure sheaf as a module;
 - a specialization of Mathlib's canonical Cech-complex functor to the standard two-open cover;
 - design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
 
-The next algebraic milestone is to construct the corresponding chart-ring equivalence on the `X1` chart and compose the ring and spectrum isomorphisms to identify both standard opens with the affine line. The overlap, twisting sheaves `O(n)`, the explicit normalized Cech calculation, and the comparison with derived sheaf cohomology remain future work.
+The next algebraic milestone is to compose the ring and spectrum isomorphisms to identify both standard opens with the affine line. The overlap, twisting sheaves `O(n)`, the explicit normalized Cech calculation, and the comparison with derived sheaf cohomology remain future work.
 
 ## Repository layout
 
@@ -51,6 +51,7 @@ The next algebraic milestone is to construct the corresponding chart-ring equiva
 | `RiemannRoch.ProjectiveLine.BasicOpens` | `P^1_k`, its standard homogeneous opens, and the cover theorem |
 | `RiemannRoch.ProjectiveLine.AffineCharts` | Homogeneous-localization chart rings, open immersions, and ratio coordinates |
 | `RiemannRoch.ProjectiveLine.Dehomogenization` | The `X0` polynomial chart map, dehomogenization, and chart-ring equivalence |
+| `RiemannRoch.ProjectiveLine.X1Dehomogenization` | The `X1` polynomial chart map, dehomogenization, and chart-ring equivalence |
 | `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical standard-cover Cech complex |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
