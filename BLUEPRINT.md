@@ -49,7 +49,7 @@ principal API gaps.
       left inverse, and prove injectivity.
 - [x] Prove surjectivity and package the `X0` chart-ring equivalence.
 - [x] Construct the corresponding `X1` chart-ring equivalence.
-- [ ] Compose the ring and scheme isomorphisms to identify each standard open
+- [x] Compose the ring and scheme isomorphisms to identify each standard open
       with an affine line.
 - [ ] Identify the overlap with the Laurent polynomial coordinate ring.
 - [ ] Package the standard two-open cover as a reusable object.

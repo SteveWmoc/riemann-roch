@@ -10,6 +10,7 @@ import RiemannRoch.ProjectiveLine.BasicOpens
 import RiemannRoch.ProjectiveLine.AffineCharts
 import RiemannRoch.ProjectiveLine.Dehomogenization
 import RiemannRoch.ProjectiveLine.X1Dehomogenization
+import RiemannRoch.ProjectiveLine.AffineLineCharts
 import RiemannRoch.ProjectiveLine.SheavesAndCech
 import RiemannRoch.ProjectiveLine.Target
 
@@ -17,8 +18,7 @@ import RiemannRoch.ProjectiveLine.Target
 # Riemann-Roch in Lean
 
 This is the main import file for the public Riemann-Roch development. It exports
-the current projective-line construction, its standard homogeneous opens and
-affine presentations, the two dehomogenization chart-ring equivalences, and the
-module-sheaf and Cech-complex interfaces used by the planned cohomology
-calculation.
+the current projective-line construction, its standard homogeneous opens, the
+two affine-line chart isomorphisms, and the module-sheaf and Cech-complex
+interfaces used by the planned cohomology calculation.
 -/
