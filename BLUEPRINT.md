@@ -51,7 +51,9 @@ principal API gaps.
 - [x] Construct the corresponding `X1` chart-ring equivalence.
 - [x] Compose the ring and scheme isomorphisms to identify each standard open
       with an affine line.
-- [ ] Identify the overlap with the Laurent polynomial coordinate ring.
+- [x] Identify the overlap with the Laurent polynomial coordinate ring.
+- [ ] Prove that the two Laurent overlap coordinates differ by inversion
+      `t ↦ t⁻¹`.
 - [ ] Package the standard two-open cover as a reusable object.
 
 ### Exit criterion
