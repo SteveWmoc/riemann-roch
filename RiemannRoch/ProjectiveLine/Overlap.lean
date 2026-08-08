@@ -103,6 +103,38 @@ noncomputable def laurentPolynomialEquivOverlapAway
     (T := Submonoid.powers (x0AffineCoordinate k))
     (x0ChartRingEquiv k) hpow
 
+/-- The punctured affine line over `k`, represented by the Laurent polynomial
+spectrum. -/
+abbrev puncturedAffineLine (k : Type u) [CommRing k] : Scheme.{u} :=
+  Spec (.of <| LaurentPolynomial k)
+
+/-- The homogeneous basic open cut out by `X_0 X_1` has its canonical affine
+presentation by the overlap ring. -/
+noncomputable def overlapBasicOpenIsoSpec (k : Type u) [CommRing k] :
+    (AlgebraicGeometry.Proj.basicOpen (grading k) (overlapDenominator k)).toScheme ≅
+      Spec (.of <| overlapAway k) :=
+  AlgebraicGeometry.Proj.basicOpenIsoSpec (grading k) (overlapDenominator k)
+    (overlapDenominator_mem_grading_two k) (by norm_num)
+
+/-- The literal intersection of the two standard opens is the spectrum of the
+product homogeneous localization. -/
+noncomputable def standardOverlapIsoSpec (k : Type u) [CommRing k] :
+    (standardOverlap k).toScheme ≅ Spec (.of <| overlapAway k) :=
+  (scheme k).isoOfEq (basicOpen_overlapDenominator_eq_standardOverlap k).symm ≪≫
+    overlapBasicOpenIsoSpec k
+
+/-- The spectrum of the overlap ring is the punctured affine line. -/
+noncomputable def overlapSpecIsoPuncturedAffineLine (k : Type u) [CommRing k] :
+    Spec (.of <| overlapAway k) ≅ puncturedAffineLine k :=
+  Scheme.Spec.mapIso (laurentPolynomialEquivOverlapAway k).toCommRingCatIso.op
+
+/-- The overlap `D_+(X_0) ∩ D_+(X_1)` is the punctured affine line
+`Spec k[t, t⁻¹]`. -/
+noncomputable def standardOverlapIsoPuncturedAffineLine
+    (k : Type u) [CommRing k] :
+    (standardOverlap k).toScheme ≅ puncturedAffineLine k :=
+  standardOverlapIsoSpec k ≪≫ overlapSpecIsoPuncturedAffineLine k
+
 end
 
 end RiemannRoch.ProjectiveLine
