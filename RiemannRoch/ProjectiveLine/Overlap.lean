@@ -18,7 +18,8 @@ homogeneous localization away from `f * g` is the localization of the `f`-chart
 ring at the degree-zero ratio coordinate `g ^ deg(f) / f ^ deg(g)`. For
 `f = X_0` and `g = X_1`, this ratio is exactly `X_1 / X_0`. Transporting along
 the previously constructed equivalence `k[t] ≃+* standardAway k 0` therefore
-identifies the overlap ring with `k[t, t⁻¹]`.
+identifies the overlap ring with `k[t, t⁻¹]`. The symmetric construction from
+the `X_1` chart is also recorded in preparation for the transition map.
 -/
 
 namespace RiemannRoch.ProjectiveLine
@@ -78,7 +79,8 @@ theorem overlapAway_isLocalization_x0AffineCoordinate
       (coordinate_mem_grading_one k 1) rfl (by norm_num))
 
 /-- The Laurent polynomial ring is isomorphic to the coordinate ring of the
-standard overlap. Under this equivalence, `T` corresponds to `X_1 / X_0`. -/
+standard overlap via the `X_0` chart. Under this equivalence, `T` corresponds
+to `X_1 / X_0`. -/
 noncomputable def laurentPolynomialEquivOverlapAway
     (k : Type u) [CommRing k] :
     LaurentPolynomial k ≃+* overlapAway k := by
@@ -102,6 +104,56 @@ noncomputable def laurentPolynomialEquivOverlapAway
     (M := Submonoid.powers (Polynomial.X : Polynomial k))
     (T := Submonoid.powers (x0AffineCoordinate k))
     (x0ChartRingEquiv k) hpow
+
+/-- The `X_1` chart map into the product localization. -/
+noncomputable abbrev x1ToOverlapMap (k : Type u) [CommRing k] :
+    standardAway k 1 →+* overlapAway k :=
+  HomogeneousLocalization.awayMap (grading k)
+    (coordinate_mem_grading_one k 0)
+    (mul_comm (coordinate k 0) (coordinate k 1))
+
+/-- The overlap ring is the localization of the `X_1` chart ring at the affine
+coordinate `X_0 / X_1`. -/
+theorem overlapAway_isLocalization_x1AffineCoordinate
+    (k : Type u) [CommRing k] :
+    letI := (x1ToOverlapMap k).toAlgebra
+    IsLocalization.Away (x1AffineCoordinate k) (overlapAway k) := by
+  simpa [x1AffineCoordinate, chartCoordinate,
+    HomogeneousLocalization.Away.isLocalizationElem] using
+    (HomogeneousLocalization.Away.isLocalization_mul
+      (𝒜 := grading k)
+      (f := coordinate k 1) (g := coordinate k 0)
+      (x := overlapDenominator k)
+      (coordinate_mem_grading_one k 1)
+      (coordinate_mem_grading_one k 0)
+      (mul_comm (coordinate k 0) (coordinate k 1)) (by norm_num))
+
+/-- The Laurent polynomial ring is isomorphic to the coordinate ring of the
+standard overlap via the `X_1` chart. Under this equivalence, `T` corresponds
+to `X_0 / X_1`. -/
+noncomputable def laurentPolynomialEquivOverlapAwayX1
+    (k : Type u) [CommRing k] :
+    LaurentPolynomial k ≃+* overlapAway k := by
+  letI := (x1ToOverlapMap k).toAlgebra
+  letI : IsLocalization.Away (x1AffineCoordinate k) (overlapAway k) :=
+    overlapAway_isLocalization_x1AffineCoordinate k
+  have hpow :
+      (Submonoid.powers (Polynomial.X : Polynomial k)).map
+          (x1ChartRingEquiv k).toMonoidHom =
+        Submonoid.powers (x1AffineCoordinate k) := by
+    ext y
+    constructor
+    · rintro ⟨z, ⟨n, rfl⟩, rfl⟩
+      refine ⟨n, ?_⟩
+      simp [x1ChartRingEquiv_apply]
+    · rintro ⟨n, rfl⟩
+      refine ⟨Polynomial.X ^ n, ⟨n, rfl⟩, ?_⟩
+      simp [x1ChartRingEquiv_apply]
+  exact IsLocalization.ringEquivOfRingEquiv
+    (S := LaurentPolynomial k) (Q := overlapAway k)
+    (M := Submonoid.powers (Polynomial.X : Polynomial k))
+    (T := Submonoid.powers (x1AffineCoordinate k))
+    (x1ChartRingEquiv k) hpow
 
 /-- The punctured affine line over `k`, represented by the Laurent polynomial
 spectrum. -/
