@@ -57,7 +57,7 @@ theorem basicOpen_overlapDenominator_eq_standardOverlap
     (AlgebraicGeometry.Proj.basicOpen_mul (grading k) (coordinate k 0) (coordinate k 1))
 
 /-- The `X_0` chart map into the product localization. -/
-noncomputable def x0ToOverlapMap (k : Type u) [CommRing k] :
+noncomputable abbrev x0ToOverlapMap (k : Type u) [CommRing k] :
     standardAway k 0 →+* overlapAway k :=
   HomogeneousLocalization.awayMap (grading k)
     (coordinate_mem_grading_one k 1) rfl
@@ -68,7 +68,7 @@ theorem overlapAway_isLocalization_x0AffineCoordinate
     (k : Type u) [CommRing k] :
     letI := (x0ToOverlapMap k).toAlgebra
     IsLocalization.Away (x0AffineCoordinate k) (overlapAway k) := by
-  simpa [x0ToOverlapMap, x0AffineCoordinate, chartCoordinate,
+  simpa [x0AffineCoordinate, chartCoordinate,
     HomogeneousLocalization.Away.isLocalizationElem] using
     (HomogeneousLocalization.Away.isLocalization_mul
       (𝒜 := grading k)
