@@ -29,7 +29,7 @@ theorem overlapAffineCoordinates_mul_eq_one (k : Type u) [CommRing k] :
   simp only [x0AffineCoordinate, x1AffineCoordinate, chartCoordinate,
     x0ToOverlapMap, x1ToOverlapMap, HomogeneousLocalization.awayMap_mk,
     HomogeneousLocalization.val_mul, HomogeneousLocalization.val_one,
-    HomogeneousLocalization.val_mk]
+    HomogeneousLocalization.Away.val_mk]
   rw [Localization.mk_mul, ← Localization.mk_one,
     Localization.mk_eq_mk_iff, Localization.r_iff_exists]
   refine ⟨1, ?_⟩
