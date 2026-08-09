@@ -117,7 +117,6 @@ theorem laurentPolynomialEquivOverlapAway_T_one_eq_X1_T_neg_one
         laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1) = 1 := by
     rw [← map_mul, ← LaurentPolynomial.T_add]
     norm_num
-    simp
   calc
     laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) =
         laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) * 1 :=
