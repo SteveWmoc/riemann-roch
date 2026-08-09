@@ -52,7 +52,7 @@ principal API gaps.
 - [x] Compose the ring and scheme isomorphisms to identify each standard open
       with an affine line.
 - [x] Identify the overlap with the Laurent polynomial coordinate ring.
-- [ ] Prove that the two Laurent overlap coordinates differ by inversion
+- [x] Prove that the two Laurent overlap coordinates differ by inversion
       `t ↦ t⁻¹`.
 - [ ] Package the standard two-open cover as a reusable object.
 

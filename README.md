@@ -39,11 +39,12 @@ The repository currently provides:
 - ring equivalences from `k[t]` to both standard chart rings, sending `t` to `X1 / X0` on the first chart and to `X0 / X1` on the second, with inverses given by the corresponding dehomogenization maps;
 - explicit scheme isomorphisms identifying both standard opens with the affine line `Spec k[t]`;
 - Laurent-polynomial presentations of the overlap from both charts and a scheme isomorphism `D_+(X0) ∩ D_+(X1) ≅ Spec k[t,t⁻¹]`;
+- an explicit Laurent transition automorphism between the two overlap coordinates, proved equal to inversion `t ↦ t⁻¹`;
 - the category of sheaves of modules on `P^1_k` and the structure sheaf as a module;
 - a specialization of Mathlib's canonical Cech-complex functor to the standard two-open cover;
 - design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
 
-The next algebraic milestone is to prove that the two Laurent overlap coordinates differ by `t ↦ t⁻¹` and then package the standard two-open cover as a reusable object. Twisting sheaves `O(n)`, the explicit normalized Cech calculation, and the comparison with derived sheaf cohomology remain future work.
+The next algebraic milestone is to package the standard two-open cover as a reusable object. Twisting sheaves `O(n)`, the explicit normalized Cech calculation, and the comparison with derived sheaf cohomology remain future work.
 
 ## Repository layout
 
@@ -56,6 +57,7 @@ The next algebraic milestone is to prove that the two Laurent overlap coordinate
 | `RiemannRoch.ProjectiveLine.X1Dehomogenization` | The `X1` polynomial chart map, dehomogenization, and chart-ring equivalence |
 | `RiemannRoch.ProjectiveLine.AffineLineCharts` | The affine line and the scheme isomorphisms from both standard opens |
 | `RiemannRoch.ProjectiveLine.Overlap` | The Laurent-polynomial overlap ring, both chart localizations, and the punctured-affine-line isomorphism |
+| `RiemannRoch.ProjectiveLine.OverlapTransition` | Reciprocal overlap coordinates and the Laurent inversion transition map |
 | `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical standard-cover Cech complex |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
