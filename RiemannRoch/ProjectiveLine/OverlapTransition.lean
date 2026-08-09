@@ -36,6 +36,32 @@ theorem overlapAffineCoordinates_mul_eq_one (k : Type u) [CommRing k] :
   simp [overlapDenominator]
   ring
 
+/-- On ordinary polynomials, the `X₀` Laurent presentation is the chart-ring
+map followed by localization to the overlap. -/
+@[simp]
+theorem laurentPolynomialEquivOverlapAway_toLaurent
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    laurentPolynomialEquivOverlapAway k (Polynomial.toLaurent p) =
+      x0ToOverlapMap k (x0ChartRingEquiv k p) := by
+  letI := (x0ToOverlapMap k).toAlgebra
+  change laurentPolynomialEquivOverlapAway k
+      (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
+    algebraMap (standardAway k 0) (overlapAway k) (x0ChartRingEquiv k p)
+  simp [laurentPolynomialEquivOverlapAway]
+
+/-- On ordinary polynomials, the `X₁` Laurent presentation is the chart-ring
+map followed by localization to the overlap. -/
+@[simp]
+theorem laurentPolynomialEquivOverlapAwayX1_toLaurent
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    laurentPolynomialEquivOverlapAwayX1 k (Polynomial.toLaurent p) =
+      x1ToOverlapMap k (x1ChartRingEquiv k p) := by
+  letI := (x1ToOverlapMap k).toAlgebra
+  change laurentPolynomialEquivOverlapAwayX1 k
+      (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
+    algebraMap (standardAway k 1) (overlapAway k) (x1ChartRingEquiv k p)
+  simp [laurentPolynomialEquivOverlapAwayX1]
+
 end
 
 end RiemannRoch.ProjectiveLine
