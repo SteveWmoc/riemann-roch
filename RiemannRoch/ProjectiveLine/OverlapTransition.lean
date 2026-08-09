@@ -44,11 +44,14 @@ theorem laurentPolynomialEquivOverlapAway_toLaurent
     laurentPolynomialEquivOverlapAway k (Polynomial.toLaurent p) =
       x0ToOverlapMap k (x0ChartRingEquiv k p) := by
   letI := (x0ToOverlapMap k).toAlgebra
+  letI : IsLocalization.Away (x0AffineCoordinate k) (overlapAway k) :=
+    overlapAway_isLocalization_x0AffineCoordinate k
   change laurentPolynomialEquivOverlapAway k
       (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
     algebraMap (standardAway k 0) (overlapAway k) (x0ChartRingEquiv k p)
   simp [laurentPolynomialEquivOverlapAway]
-  rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq]
+  rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq,
+    x0ChartRingEquiv_apply]
 
 /-- On ordinary polynomials, the `X₁` Laurent presentation is the chart-ring
 map followed by localization to the overlap. -/
@@ -58,11 +61,14 @@ theorem laurentPolynomialEquivOverlapAwayX1_toLaurent
     laurentPolynomialEquivOverlapAwayX1 k (Polynomial.toLaurent p) =
       x1ToOverlapMap k (x1ChartRingEquiv k p) := by
   letI := (x1ToOverlapMap k).toAlgebra
+  letI : IsLocalization.Away (x1AffineCoordinate k) (overlapAway k) :=
+    overlapAway_isLocalization_x1AffineCoordinate k
   change laurentPolynomialEquivOverlapAwayX1 k
       (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
     algebraMap (standardAway k 1) (overlapAway k) (x1ChartRingEquiv k p)
   simp [laurentPolynomialEquivOverlapAwayX1]
-  rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq]
+  rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq,
+    x1ChartRingEquiv_apply]
 
 end
 
