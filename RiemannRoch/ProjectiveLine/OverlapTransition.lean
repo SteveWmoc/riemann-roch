@@ -70,6 +70,109 @@ theorem laurentPolynomialEquivOverlapAwayX1_toLaurent
   rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq]
   rfl
 
+/-- The Laurent generator in the `X₀` presentation maps to `X₁ / X₀`. -/
+@[simp]
+theorem laurentPolynomialEquivOverlapAway_T_one
+    (k : Type u) [CommRing k] :
+    laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) =
+      x0ToOverlapMap k (x0AffineCoordinate k) := by
+  simpa using laurentPolynomialEquivOverlapAway_toLaurent k Polynomial.X
+
+/-- The Laurent generator in the `X₁` presentation maps to `X₀ / X₁`. -/
+@[simp]
+theorem laurentPolynomialEquivOverlapAwayX1_T_one
+    (k : Type u) [CommRing k] :
+    laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1) =
+      x1ToOverlapMap k (x1AffineCoordinate k) := by
+  simpa using laurentPolynomialEquivOverlapAwayX1_toLaurent k Polynomial.X
+
+/-- The two Laurent presentations agree on coefficients. -/
+theorem laurentPolynomialEquivOverlapAway_C_eq_X1_C
+    (k : Type u) [CommRing k] (r : k) :
+    laurentPolynomialEquivOverlapAway k (LaurentPolynomial.C r) =
+      laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.C r) := by
+  calc
+    laurentPolynomialEquivOverlapAway k (LaurentPolynomial.C r) =
+        x0ToOverlapMap k (x0ChartRingEquiv k (Polynomial.C r)) := by
+      simpa using laurentPolynomialEquivOverlapAway_toLaurent k (Polynomial.C r)
+    _ = x1ToOverlapMap k (x1ChartRingEquiv k (Polynomial.C r)) := by
+      simp [x0ChartRingEquiv_apply, x1ChartRingEquiv_apply,
+        coefficientToStandardAway, x0ToOverlapMap, x1ToOverlapMap,
+        HomogeneousLocalization.awayMap_fromZeroRingHom]
+    _ = laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.C r) := by
+      simpa using (laurentPolynomialEquivOverlapAwayX1_toLaurent k (Polynomial.C r)).symm
+
+/-- The `X₀` Laurent generator is the inverse Laurent generator in the `X₁`
+presentation. -/
+theorem laurentPolynomialEquivOverlapAway_T_one_eq_X1_T_neg_one
+    (k : Type u) [CommRing k] :
+    laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) =
+      laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T (-1)) := by
+  have hcoord :
+      laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) *
+        laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1) = 1 := by
+    simpa using overlapAffineCoordinates_mul_eq_one k
+  have hinv :
+      laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T (-1)) *
+        laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1) = 1 := by
+    rw [← map_mul, ← LaurentPolynomial.T_add]
+    norm_num
+    simp
+  calc
+    laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) =
+        laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) * 1 :=
+      (mul_one _).symm
+    _ = laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) *
+        (laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T (-1)) *
+          laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1)) := by
+      rw [hinv]
+    _ = (laurentPolynomialEquivOverlapAway k (LaurentPolynomial.T 1) *
+        laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T 1)) *
+          laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T (-1)) := by
+      ring
+    _ = laurentPolynomialEquivOverlapAwayX1 k (LaurentPolynomial.T (-1)) := by
+      rw [hcoord, one_mul]
+
+/-- The `X₀` Laurent presentation is the `X₁` Laurent presentation after
+substituting `T ↦ T⁻¹`. -/
+theorem laurentPolynomialEquivOverlapAway_eq_X1_comp_invert
+    (k : Type u) [CommRing k] :
+    (laurentPolynomialEquivOverlapAway k).toRingHom =
+      (laurentPolynomialEquivOverlapAwayX1 k).toRingHom.comp
+        (LaurentPolynomial.invert (R := k)).toRingEquiv.toRingHom := by
+  apply IsLocalization.ringHom_ext (Submonoid.powers (Polynomial.X : Polynomial k))
+  apply Polynomial.ringHom_ext
+  · intro r
+    simpa using laurentPolynomialEquivOverlapAway_C_eq_X1_C k r
+  · simpa using laurentPolynomialEquivOverlapAway_T_one_eq_X1_T_neg_one k
+
+/-- Change Laurent coordinates on the overlap from the `X₀` chart coordinate
+`X₁ / X₀` to the `X₁` chart coordinate `X₀ / X₁`. -/
+noncomputable def overlapLaurentTransition (k : Type u) [CommRing k] :
+    LaurentPolynomial k ≃+* LaurentPolynomial k :=
+  (laurentPolynomialEquivOverlapAway k).trans
+    (laurentPolynomialEquivOverlapAwayX1 k).symm
+
+/-- The standard overlap transition is Laurent-polynomial inversion
+`T ↦ T⁻¹`. -/
+theorem overlapLaurentTransition_eq_invert (k : Type u) [CommRing k] :
+    overlapLaurentTransition k =
+      (LaurentPolynomial.invert (R := k)).toRingEquiv := by
+  apply RingEquiv.ext
+  intro f
+  apply (laurentPolynomialEquivOverlapAwayX1 k).injective
+  have hf := RingHom.congr_fun
+    (laurentPolynomialEquivOverlapAway_eq_X1_comp_invert k) f
+  simpa [overlapLaurentTransition] using hf
+
+/-- On Laurent monomials, the overlap transition negates the exponent. -/
+@[simp]
+theorem overlapLaurentTransition_T (k : Type u) [CommRing k] (n : ℤ) :
+    overlapLaurentTransition k (LaurentPolynomial.T n) =
+      LaurentPolynomial.T (-n) := by
+  rw [overlapLaurentTransition_eq_invert]
+  simp
+
 end
 
 end RiemannRoch.ProjectiveLine
