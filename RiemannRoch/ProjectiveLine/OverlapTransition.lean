@@ -26,8 +26,15 @@ theorem overlapAffineCoordinates_mul_eq_one (k : Type u) [CommRing k] :
     x0ToOverlapMap k (x0AffineCoordinate k) *
       x1ToOverlapMap k (x1AffineCoordinate k) = 1 := by
   apply HomogeneousLocalization.val_injective
-  simp [x0AffineCoordinate, x1AffineCoordinate, chartCoordinate,
-    overlapDenominator]
+  simp only [x0AffineCoordinate, x1AffineCoordinate, chartCoordinate,
+    x0ToOverlapMap, x1ToOverlapMap, HomogeneousLocalization.awayMap_mk,
+    HomogeneousLocalization.val_mul, HomogeneousLocalization.val_one,
+    HomogeneousLocalization.val_mk]
+  rw [Localization.mk_mul, ← Localization.mk_one,
+    Localization.mk_eq_mk_iff, Localization.r_iff_exists]
+  refine ⟨1, ?_⟩
+  simp [overlapDenominator]
+  ring
 
 end
 
