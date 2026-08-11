@@ -28,8 +28,8 @@ noncomputable section
 universe u
 
 /-- The standard two-open cover `D_+(X₀), D_+(X₁)` of `P¹_k`, packaged as a
-scheme-theoretic open cover. -/
-noncomputable def standardOpenCover (k : Type u) [CommRing k] :
+scheme-theoretic open cover. Its index type reduces definitionally to `Fin 2`. -/
+noncomputable abbrev standardOpenCover (k : Type u) [CommRing k] :
     (scheme k).OpenCover :=
   (scheme k).openCoverOfIsOpenCover (standardBasicOpen k)
     (.mk (iSup_standardBasicOpen_eq_top k))
@@ -49,7 +49,7 @@ standard homogeneous basic open. -/
 @[simp]
 theorem standardOpenCover_opensRange (k : Type u) [CommRing k] (i : Variable) :
     ((standardOpenCover k).f i).opensRange = standardBasicOpen k i := by
-  simp [standardOpenCover]
+  rw [standardOpenCover_f, Scheme.Opens.opensRange_ι]
 
 /-- The first component of the standard cover is the affine line. -/
 noncomputable def standardOpenCoverX0IsoAffineLine
