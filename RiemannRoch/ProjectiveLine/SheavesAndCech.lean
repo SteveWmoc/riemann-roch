@@ -9,14 +9,14 @@ import Mathlib.AlgebraicGeometry.Modules.Sheaf
 import Mathlib.AlgebraicGeometry.Modules.Tilde
 import Mathlib.CategoryTheory.Sites.SheafCohomology.Basic
 import Mathlib.CategoryTheory.Sites.SheafCohomology.Cech
-import RiemannRoch.ProjectiveLine.BasicOpens
+import RiemannRoch.ProjectiveLine.StandardCover
 
 /-!
 # Module sheaves and the standard Cech complex
 
 This file records the exact Mathlib interfaces that connect sheaves of modules
 on the projective line with abstract sheaf cohomology and with the Cech complex
-of the standard two-open cover.
+of the bundled standard two-open cover.
 
 No comparison theorem between the Cech complex and abstract sheaf cohomology is
 asserted here. Mathlib currently supplies the two constructions separately.
@@ -48,12 +48,22 @@ noncomputable def underlyingAbelianSheaf {k : Type u} [CommRing k]
     (M : ModuleSheaf k) :=
   (SheafOfModules.toSheaf (scheme k).ringCatSheaf).obj M
 
-/-- The general Cech-complex functor specialized to the standard cover
+/-- The family of open ranges underlying the bundled standard cover. -/
+abbrev standardCoverOpens (k : Type u) [CommRing k] :
+    Variable → (scheme k).Opens :=
+  fun i => ((standardOpenCover k).f i).opensRange
+
+@[simp]
+theorem standardCoverOpens_apply (k : Type u) [CommRing k] (i : Variable) :
+    standardCoverOpens k i = standardBasicOpen k i :=
+  standardOpenCover_opensRange k i
+
+/-- The general Cech-complex functor specialized to the bundled standard cover
 `D_+(X_0), D_+(X_1)` of `P^1_k`. -/
 noncomputable def standardCechComplexFunctor (k : Type u) [CommRing k] :
     ((scheme k).Opensᵒᵖ ⥤ AddCommGrpCat.{u}) ⥤
       CochainComplex AddCommGrpCat.{u} ℕ :=
-  CategoryTheory.cechComplexFunctor (A := AddCommGrpCat.{u}) (standardBasicOpen k)
+  CategoryTheory.cechComplexFunctor (A := AddCommGrpCat.{u}) (standardCoverOpens k)
 
 /-- The Cech cochain complex of the standard cover with coefficients in a
 sheaf of modules, after forgetting to its underlying abelian presheaf. -/
