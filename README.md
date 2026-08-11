@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance is complete, and Phase 1 is developing explicit affine charts for the projective line. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. The next phase constructs the twisting objects `O(n)`. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -40,11 +40,12 @@ The repository currently provides:
 - explicit scheme isomorphisms identifying both standard opens with the affine line `Spec k[t]`;
 - Laurent-polynomial presentations of the overlap from both charts and a scheme isomorphism `D_+(X0) ∩ D_+(X1) ≅ Spec k[t,t⁻¹]`;
 - an explicit Laurent transition automorphism between the two overlap coordinates, proved equal to inversion `t ↦ t⁻¹`;
+- the standard two-open cover packaged as Mathlib's native `Scheme.OpenCover`, together with its affine-line components and punctured-affine-line overlap;
 - the category of sheaves of modules on `P^1_k` and the structure sheaf as a module;
-- a specialization of Mathlib's canonical Cech-complex functor to the standard two-open cover;
+- a specialization of Mathlib's canonical Cech-complex functor derived from the bundled standard cover;
 - design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
 
-The next algebraic milestone is to package the standard two-open cover as a reusable object. Twisting sheaves `O(n)`, the explicit normalized Cech calculation, and the comparison with derived sheaf cohomology remain future work.
+The next milestone is to choose and implement the construction of the twisting objects `O(n)`, either from shifted graded modules or from transition data on the standard cover. The explicit normalized Cech calculation and the comparison with derived sheaf cohomology remain later work.
 
 ## Repository layout
 
@@ -58,7 +59,8 @@ The next algebraic milestone is to package the standard two-open cover as a reus
 | `RiemannRoch.ProjectiveLine.AffineLineCharts` | The affine line and the scheme isomorphisms from both standard opens |
 | `RiemannRoch.ProjectiveLine.Overlap` | The Laurent-polynomial overlap ring, both chart localizations, and the punctured-affine-line isomorphism |
 | `RiemannRoch.ProjectiveLine.OverlapTransition` | Reciprocal overlap coordinates and the Laurent inversion transition map |
-| `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical standard-cover Cech complex |
+| `RiemannRoch.ProjectiveLine.StandardCover` | The bundled `Scheme.OpenCover`, affine chart components, and overlap presentation |
+| `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical Cech complex derived from the bundled cover |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
 | [`BLUEPRINT.md`](BLUEPRINT.md) | Detailed phased roadmap and progress tracker |
@@ -84,12 +86,11 @@ Run `lake update` only when intentionally changing the pinned dependency metadat
 
 ## Roadmap
 
-1. Complete the affine-coordinate descriptions of `P^1_k` and its standard overlap.
-2. Construct the twisting sheaves `O(n)` with explicit restriction data.
-3. Calculate a normalized two-open Cech complex.
-4. Prove `chi(P^1_k, O(n)) = n + 1`.
-5. Extend the infrastructure to smooth projective curves.
-6. Develop the K-theoretic and intersection-theoretic ingredients for Hirzebruch-Riemann-Roch and Grothendieck-Riemann-Roch.
+1. Construct the twisting objects `O(n)` with explicit restriction data on the standard cover.
+2. Calculate a normalized two-open Cech complex.
+3. Prove `chi(P^1_k, O(n)) = n + 1`.
+4. Extend the infrastructure to smooth projective curves.
+5. Develop the K-theoretic and intersection-theoretic ingredients for Hirzebruch-Riemann-Roch and Grothendieck-Riemann-Roch.
 
 The full dependency-aware roadmap is maintained in [`BLUEPRINT.md`](BLUEPRINT.md).
 
