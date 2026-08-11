@@ -59,8 +59,9 @@ theorem standardOpenCover_f (k : Type u) [CommRing k] (i : Variable) :
 standard homogeneous basic open. -/
 @[simp]
 theorem standardOpenCover_opensRange (k : Type u) [CommRing k] (i : Variable) :
-    ((standardOpenCover k).f i).opensRange = standardBasicOpen k i :=
-  Scheme.Opens.opensRange_ι
+    ((standardOpenCover k).f i).opensRange = standardBasicOpen k i := by
+  change (standardBasicOpen k i).ι.opensRange = standardBasicOpen k i
+  exact Scheme.Opens.opensRange_ι _
 
 /-- The first component of the standard cover is the affine line. -/
 noncomputable def standardOpenCoverX0IsoAffineLine
