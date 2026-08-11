@@ -54,7 +54,7 @@ principal API gaps.
 - [x] Identify the overlap with the Laurent polynomial coordinate ring.
 - [x] Prove that the two Laurent overlap coordinates differ by inversion
       `t ↦ t⁻¹`.
-- [ ] Package the standard two-open cover as a reusable object.
+- [x] Package the standard two-open cover as a reusable object.
 
 ### Exit criterion
 
