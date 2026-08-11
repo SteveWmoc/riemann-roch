@@ -11,7 +11,7 @@ import RiemannRoch.ProjectiveLine.OverlapTransition
 # The standard two-open cover of the projective line
 
 This file packages the standard opens `D_+(X₀)` and `D_+(X₁)` as Mathlib's
-native scheme-theoretic `Scheme.OpenCover`.  The cover is indexed by `Fin 2`,
+native scheme-theoretic `Scheme.OpenCover`. The cover is indexed by `Fin 2`,
 its component schemes are the corresponding open subschemes, and its component
 maps are the canonical open immersions into `P¹`.
 
@@ -28,11 +28,22 @@ noncomputable section
 universe u
 
 /-- The standard two-open cover `D_+(X₀), D_+(X₁)` of `P¹_k`, packaged as a
-scheme-theoretic open cover. Its index type reduces definitionally to `Fin 2`. -/
+scheme-theoretic open cover. Its index type is definitionally `Fin 2`. -/
 noncomputable abbrev standardOpenCover (k : Type u) [CommRing k] :
     (scheme k).OpenCover :=
-  (scheme k).openCoverOfIsOpenCover (standardBasicOpen k)
-    (.mk (iSup_standardBasicOpen_eq_top k))
+  { I₀ := Variable
+    X := fun i => (standardBasicOpen k i).toScheme
+    f := fun i => (standardBasicOpen k i).ι
+    mem₀ := by
+      rw [Scheme.presieve₀_mem_precoverage_iff]
+      refine ⟨fun x => ?_, inferInstance⟩
+      have hx : x ∈ ⨆ i : Variable, standardBasicOpen k i := by
+        rw [iSup_standardBasicOpen_eq_top k]
+        trivial
+      rw [Opens.mem_iSup] at hx
+      obtain ⟨i, hi⟩ := hx
+      use i
+      simpa using hi }
 
 @[simp]
 theorem standardOpenCover_X (k : Type u) [CommRing k] (i : Variable) :
@@ -48,8 +59,8 @@ theorem standardOpenCover_f (k : Type u) [CommRing k] (i : Variable) :
 standard homogeneous basic open. -/
 @[simp]
 theorem standardOpenCover_opensRange (k : Type u) [CommRing k] (i : Variable) :
-    ((standardOpenCover k).f i).opensRange = standardBasicOpen k i := by
-  rw [standardOpenCover_f, Scheme.Opens.opensRange_ι]
+    ((standardOpenCover k).f i).opensRange = standardBasicOpen k i :=
+  Scheme.Opens.opensRange_ι
 
 /-- The first component of the standard cover is the affine line. -/
 noncomputable def standardOpenCoverX0IsoAffineLine
