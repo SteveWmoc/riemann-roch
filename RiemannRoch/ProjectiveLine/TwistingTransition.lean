@@ -52,7 +52,7 @@ theorem twistTransition_zero (k : Type u) [CommRing k] :
 theorem twistTransition_add (k : Type u) [CommRing k] (m n : ℤ) :
     twistTransition k (m + n) =
       twistTransition k m * twistTransition k n := by
-  simpa [twistTransition] using (LaurentPolynomial.T_add (R := k) m n)
+  exact LaurentPolynomial.T_add (R := k) m n
 
 @[simp]
 theorem twistTransition_neg_mul (k : Type u) [CommRing k] (n : ℤ) :
@@ -110,7 +110,7 @@ theorem overlapLaurentTransition_twistTransition
     (k : Type u) [CommRing k] (n : ℤ) :
     overlapLaurentTransition k (twistTransition k n) =
       twistTransition k (-n) := by
-  simpa [twistTransition] using overlapLaurentTransition_T k n
+  exact overlapLaurentTransition_T k n
 
 /-- Under the overlap coordinate change, the coefficient transition factor
 becomes the frame transition factor. -/
