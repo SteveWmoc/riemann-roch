@@ -63,8 +63,10 @@ coordinate-ring descriptions.
 
 ## Phase 2: Twisting objects
 
-- [ ] Decide whether to construct `O(n)` first from shifted graded modules or by
-      transition data on the standard cover.
+- [x] Choose transition data on the standard cover as the first construction of
+      `O(n)`, with a future comparison to the shifted-graded-module construction.
+- [x] Define the Laurent frame transition factors `t^n`, coefficient transport
+      factors `t^(-n)`, and their basic unit and coordinate-change identities.
 - [ ] Define `O(n)` for every integer `n`.
 - [ ] Prove `O(0)` is the structure sheaf.
 - [ ] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
