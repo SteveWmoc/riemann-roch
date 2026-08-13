@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. The next phase constructs the twisting objects `O(n)`. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is underway: the construction of `O(n)` will use transition data on the standard cover, and the Laurent transition factors have been packaged. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -43,9 +43,10 @@ The repository currently provides:
 - the standard two-open cover packaged as Mathlib's native `Scheme.OpenCover`, together with its affine-line components and punctured-affine-line overlap;
 - the category of sheaves of modules on `P^1_k` and the structure sheaf as a module;
 - a specialization of Mathlib's canonical Cech-complex functor derived from the bundled standard cover;
+- the Phase 2 transition factors for `O(n)`, with the convention `e₁ = t^n e₀`, coefficient transport by `t^(-n)`, unit identities, and compatibility with the Laurent coordinate inversion;
 - design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
 
-The next milestone is to choose and implement the construction of the twisting objects `O(n)`, either from shifted graded modules or from transition data on the standard cover. The explicit normalized Cech calculation and the comparison with derived sheaf cohomology remain later work.
+The next milestone is to glue the two trivial rank-one module sheaves on the standard cover into a global `twistingSheaf k n`, using the packaged coefficient transition factor on the overlap. The explicit normalized Cech calculation and the comparison with derived sheaf cohomology remain later work.
 
 ## Repository layout
 
@@ -61,10 +62,11 @@ The next milestone is to choose and implement the construction of the twisting o
 | `RiemannRoch.ProjectiveLine.OverlapTransition` | Reciprocal overlap coordinates and the Laurent inversion transition map |
 | `RiemannRoch.ProjectiveLine.StandardCover` | The bundled `Scheme.OpenCover`, affine chart components, and overlap presentation |
 | `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical Cech complex derived from the bundled cover |
+| `RiemannRoch.ProjectiveLine.TwistingTransition` | Laurent frame and coefficient transition factors for the twisting sheaves `O(n)` |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
 | [`BLUEPRINT.md`](BLUEPRINT.md) | Detailed phased roadmap and progress tracker |
-| [`docs/`](docs/) | Phase 0 API inventories and design decisions |
+| [`docs/`](docs/) | API inventories and design decisions, including the Phase 2 twisting-object convention |
 
 ## Quick start
 
