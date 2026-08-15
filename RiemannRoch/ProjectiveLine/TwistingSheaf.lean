@@ -92,7 +92,11 @@ noncomputable def overlapLaurentSection (k : Type u) [CommRing k]
       (homOfLE (show V.unop ≤ ⊤ from le_top)).op
       (overlapLaurentTopSection k f)
   rw [← ConcreteCategory.comp_apply, ← Functor.map_comp]
-  congr
+  have h :
+      (homOfLE (show U.unop ≤ ⊤ from le_top)).op ≫ g =
+        (homOfLE (show V.unop ≤ ⊤ from le_top)).op :=
+    Subsingleton.elim _ _
+  rw [h]
 
 /-- Multiplication by the coefficient transition factor `t^(-n)` as an
 endomorphism of the trivial rank-one sheaf on the overlap. -/
