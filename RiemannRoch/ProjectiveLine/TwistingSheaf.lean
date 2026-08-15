@@ -67,12 +67,29 @@ noncomputable abbrev overlapTrivialModule (k : Type u) [CommRing k] :
     (overlapScheme k).Modules :=
   SheafOfModules.unit (overlapScheme k).ringCatSheaf
 
-/-- A Laurent polynomial, regarded as a global section of the structure sheaf
-on the standard overlap via its explicit identification with `Spec k[t,t⁻¹]`. -/
-noncomputable def overlapLaurentSection (k : Type u) [CommRing k]
-    (f : LaurentPolynomial k) : (overlapTrivialModule k).sections :=
+/-- A Laurent polynomial, regarded as a section over the top open of the
+standard overlap via its explicit identification with `Spec k[t,t⁻¹]`. -/
+noncomputable def overlapLaurentTopSection (k : Type u) [CommRing k]
+    (f : LaurentPolynomial k) : Γ(overlapScheme k, ⊤) :=
   (standardOverlapIsoPuncturedAffineLine k).hom.appTop
     ((Scheme.ΓSpecIso (.of <| LaurentPolynomial k)).inv f)
+
+/-- A Laurent polynomial, regarded as a global section of the trivial
+rank-one module sheaf on the standard overlap. -/
+noncomputable def overlapLaurentSection (k : Type u) [CommRing k]
+    (f : LaurentPolynomial k) : (overlapTrivialModule k).sections := by
+  refine PresheafOfModules.sectionsMk
+    (M := (overlapTrivialModule k).val)
+    (fun U => (overlapScheme k).presheaf.map (homOfLE U.unop.leTop).op
+      (overlapLaurentTopSection k f)) ?_
+  intro U V g
+  change (overlapScheme k).presheaf.map g
+      ((overlapScheme k).presheaf.map (homOfLE U.unop.leTop).op
+        (overlapLaurentTopSection k f)) =
+    (overlapScheme k).presheaf.map (homOfLE V.unop.leTop).op
+      (overlapLaurentTopSection k f)
+  rw [← ConcreteCategory.comp_apply, ← Functor.map_comp]
+  congr
 
 /-- Multiplication by the coefficient transition factor `t^(-n)` as an
 endomorphism of the trivial rank-one sheaf on the overlap. -/
