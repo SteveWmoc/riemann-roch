@@ -16,6 +16,7 @@ import RiemannRoch.ProjectiveLine.OverlapTransition
 import RiemannRoch.ProjectiveLine.StandardCover
 import RiemannRoch.ProjectiveLine.SheavesAndCech
 import RiemannRoch.ProjectiveLine.TwistingTransition
+import RiemannRoch.ProjectiveLine.TwistingSheaf
 import RiemannRoch.ProjectiveLine.Target
 
 /-!
@@ -26,6 +27,5 @@ the current projective-line construction, its standard homogeneous opens, the
 two affine-line chart isomorphisms, the Laurent-polynomial overlap and its
 coordinate transition map, the bundled standard open cover, the module-sheaf
 and Cech-complex interfaces used by the planned cohomology calculation, and the
-Laurent transition factors that begin the construction of the twisting sheaves
-`O(n)`.
+transition-data construction of the twisting sheaves `O(n)`.
 -/

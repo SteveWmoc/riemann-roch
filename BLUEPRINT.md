@@ -67,7 +67,7 @@ coordinate-ring descriptions.
       `O(n)`, with a future comparison to the shifted-graded-module construction.
 - [x] Define the Laurent frame transition factors `t^n`, coefficient transport
       factors `t^(-n)`, and their basic unit and coordinate-change identities.
-- [ ] Define `O(n)` for every integer `n`.
+- [x] Define `O(n)` for every integer `n`.
 - [ ] Prove `O(0)` is the structure sheaf.
 - [ ] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
 - [ ] Prove the expected tensor and duality isomorphisms.
