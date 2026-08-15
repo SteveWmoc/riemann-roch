@@ -80,13 +80,16 @@ noncomputable def overlapLaurentSection (k : Type u) [CommRing k]
     (f : LaurentPolynomial k) : (overlapTrivialModule k).sections := by
   refine PresheafOfModules.sectionsMk
     (M := (overlapTrivialModule k).val)
-    (fun U => (overlapScheme k).presheaf.map (homOfLE U.unop.leTop).op
+    (fun U => (overlapScheme k).presheaf.map
+      (homOfLE (show U.unop ≤ ⊤ from le_top)).op
       (overlapLaurentTopSection k f)) ?_
   intro U V g
   change (overlapScheme k).presheaf.map g
-      ((overlapScheme k).presheaf.map (homOfLE U.unop.leTop).op
+      ((overlapScheme k).presheaf.map
+        (homOfLE (show U.unop ≤ ⊤ from le_top)).op
         (overlapLaurentTopSection k f)) =
-    (overlapScheme k).presheaf.map (homOfLE V.unop.leTop).op
+    (overlapScheme k).presheaf.map
+      (homOfLE (show V.unop ≤ ⊤ from le_top)).op
       (overlapLaurentTopSection k f)
   rw [← ConcreteCategory.comp_apply, ← Functor.map_comp]
   congr
