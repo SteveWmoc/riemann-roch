@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is underway: the transition functions have been packaged and `O(n)` is now constructed globally for every integer `n`. The next step is to prove its standard-chart restriction formulas and identify `O(0)` with the structure sheaf. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is underway: the transition functions have been packaged, `O(n)` is constructed globally for every integer `n`, and its canonical local components and overlap gluing property are available through a public API. The next step is to prove its standard-chart restriction isomorphisms and identify `O(0)` with the structure sheaf. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -45,9 +45,10 @@ The repository currently provides:
 - a specialization of Mathlib's canonical Cech-complex functor derived from the bundled standard cover;
 - the Phase 2 transition factors for `O(n)`, with the convention `e₁ = t^n e₀`, coefficient transport by `t^(-n)`, unit identities, and compatibility with the Laurent coordinate inversion;
 - the global twisting sheaf `twistingSheaf k n` for every `n : ℤ`, constructed as the kernel of the compatibility map between the two pushed-forward trivial rank-one chart modules and the overlap module;
+- canonical maps from `twistingSheaf k n` to both pushed-forward trivial chart modules, their overlap equation `a₁ = t^(-n) a₀`, and a universal gluing lift for compatible local data;
 - design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
 
-The next milestone is to prove that `twistingSheaf k n` restricts to the trivial rank-one module sheaf on each standard affine chart. Those local trivializations will support the identification `O(0) ≅ O`, the tensor and duality formulas, and the explicit Cech calculation.
+The next milestone is to prove that `twistingSheaf k n` restricts to the trivial rank-one module sheaf on each standard affine chart. The local-coordinate and gluing API now isolates that proof from the kernel implementation. Those local trivializations will support the identification `O(0) ≅ O`, the tensor and duality formulas, and the explicit Cech calculation.
 
 ## Repository layout
 
@@ -65,6 +66,7 @@ The next milestone is to prove that `twistingSheaf k n` restricts to the trivial
 | `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical Cech complex derived from the bundled cover |
 | `RiemannRoch.ProjectiveLine.TwistingTransition` | Laurent frame and coefficient transition factors for the twisting sheaves `O(n)` |
 | `RiemannRoch.ProjectiveLine.TwistingSheaf` | Global twisting sheaves as kernels of the two-chart overlap compatibility maps |
+| `RiemannRoch.ProjectiveLine.TwistingSheafCoordinates` | Canonical chart components, overlap compatibility, and the universal gluing lift for `O(n)` |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
 | [`BLUEPRINT.md`](BLUEPRINT.md) | Detailed phased roadmap and progress tracker |
