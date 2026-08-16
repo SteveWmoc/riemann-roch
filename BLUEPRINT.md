@@ -71,7 +71,9 @@ coordinate-ring descriptions.
 - [ ] Prove `O(0)` is the structure sheaf.
 - [ ] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
 - [ ] Prove the expected tensor and duality isomorphisms.
-- [ ] Prove restriction formulas on the two standard opens.
+- [~] Prove restriction formulas on the two standard opens. The canonical local
+      components, overlap equation, and universal gluing lift are packaged;
+      the chart restriction isomorphisms remain.
 
 ### Exit criterion
 
