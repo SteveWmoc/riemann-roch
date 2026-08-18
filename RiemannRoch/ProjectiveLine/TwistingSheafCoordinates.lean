@@ -126,7 +126,7 @@ theorem twistingSheaf_hom_ext
     (h0 : f ≫ twistingSheafToX0 k n = g ≫ twistingSheafToX0 k n)
     (h1 : f ≫ twistingSheafToX1 k n = g ≫ twistingSheafToX1 k n) :
     f = g := by
-  apply equalizer.hom_ext
+  apply Fork.IsLimit.hom_ext (kernelIsKernel (twistingCompatibilityMap k n))
   apply biprod.hom_ext
   · simpa [twistingSheafToX0, Category.assoc] using h0
   · simpa [twistingSheafToX1, Category.assoc] using h1
