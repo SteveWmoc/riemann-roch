@@ -19,7 +19,11 @@ The main declarations are:
 * `twistingSheafToX0` and `twistingSheafToX1`, the two local components;
 * `twistingSheaf_overlap_condition`, expressing the coefficient relation
   `a₁ = t^(-n) a₀` on the overlap;
-* `twistingSheafLift`, the corresponding universal gluing constructor.
+* `twistingSheafLift`, the corresponding universal gluing constructor;
+* `twistingSheaf_hom_ext`, showing that the two local components determine a
+  morphism into `O(n)`;
+* `twistingSheafLift_unique`, the uniqueness half of the gluing universal
+  property.
 
 This API is intended to isolate later chart trivializations and Cech calculations
 from the kernel used to construct `twistingSheaf`.
@@ -113,6 +117,36 @@ theorem twistingSheafLift_toX1
         f1 ≫ x1RestrictionToOverlap k) :
     twistingSheafLift k n f0 f1 h ≫ twistingSheafToX1 k n = f1 := by
   simp [twistingSheafToX1]
+
+/-- Morphisms into `O(n)` are determined by their two local components. -/
+@[ext]
+theorem twistingSheaf_hom_ext
+    (k : Type u) [CommRing k] (n : ℤ) {M : ModuleSheaf k}
+    {f g : M ⟶ twistingSheaf k n}
+    (h0 : f ≫ twistingSheafToX0 k n = g ≫ twistingSheafToX0 k n)
+    (h1 : f ≫ twistingSheafToX1 k n = g ≫ twistingSheafToX1 k n) :
+    f = g := by
+  rw [← cancel_mono (twistingSheafι k n)]
+  apply biprod.hom_ext
+  · simpa [twistingSheafToX0, Category.assoc] using h0
+  · simpa [twistingSheafToX1, Category.assoc] using h1
+
+/-- The glued morphism is the unique morphism into `O(n)` with the prescribed
+compatible local components. -/
+theorem twistingSheafLift_unique
+    (k : Type u) [CommRing k] (n : ℤ) {M : ModuleSheaf k}
+    (f0 : M ⟶ x0PushedTrivialModule k)
+    (f1 : M ⟶ x1PushedTrivialModule k)
+    (h : f0 ≫ x0RestrictionToOverlap k ≫
+          pushedOverlapCoefficientTransitionEnd k n =
+        f1 ≫ x1RestrictionToOverlap k)
+    (g : M ⟶ twistingSheaf k n)
+    (h0 : g ≫ twistingSheafToX0 k n = f0)
+    (h1 : g ≫ twistingSheafToX1 k n = f1) :
+    g = twistingSheafLift k n f0 f1 h := by
+  apply twistingSheaf_hom_ext k n
+  · simpa using h0
+  · simpa using h1
 
 end
 
