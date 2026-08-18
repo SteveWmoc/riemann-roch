@@ -126,10 +126,13 @@ theorem twistingSheaf_hom_ext
     (h0 : f ≫ twistingSheafToX0 k n = g ≫ twistingSheafToX0 k n)
     (h1 : f ≫ twistingSheafToX1 k n = g ≫ twistingSheafToX1 k n) :
     f = g := by
-  apply Fork.IsLimit.hom_ext (kernelIsKernel (twistingCompatibilityMap k n))
+  letI : Mono (twistingSheafι k n) := by
+    change Mono (equalizer.ι (twistingCompatibilityMap k n) 0)
+    infer_instance
+  rw [← cancel_mono (twistingSheafι k n)]
   apply biprod.hom_ext
-  · simpa [twistingSheafToX0, Category.assoc] using h0
-  · simpa [twistingSheafToX1, Category.assoc] using h1
+  · simpa only [Category.assoc] using h0
+  · simpa only [Category.assoc] using h1
 
 /-- The glued morphism is the unique morphism into `O(n)` with the prescribed
 compatible local components. -/
