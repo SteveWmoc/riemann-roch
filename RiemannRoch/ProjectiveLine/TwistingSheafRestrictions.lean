@@ -24,13 +24,26 @@ universe u
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
 
-This lemma records the exact finite-limit preservation fact needed for the
-first local trivialization. -/
+Mathlib's restriction functor for module sheaves is implemented pointwise by
+precomposition on opens followed by restriction of scalars. Both operations
+preserve limits, although that composite preservation instance is not currently
+registered. -/
 theorem x0Restrict_preserves_twisting_kernel
     (k : Type u) [CommRing k] (n : ℤ) :
     PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0)
       (Scheme.Modules.restrictFunctor (x0BasicOpen k).ι) := by
-  infer_instance
+  let j := (x0BasicOpen k).ι
+  let F := Scheme.Modules.restrictFunctor j
+  apply preservesLimit_of_preserves_limit_cone (limit.isLimit _)
+  apply isLimitOfReflects (SheafOfModules.forget _)
+  apply PresheafOfModules.evaluationJointlyReflectsLimits
+  intro U
+  change IsLimit
+    ((ModuleCat.restrictScalars ((j.appIso U.unop).inv.hom)).mapCone
+      ((SheafOfModules.evaluation _ (Opposite.op (j.opensFunctor.obj U.unop))).mapCone
+        (limit.cone (parallelPair (twistingCompatibilityMap k n) 0))))
+  exact isLimitOfPreserves _
+    (isLimitOfPreserves _ (limit.isLimit (parallelPair (twistingCompatibilityMap k n) 0)))
 
 end
 
