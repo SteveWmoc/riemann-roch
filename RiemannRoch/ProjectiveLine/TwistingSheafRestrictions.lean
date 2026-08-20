@@ -6,6 +6,7 @@ Authors: Steven Sabean
 
 import Mathlib.Algebra.Category.ModuleCat.Sheaf.Limits
 import Mathlib.CategoryTheory.Limits.Shapes.FiniteLimits
+import Mathlib.CategoryTheory.Preadditive.AdditiveFunctor
 import RiemannRoch.ProjectiveLine.TwistingSheafCoordinates
 
 /-!
@@ -21,7 +22,7 @@ open AlgebraicGeometry CategoryTheory Limits TopologicalSpace
 
 noncomputable section
 
-universe u
+universe u v
 
 /-- Restriction along an open immersion is additive. -/
 private theorem restrictFunctor_additive {X Y : Scheme.{u}} (f : X ⟶ Y)
@@ -52,7 +53,7 @@ private instance presheafMapEqToHom_isIso
 graph of `g⁻¹f` whenever `g` is an isomorphism. In particular its first
 projection is an isomorphism. -/
 private theorem kernelFork_fst_isIso_of_isLimit_desc_neg
-    {C : Type u} [Category.{u} C] [Preadditive C]
+    {C : Type u} [Category.{v} C] [Preadditive C]
     {A B D : C} [HasBinaryBiproduct A B]
     (f : A ⟶ D) (g : B ⟶ D) [IsIso g]
     (c : KernelFork (biprod.desc f (-g))) (hc : IsLimit c) :
@@ -62,23 +63,21 @@ private theorem kernelFork_fst_isIso_of_isLimit_desc_neg
       simp [Category.assoc])
   let l : A ⟶ c.pt := hc.lift s
   have hfg : c.ι ≫ biprod.fst ≫ f = c.ι ≫ biprod.snd ≫ g := by
-    have h := c.condition
-    rw [biprod.desc_eq] at h
-    have h' : c.ι ≫ biprod.fst ≫ f - c.ι ≫ biprod.snd ≫ g = 0 := by
-      simpa [sub_eq_add_neg, Category.assoc] using h
-    exact sub_eq_zero.mp h'
+    have hzero : c.ι ≫ biprod.fst ≫ f - c.ι ≫ biprod.snd ≫ g = 0 := by
+      simpa [biprod.desc_eq, sub_eq_add_neg, Category.assoc] using c.condition
+    exact sub_eq_zero.mp hzero
   have hsnd : c.ι ≫ biprod.snd = c.ι ≫ biprod.fst ≫ f ≫ inv g := by
     rw [← cancel_mono g]
     simpa [Category.assoc] using hfg.symm
   refine ⟨⟨l, ?_, ?_⟩⟩
-  · apply hc.hom_ext
-    simp only [Category.assoc, Category.comp_id]
+  · apply Fork.IsLimit.hom_ext hc
+    simp only [Category.assoc, Category.id_comp]
     rw [show l ≫ c.ι = s.ι from hc.fac s WalkingParallelPair.zero]
     apply biprod.hom_ext
-    · simp [s]
-    · simpa [s, Category.assoc] using hsnd
-  · simpa [l, s, Category.assoc] using
-      congrArg (fun m => m ≫ biprod.fst) (hc.fac s WalkingParallelPair.zero)
+    · simp [s, Category.assoc]
+    · simpa [s, Category.assoc] using hsnd.symm
+  · rw [← Category.assoc, show l ≫ c.ι = s.ι from hc.fac s WalkingParallelPair.zero]
+    simp [s]
 
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
@@ -214,12 +213,12 @@ theorem x0Restrict_twistingSheafToX0_isIso
   have hcF : IsLimit (c.map F) := c.mapIsLimit hc F
   let c' : KernelFork h :=
     KernelFork.ofι ((c.map F).ι ≫ e.hom) (by
-      rw [← hmap]
-      simp)
+      rw [Category.assoc, ← hmap]
+      exact (c.map F).condition)
   have hc' : IsLimit c' := by
     apply KernelFork.isLimitOfIsLimitOfIff hcF h e
     intro W φ
-    rw [hmap, Category.assoc]
+    simpa [hmap, Category.assoc]
   have hi : IsIso (c'.ι ≫ biprod.fst) :=
     kernelFork_fst_isIso_of_isLimit_desc_neg (F.map f) (F.map g) c' hc'
   have heq : c'.ι ≫ biprod.fst =
