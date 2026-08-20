@@ -40,9 +40,14 @@ theorem x0Restrict_preserves_twisting_kernel
   apply isLimitOfReflects (SheafOfModules.forget _)
   apply PresheafOfModules.evaluationJointlyReflectsLimits
   intro U
+  let X := Opposite.op (j.opensFunctor.obj U.unop)
+  letI : PreservesFiniteLimits
+      (SheafOfModules.evaluation (scheme k).ringCatSheaf X) :=
+    SheafOfModules.Finite.evaluationPreservesFiniteLimits
+      ((scheme k).ringCatSheaf) X
   change IsLimit
     ((ModuleCat.restrictScalars ((j.appIso U.unop).inv.hom)).mapCone
-      ((SheafOfModules.evaluation _ (Opposite.op (j.opensFunctor.obj U.unop))).mapCone
+      ((SheafOfModules.evaluation _ X).mapCone
         (limit.cone (parallelPair (twistingCompatibilityMap k n) 0))))
   exact isLimitOfPreserves _
     (isLimitOfPreserves _ (limit.isLimit (parallelPair (twistingCompatibilityMap k n) 0)))
