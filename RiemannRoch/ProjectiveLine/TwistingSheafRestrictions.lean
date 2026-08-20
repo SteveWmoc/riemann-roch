@@ -48,6 +48,38 @@ private instance presheafMapEqToHom_isIso
   rw [M.presheaf.map_id]
   infer_instance
 
+/-- In a preadditive category, the kernel of `(a, b) ↦ f(a) - g(b)` is the
+graph of `g⁻¹f` whenever `g` is an isomorphism. In particular its first
+projection is an isomorphism. -/
+private theorem kernelFork_fst_isIso_of_isLimit_desc_neg
+    {C : Type u} [Category.{u} C] [Preadditive C]
+    {A B D : C} [HasBinaryBiproduct A B]
+    (f : A ⟶ D) (g : B ⟶ D) [IsIso g]
+    (c : KernelFork (biprod.desc f (-g))) (hc : IsLimit c) :
+    IsIso (c.ι ≫ biprod.fst) := by
+  let s : KernelFork (biprod.desc f (-g)) :=
+    KernelFork.ofι (biprod.lift (𝟙 A) (f ≫ inv g)) (by
+      simp [Category.assoc])
+  let l : A ⟶ c.pt := hc.lift s
+  have hfg : c.ι ≫ biprod.fst ≫ f = c.ι ≫ biprod.snd ≫ g := by
+    have h := c.condition
+    rw [biprod.desc_eq] at h
+    have h' : c.ι ≫ biprod.fst ≫ f - c.ι ≫ biprod.snd ≫ g = 0 := by
+      simpa [sub_eq_add_neg, Category.assoc] using h
+    exact sub_eq_zero.mp h'
+  have hsnd : c.ι ≫ biprod.snd = c.ι ≫ biprod.fst ≫ f ≫ inv g := by
+    rw [← cancel_mono g]
+    simpa [Category.assoc] using hfg.symm
+  refine ⟨⟨l, ?_, ?_⟩⟩
+  · apply hc.hom_ext
+    simp only [Category.assoc, Category.comp_id]
+    rw [show l ≫ c.ι = s.ι from hc.fac s WalkingParallelPair.zero]
+    apply biprod.hom_ext
+    · simp [s]
+    · simpa [s, Category.assoc] using hsnd
+  · simpa [l, s, Category.assoc] using
+      congrArg (fun m => m ≫ biprod.fst) (hc.fac s WalkingParallelPair.zero)
+
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
 
@@ -146,6 +178,57 @@ theorem x0Restrict_x1RestrictionToOverlap_isIso
         ((Scheme.Modules.pushforwardComp (overlapToX1 k) (x1BasicOpen k).ι).app
           (overlapTrivialModule k)).isIso_hom _
     · exact inferInstance
+
+/-- The canonical `X0` coordinate of `O(n)` becomes an isomorphism after
+restriction to the first standard chart. -/
+theorem x0Restrict_twistingSheafToX0_isIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
+      (twistingSheafToX0 k n)) := by
+  let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
+  let A := x0PushedTrivialModule k
+  let B := x1PushedTrivialModule k
+  let D := overlapPushedTrivialModule k
+  let f : A ⟶ D :=
+    x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n
+  let g : B ⟶ D := x1RestrictionToOverlap k
+  letI : F.Additive := restrictFunctor_additive (x0BasicOpen k).ι
+  letI : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
+    x0Restrict_preserves_twisting_kernel k n
+  letI : IsIso (F.map g) := by
+    dsimp [g, F]
+    exact x0Restrict_x1RestrictionToOverlap_isIso k
+  let e := F.mapBiprod A B
+  let h : F.obj A ⊞ F.obj B ⟶ F.obj D :=
+    biprod.desc (F.map f) (-F.map g)
+  have hmap : F.map (twistingCompatibilityMap k n) = e.hom ≫ h := by
+    dsimp [e, h, f, g, twistingCompatibilityMap]
+    simpa using
+      (biprod.mapBiprod_hom_desc (F := F) A B
+        (x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n)
+        (-x1RestrictionToOverlap k)).symm
+  let c : KernelFork (twistingCompatibilityMap k n) :=
+    KernelFork.ofι (kernel.ι (twistingCompatibilityMap k n))
+      (kernel.condition (twistingCompatibilityMap k n))
+  have hc : IsLimit c := kernelIsKernel (twistingCompatibilityMap k n)
+  have hcF : IsLimit (c.map F) := c.mapIsLimit hc F
+  let c' : KernelFork h :=
+    KernelFork.ofι ((c.map F).ι ≫ e.hom) (by
+      rw [← hmap]
+      simp)
+  have hc' : IsLimit c' := by
+    apply KernelFork.isLimitOfIsLimitOfIff hcF h e
+    intro W φ
+    rw [hmap, Category.assoc]
+  have hi : IsIso (c'.ι ≫ biprod.fst) :=
+    kernelFork_fst_isIso_of_isLimit_desc_neg (F.map f) (F.map g) c' hc'
+  have heq : c'.ι ≫ biprod.fst =
+      F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst) := by
+    dsimp [c', c, e]
+    simp [Functor.mapBiprod_hom, ← F.map_comp, Category.assoc]
+  change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst))
+  rw [← heq]
+  exact hi
 
 end
 
