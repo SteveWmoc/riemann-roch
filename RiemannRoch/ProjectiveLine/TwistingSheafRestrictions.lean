@@ -32,6 +32,14 @@ private theorem restrictFunctor_additive {X Y : Scheme.{u}} (f : X ⟶ Y)
   intro U
   rfl
 
+/-- The map on sections of an isomorphism of module sheaves is an isomorphism. -/
+private theorem modulesHom_app_isIso_of_isIso
+    {X : Scheme.{u}} {M N : X.Modules} (f : M ⟶ N) [IsIso f] (U : X.Opens) :
+    IsIso (f.app U) := by
+  have hf : IsIso f := inferInstance
+  rw [Scheme.Modules.Hom.isIso_iff_isIso_app] at hf
+  exact hf U
+
 /-- A module-presheaf map induced by equality of opens is an isomorphism. -/
 private instance presheafMapEqToHom_isIso
     {X : Scheme.{u}} (M : X.Modules) {U V : X.Opens} (e : U = V) :
@@ -126,16 +134,21 @@ theorem x0Restrict_x1RestrictionToOverlap_isIso
   let O1 := x1TrivialModule k
   let W := j1 ⁻¹ᵁ (j0 ''ᵁ U)
   have hW : W ≤ r.opensRange := x0_image_preimage_x1_le_overlapRange k U
-  letI : IsIso (((Scheme.Modules.restrictAdjunction r).unit.app O1).app W) :=
-    restrictAdjunction_unit_app_isIso_of_le_range r O1 W hW
+  letI : IsIso (((Scheme.Modules.restrictAdjunction r).unit.app O1).app
+      (j1 ⁻¹ᵁ (j0 ''ᵁ U))) :=
+    restrictAdjunction_unit_app_isIso_of_le_range r O1 _ (by simpa [W] using hW)
+  letI : IsIso ((Scheme.Modules.pushforward r).map
+      (Scheme.Modules.restrictUnitIso r).hom) := by infer_instance
+  letI : IsIso (((Scheme.Modules.pushforwardComp r j1).hom.app
+      (overlapTrivialModule k))) := by infer_instance
   change IsIso ((x1RestrictionToOverlap k).app (j0 ''ᵁ U))
   dsimp [x1RestrictionToOverlap]
   refine IsIso.comp_isIso' ?_ ?_
   · refine IsIso.comp_isIso' ?_ ?_
     · exact inferInstance
-    · exact inferInstance
+    · exact modulesHom_app_isIso_of_isIso _ _
   · refine IsIso.comp_isIso' ?_ ?_
-    · exact inferInstance
+    · exact modulesHom_app_isIso_of_isIso _ _
     · exact inferInstance
 
 end
