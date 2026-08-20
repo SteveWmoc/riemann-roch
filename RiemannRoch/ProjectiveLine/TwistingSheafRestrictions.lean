@@ -14,6 +14,9 @@ import RiemannRoch.ProjectiveLine.TwistingSheafCoordinates
 
 This file develops the restriction isomorphisms for the twisting sheaf `O(n)`
 on the two standard affine charts of `P¹_k`.
+
+The first chart is now fully trivialized: `x0TwistingSheafIso k n` identifies
+the restriction of `O(n)` to `D_+(X₀)` with the trivial rank-one module.
 -/
 
 namespace RiemannRoch.ProjectiveLine
@@ -240,6 +243,21 @@ theorem x0Restrict_twistingSheafToX0_isIso
   change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst))
   rw [← heq]
   exact hi
+
+/-- The restriction of `O(n)` to the first standard affine chart is the
+trivial rank-one module sheaf. -/
+noncomputable def x0TwistingSheafIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (twistingSheaf k n).restrict (x0BasicOpen k).ι ≅ x0TrivialModule k := by
+  let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
+  letI : IsIso (F.map (twistingSheafToX0 k n)) := by
+    dsimp [F]
+    exact x0Restrict_twistingSheafToX0_isIso k n
+  change F.obj (twistingSheaf k n) ≅ x0TrivialModule k
+  exact
+    asIso (F.map (twistingSheafToX0 k n)) ≪≫
+      (Scheme.Modules.restrictFunctorAdjCounitIso (x0BasicOpen k).ι).app
+        (x0TrivialModule k)
 
 end
 
