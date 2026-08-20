@@ -192,6 +192,9 @@ theorem x0Restrict_twistingSheafToX0_isIso
     x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n
   let g : B ⟶ D := x1RestrictionToOverlap k
   letI : F.Additive := restrictFunctor_additive (x0BasicOpen k).ι
+  letI : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproduct A B F :=
+    preservesBinaryBiproduct_of_preservesBiproduct F A B
   letI : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
     x0Restrict_preserves_twisting_kernel k n
   letI : IsIso (F.map g) := by
@@ -218,13 +221,22 @@ theorem x0Restrict_twistingSheafToX0_isIso
   have hc' : IsLimit c' := by
     apply KernelFork.isLimitOfIsLimitOfIff hcF h e
     intro W φ
-    simpa [hmap, Category.assoc]
+    constructor
+    · intro hφ
+      rw [hmap] at hφ
+      simpa only [Category.assoc] using hφ
+    · intro hφ
+      rw [hmap]
+      simpa only [Category.assoc] using hφ
   have hi : IsIso (c'.ι ≫ biprod.fst) :=
     kernelFork_fst_isIso_of_isLimit_desc_neg (F.map f) (F.map g) c' hc'
   have heq : c'.ι ≫ biprod.fst =
       F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst) := by
-    dsimp [c', c, e]
-    simp [Functor.mapBiprod_hom, ← F.map_comp, Category.assoc]
+    change ((c.map F).ι ≫ e.hom) ≫ biprod.fst =
+      F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst)
+    rw [Category.assoc, Functor.mapBiprod_hom]
+    simp only [biprod.lift_fst, ← F.map_comp]
+    rfl
   change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst))
   rw [← heq]
   exact hi
