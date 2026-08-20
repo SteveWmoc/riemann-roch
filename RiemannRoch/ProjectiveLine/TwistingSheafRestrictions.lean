@@ -32,6 +32,13 @@ private theorem restrictFunctor_additive {X Y : Scheme.{u}} (f : X ⟶ Y)
   intro U
   rfl
 
+/-- A module-presheaf map induced by equality of opens is an isomorphism. -/
+private instance presheafMapEqToHom_isIso
+    {X : Scheme.{u}} (M : X.Modules) {U V : X.Opens} (e : U = V) :
+    IsIso (M.presheaf.map (eqToHom e).op) := by
+  subst V
+  simp
+
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
 
@@ -94,11 +101,12 @@ private theorem x0_image_preimage_x1_le_overlapRange
     _ = standardOverlap k := by
       simp [j0, j1, standardOverlap, inf_comm]
     _ = j1 ''ᵁ r.opensRange := by
-      rw [← Scheme.Hom.opensRange_comp r j1]
+      apply Opens.ext
+      change (standardOverlap k : Set (scheme k)) = Set.range (r ≫ j1)
       have hcomp : r ≫ j1 = (standardOverlap k).ι := by
         simp [r, j1, standardOverlap]
       rw [hcomp]
-      simp
+      exact (Scheme.Opens.range_ι (standardOverlap k)).symm
 
 /-- After restriction to the `X0` chart, the `X1`-to-overlap restriction map
 is an isomorphism. Geometrically, every point of `X1` visible inside `X0`
