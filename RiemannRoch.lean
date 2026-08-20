@@ -18,6 +18,7 @@ import RiemannRoch.ProjectiveLine.SheavesAndCech
 import RiemannRoch.ProjectiveLine.TwistingTransition
 import RiemannRoch.ProjectiveLine.TwistingSheaf
 import RiemannRoch.ProjectiveLine.TwistingSheafCoordinates
+import RiemannRoch.ProjectiveLine.TwistingSheafRestrictions
 import RiemannRoch.ProjectiveLine.Target
 
 /-!
@@ -29,5 +30,5 @@ two affine-line chart isomorphisms, the Laurent-polynomial overlap and its
 coordinate transition map, the bundled standard open cover, the module-sheaf
 and Cech-complex interfaces used by the planned cohomology calculation, and the
 transition-data construction and local-coordinate API of the twisting sheaves
-`O(n)`.
+`O(n)` together with their standard-chart restriction interface.
 -/
