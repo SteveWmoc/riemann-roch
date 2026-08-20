@@ -44,7 +44,8 @@ private instance presheafMapEqToHom_isIso
     {X : Scheme.{u}} (M : X.Modules) {U V : X.Opens} (e : U = V) :
     IsIso (M.presheaf.map (eqToHom e).op) := by
   cases e
-  infer_instance
+  simpa only [eqToHom_refl, op_id, Functor.map_id] using
+    (inferInstance : IsIso (𝟙 (M.presheaf.obj (Opposite.op U))))
 
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
