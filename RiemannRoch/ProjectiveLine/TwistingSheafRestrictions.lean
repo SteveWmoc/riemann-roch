@@ -5,6 +5,7 @@ Authors: Steven Sabean
 -/
 
 import Mathlib.Algebra.Category.ModuleCat.Sheaf.Limits
+import Mathlib.CategoryTheory.Limits.Shapes.FiniteLimits
 import RiemannRoch.ProjectiveLine.TwistingSheafCoordinates
 
 /-!
