@@ -36,8 +36,9 @@ private theorem restrictFunctor_additive {X Y : Scheme.{u}} (f : X ⟶ Y)
 private instance presheafMapEqToHom_isIso
     {X : Scheme.{u}} (M : X.Modules) {U V : X.Opens} (e : U = V) :
     IsIso (M.presheaf.map (eqToHom e).op) := by
-  subst V
-  simp only [eqToHom_refl, Quiver.Hom.op_id, Functor.map_id]
+  cases e
+  change IsIso (M.presheaf.map (𝟙 _))
+  rw [Functor.map_id]
   constructor
   exact ⟨𝟙 _, by simp, by simp⟩
 
@@ -82,7 +83,7 @@ private theorem restrictAdjunction_unit_app_isIso_of_le_range
   have hHom : homOfLE (f.image_preimage_le U) = eqToHom hEq :=
     Subsingleton.elim _ _
   rw [hHom]
-  infer_instance
+  exact presheafMapEqToHom_isIso M hEq
 
 /-- An open of the `X0` chart, pulled back to the `X1` chart, lies in the
 standard overlap. -/
