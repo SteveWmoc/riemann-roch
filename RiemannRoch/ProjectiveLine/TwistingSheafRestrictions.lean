@@ -130,7 +130,13 @@ theorem x0Restrict_x1RestrictionToOverlap_isIso
     restrictAdjunction_unit_app_isIso_of_le_range r O1 W hW
   change IsIso ((x1RestrictionToOverlap k).app (j0 ''ᵁ U))
   dsimp [x1RestrictionToOverlap]
-  infer_instance
+  refine IsIso.comp_isIso' ?_ ?_
+  · refine IsIso.comp_isIso' ?_ ?_
+    · exact inferInstance
+    · exact inferInstance
+  · refine IsIso.comp_isIso' ?_ ?_
+    · exact inferInstance
+    · exact inferInstance
 
 end
 
