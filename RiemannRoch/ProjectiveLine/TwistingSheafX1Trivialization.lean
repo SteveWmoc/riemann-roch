@@ -170,6 +170,68 @@ private theorem kernelFork_snd_isIso_of_isLimit_desc_neg
   · rw [← Category.assoc, show l ≫ c.ι = s.ι from hc.fac s WalkingParallelPair.zero]
     simp [s]
 
+/-- The Laurent-polynomial realization of overlap sections respects
+multiplication on the top open. -/
+private theorem overlapLaurentTopSection_mul'
+    (k : Type u) [CommRing k] (f g : LaurentPolynomial k) :
+    overlapLaurentTopSection k f * overlapLaurentTopSection k g =
+      overlapLaurentTopSection k (f * g) := by
+  simp [overlapLaurentTopSection]
+
+/-- On every open of the overlap, the transition endomorphism acts by
+multiplication by the restricted Laurent transition section. -/
+private theorem overlapCoefficientTransitionEnd_app_apply
+    (k : Type u) [CommRing k] (n : ℤ) (U : (overlapScheme k).Opens)
+    (x : Γ(overlapScheme k, U)) :
+    (overlapCoefficientTransitionEnd k n).app U x =
+      x * (overlapScheme k).presheaf.map
+        (homOfLE (show U ≤ ⊤ from le_top)).op
+        (overlapLaurentTopSection k (twistCoefficientTransition k n)) := by
+  rfl
+
+/-- Multiplication by the coefficient transition `t^(-n)` is an automorphism
+of the trivial module sheaf on the standard overlap. -/
+theorem overlapCoefficientTransitionEnd_isIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    IsIso (overlapCoefficientTransitionEnd k n) := by
+  rw [Scheme.Modules.Hom.isIso_iff_isIso_app]
+  intro U
+  let ρ := (overlapScheme k).presheaf.map
+    (homOfLE (show U ≤ ⊤ from le_top)).op
+  let a := ρ (overlapLaurentTopSection k (twistCoefficientTransition k n))
+  let b := ρ (overlapLaurentTopSection k (twistCoefficientTransition k (-n)))
+  have hab : a * b = 1 := by
+    dsimp [a, b, ρ]
+    rw [← map_mul, overlapLaurentTopSection_mul']
+    simp [twistCoefficientTransition, overlapLaurentTopSection]
+  have hba : b * a = 1 := by
+    rw [mul_comm, hab]
+  refine ⟨⟨(overlapCoefficientTransitionEnd k (-n)).app U, ?_, ?_⟩⟩
+  · ext x
+    change (overlapCoefficientTransitionEnd k (-n)).app U
+      ((overlapCoefficientTransitionEnd k n).app U x) = x
+    rw [overlapCoefficientTransitionEnd_app_apply,
+      overlapCoefficientTransitionEnd_app_apply]
+    dsimp [a, b, ρ] at hab ⊢
+    rw [mul_assoc, hab, mul_one]
+  · ext x
+    change (overlapCoefficientTransitionEnd k n).app U
+      ((overlapCoefficientTransitionEnd k (-n)).app U x) = x
+    rw [overlapCoefficientTransitionEnd_app_apply,
+      overlapCoefficientTransitionEnd_app_apply]
+    dsimp [a, b, ρ] at hba ⊢
+    rw [mul_assoc, hba, mul_one]
+
+/-- The pushed-forward coefficient transition is an automorphism of the
+pushed-forward trivial overlap module. -/
+theorem pushedOverlapCoefficientTransitionEnd_isIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    IsIso (pushedOverlapCoefficientTransitionEnd k n) := by
+  letI : IsIso (overlapCoefficientTransitionEnd k n) :=
+    overlapCoefficientTransitionEnd_isIso k n
+  dsimp [pushedOverlapCoefficientTransitionEnd]
+  infer_instance
+
 end
 
 end RiemannRoch.ProjectiveLine
