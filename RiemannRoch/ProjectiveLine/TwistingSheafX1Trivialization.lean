@@ -232,6 +232,89 @@ theorem pushedOverlapCoefficientTransitionEnd_isIso
   dsimp [pushedOverlapCoefficientTransitionEnd]
   infer_instance
 
+/-- The canonical `X1` coordinate of `O(n)` becomes an isomorphism after
+restriction to the second standard chart. -/
+theorem x1Restrict_twistingSheafToX1_isIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
+      (twistingSheafToX1 k n)) := by
+  let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
+  let A := x0PushedTrivialModule k
+  let B := x1PushedTrivialModule k
+  let D := overlapPushedTrivialModule k
+  let f : A ⟶ D :=
+    x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n
+  let g : B ⟶ D := x1RestrictionToOverlap k
+  letI : F.Additive := restrictFunctor_additive' (x1BasicOpen k).ι
+  letI : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproduct A B F :=
+    preservesBinaryBiproduct_of_preservesBiproduct F A B
+  letI : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
+    x1Restrict_preserves_twisting_kernel k n
+  letI : IsIso (F.map (x0RestrictionToOverlap k)) :=
+    x1Restrict_x0RestrictionToOverlap_isIso k
+  letI : IsIso (pushedOverlapCoefficientTransitionEnd k n) :=
+    pushedOverlapCoefficientTransitionEnd_isIso k n
+  letI : IsIso (F.map f) := by
+    dsimp [f]
+    rw [Functor.map_comp]
+    infer_instance
+  let e := F.mapBiprod A B
+  let h : F.obj A ⊞ F.obj B ⟶ F.obj D :=
+    biprod.desc (F.map f) (-F.map g)
+  have hmap : F.map (twistingCompatibilityMap k n) = e.hom ≫ h := by
+    dsimp [e, h, f, g, twistingCompatibilityMap]
+    simpa using
+      (biprod.mapBiprod_hom_desc (F := F) A B
+        (x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n)
+        (-x1RestrictionToOverlap k)).symm
+  let c : KernelFork (twistingCompatibilityMap k n) :=
+    KernelFork.ofι (kernel.ι (twistingCompatibilityMap k n))
+      (kernel.condition (twistingCompatibilityMap k n))
+  have hc : IsLimit c := kernelIsKernel (twistingCompatibilityMap k n)
+  have hcF : IsLimit (c.map F) := c.mapIsLimit hc F
+  let c' : KernelFork h :=
+    KernelFork.ofι ((c.map F).ι ≫ e.hom) (by
+      rw [Category.assoc, ← hmap]
+      exact (c.map F).condition)
+  have hc' : IsLimit c' := by
+    apply KernelFork.isLimitOfIsLimitOfIff hcF h e
+    intro W φ
+    constructor
+    · intro hφ
+      rw [hmap] at hφ
+      simpa only [Category.assoc] using hφ
+    · intro hφ
+      rw [hmap]
+      simpa only [Category.assoc] using hφ
+  have hi : IsIso (c'.ι ≫ biprod.snd) :=
+    kernelFork_snd_isIso_of_isLimit_desc_neg (F.map f) (F.map g) c' hc'
+  have heq : c'.ι ≫ biprod.snd =
+      F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.snd) := by
+    change ((c.map F).ι ≫ e.hom) ≫ biprod.snd =
+      F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.snd)
+    rw [Category.assoc, Functor.mapBiprod_hom]
+    simp only [biprod.lift_snd, ← F.map_comp]
+    rfl
+  change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.snd))
+  rw [← heq]
+  exact hi
+
+/-- The restriction of `O(n)` to the second standard affine chart is the
+trivial rank-one module sheaf. -/
+noncomputable def x1TwistingSheafIso
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (twistingSheaf k n).restrict (x1BasicOpen k).ι ≅ x1TrivialModule k := by
+  let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
+  letI : IsIso (F.map (twistingSheafToX1 k n)) := by
+    dsimp [F]
+    exact x1Restrict_twistingSheafToX1_isIso k n
+  change F.obj (twistingSheaf k n) ≅ x1TrivialModule k
+  exact
+    asIso (F.map (twistingSheafToX1 k n)) ≪≫
+      (Scheme.Modules.restrictFunctorAdjCounitIso (x1BasicOpen k).ι).app
+        (x1TrivialModule k)
+
 end
 
 end RiemannRoch.ProjectiveLine
