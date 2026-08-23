@@ -5,6 +5,7 @@ Authors: Steven Sabean
 -/
 
 import Mathlib.Algebra.Category.Grp.Biproducts
+import Mathlib.Algebra.Category.Grp.Zero
 import Mathlib.Algebra.Homology.HomologicalComplex
 import RiemannRoch.ProjectiveLine.SheavesAndCech
 
@@ -30,7 +31,7 @@ trivializations.
 
 namespace RiemannRoch.ProjectiveLine
 
-open CategoryTheory Limits Opposite TopologicalSpace
+open CategoryTheory Limits Opposite TopologicalSpace ZeroObject
 
 noncomputable section
 
@@ -125,13 +126,13 @@ theorem standardNormalizedCechComplex_X_one (M : ModuleSheaf k) :
 @[simp]
 theorem standardNormalizedCechComplex_X_add_two (M : ModuleSheaf k) (i : ℕ) :
     (standardNormalizedCechComplex M).X (i + 2) = 0 := by
-  cases i <;> rfl
+  rfl
 
 @[simp]
 theorem standardNormalizedCechComplex_d_zero_one (M : ModuleSheaf k) :
     (standardNormalizedCechComplex M).d 0 1 =
       standardNormalizedCechDifferential M := by
-  simp [standardNormalizedCechComplex, standardNormalizedCechD]
+  simp [standardNormalizedCechComplex, CochainComplex.of.d, standardNormalizedCechD]
 
 end
 
