@@ -53,7 +53,6 @@ abbrev standardCoverOpens (k : Type u) [CommRing k] :
     Variable → (scheme k).Opens :=
   fun i => ((standardOpenCover k).f i).opensRange
 
-@[simp]
 theorem standardCoverOpens_apply (k : Type u) [CommRing k] (i : Variable) :
     standardCoverOpens k i = standardBasicOpen k i :=
   standardOpenCover_opensRange k i
