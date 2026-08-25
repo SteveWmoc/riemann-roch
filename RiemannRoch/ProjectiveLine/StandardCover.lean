@@ -57,7 +57,6 @@ theorem standardOpenCover_f (k : Type u) [CommRing k] (i : Variable) :
 
 /-- The range of the `i`th map in the bundled cover is the corresponding
 standard homogeneous basic open. -/
-@[simp]
 theorem standardOpenCover_opensRange (k : Type u) [CommRing k] (i : Variable) :
     ((standardOpenCover k).f i).opensRange = standardBasicOpen k i := by
   change (standardBasicOpen k i).ι.opensRange = standardBasicOpen k i
@@ -77,7 +76,6 @@ noncomputable def standardOpenCoverX1IsoAffineLine
 
 /-- The intersection of the two ranges in the bundled cover is the standard
 overlap `D_+(X₀) ∩ D_+(X₁)`. -/
-@[simp]
 theorem standardOpenCover_overlap (k : Type u) [CommRing k] :
     ((standardOpenCover k).f 0).opensRange ⊓
       ((standardOpenCover k).f 1).opensRange = standardOverlap k := by
