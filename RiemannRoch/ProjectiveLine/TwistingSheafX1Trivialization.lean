@@ -294,7 +294,7 @@ theorem x1Restrict_twistingSheafToX1_isIso
     change ((c.map F).ι ≫ e.hom) ≫ biprod.snd =
       F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.snd)
     rw [Category.assoc, Functor.mapBiprod_hom]
-    simp only [biprod.lift_snd, ← F.map_comp]
+    simp only [biprod.lift_snd]
     rfl
   change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.snd))
   rw [← heq]

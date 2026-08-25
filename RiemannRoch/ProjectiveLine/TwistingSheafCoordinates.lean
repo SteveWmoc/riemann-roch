@@ -96,7 +96,7 @@ theorem twistingSheafLift_ι
       biprod.lift f0 f1 :=
   kernel.lift_ι _ _ _
 
-@[reassoc (attr := simp)]
+@[reassoc]
 theorem twistingSheafLift_toX0
     (k : Type u) [CommRing k] (n : ℤ) {M : ModuleSheaf k}
     (f0 : M ⟶ x0PushedTrivialModule k)
@@ -107,7 +107,7 @@ theorem twistingSheafLift_toX0
     twistingSheafLift k n f0 f1 h ≫ twistingSheafToX0 k n = f0 := by
   simp [twistingSheafToX0]
 
-@[reassoc (attr := simp)]
+@[reassoc]
 theorem twistingSheafLift_toX1
     (k : Type u) [CommRing k] (n : ℤ) {M : ModuleSheaf k}
     (f0 : M ⟶ x0PushedTrivialModule k)

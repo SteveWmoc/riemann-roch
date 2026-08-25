@@ -1,6 +1,8 @@
 name = "riemann-roch"
 version = "0.1.0"
 defaultTargets = ["RiemannRoch"]
+lintDriver = "batteries/runLinter"
+lintDriverArgs = ["RiemannRoch"]
 
 [[require]]
 name = "mathlib"

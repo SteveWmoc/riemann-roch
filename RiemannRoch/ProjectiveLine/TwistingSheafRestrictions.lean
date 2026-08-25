@@ -238,7 +238,7 @@ theorem x0Restrict_twistingSheafToX0_isIso
     change ((c.map F).ι ≫ e.hom) ≫ biprod.fst =
       F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst)
     rw [Category.assoc, Functor.mapBiprod_hom]
-    simp only [biprod.lift_fst, ← F.map_comp]
+    simp only [biprod.lift_fst]
     rfl
   change IsIso (F.map (kernel.ι (twistingCompatibilityMap k n) ≫ biprod.fst))
   rw [← heq]
