@@ -45,3 +45,6 @@ jobs:
         with:
           auto-config: false
           build: true
+
+      - name: Lint declarations
+        run: lake lint
