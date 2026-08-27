@@ -222,10 +222,12 @@ theorem x0Restrict_structureModuleToTwistingSheafZero_isIso
     x0Restrict_twistingSheafToX0_isIso k 0
   letI : IsIso (F.map (structureModuleToX0 k)) :=
     x0Restrict_structureModuleToX0_isIso k
-  apply IsIso.of_isIso_fac_right
-    (g := F.map (twistingSheafToX0 k 0))
-    (h := F.map (structureModuleToX0 k))
-  rw [← F.map_comp, structureModuleToTwistingSheafZero_toX0]
+  have hfac :
+      F.map (structureModuleToTwistingSheafZero k) ≫
+          F.map (twistingSheafToX0 k 0) =
+        F.map (structureModuleToX0 k) := by
+    rw [← F.map_comp, structureModuleToTwistingSheafZero_toX0]
+  exact IsIso.of_isIso_fac_right hfac
 
 /-- The comparison from the structure module to `O(0)` is an
 isomorphism on the second standard chart. -/
@@ -238,10 +240,12 @@ theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
     x1Restrict_twistingSheafToX1_isIso k 0
   letI : IsIso (F.map (structureModuleToX1 k)) :=
     x1Restrict_structureModuleToX1_isIso k
-  apply IsIso.of_isIso_fac_right
-    (g := F.map (twistingSheafToX1 k 0))
-    (h := F.map (structureModuleToX1 k))
-  rw [← F.map_comp, structureModuleToTwistingSheafZero_toX1]
+  have hfac :
+      F.map (structureModuleToTwistingSheafZero k) ≫
+          F.map (twistingSheafToX1 k 0) =
+        F.map (structureModuleToX1 k) := by
+    rw [← F.map_comp, structureModuleToTwistingSheafZero_toX1]
+  exact IsIso.of_isIso_fac_right hfac
 
 end
 
