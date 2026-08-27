@@ -148,7 +148,10 @@ theorem structureModule_chart_compatibility
       (1 : Γ(scheme k, U.unop)) =
     ((structureModuleToX1 k ≫ x1RestrictionToOverlap k).app U.unop)
       (1 : Γ(scheme k, U.unop))
-  simp
+  rw [structureModuleToX0_app_one k U.unop,
+    structureModuleToX1_app_one k U.unop,
+    x0RestrictionToOverlap_app_one k U.unop,
+    x1RestrictionToOverlap_app_one k U.unop]
 
 /-- The canonical comparison from the structure module to `O(0)`. -/
 noncomputable def structureModuleToTwistingSheafZero
