@@ -51,6 +51,40 @@ noncomputable def structureModuleToX1
     (Scheme.Modules.pushforward j).map
       (Scheme.Modules.restrictUnitIso j).hom
 
+/-- Restricting the canonical map from a structure module to the
+pushforward of the restricted structure module gives an isomorphism. -/
+private theorem restrict_structureModuleToPushedUnit_isIso
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] :
+    IsIso ((Scheme.Modules.restrictFunctor f).map
+      ((Scheme.Modules.restrictAdjunction f).unit.app
+          (SheafOfModules.unit Y.ringCatSheaf) ≫
+        (Scheme.Modules.pushforward f).map
+          (Scheme.Modules.restrictUnitIso f).hom)) := by
+  haveI : IsIso ((Scheme.Modules.restrictFunctor f).map
+      ((Scheme.Modules.restrictAdjunction f).unit.app
+        (SheafOfModules.unit Y.ringCatSheaf))) :=
+    IsIso.of_isIso_fac_right
+      ((Scheme.Modules.restrictAdjunction f).left_triangle_components
+        (SheafOfModules.unit Y.ringCatSheaf))
+  rw [Functor.map_comp]
+  infer_instance
+
+/-- The first canonical structure-module chart map is locally an isomorphism. -/
+theorem x0Restrict_structureModuleToX0_isIso
+    (k : Type u) [CommRing k] :
+    IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
+      (structureModuleToX0 k)) := by
+  simpa [structureModuleToX0] using
+    restrict_structureModuleToPushedUnit_isIso (x0BasicOpen k).ι
+
+/-- The second canonical structure-module chart map is locally an isomorphism. -/
+theorem x1Restrict_structureModuleToX1_isIso
+    (k : Type u) [CommRing k] :
+    IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
+      (structureModuleToX1 k)) := by
+  simpa [structureModuleToX1] using
+    restrict_structureModuleToPushedUnit_isIso (x1BasicOpen k).ι
+
 theorem structureModuleToX0_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (structureModuleToX0 k).app U (1 : Γ(scheme k, U)) =
