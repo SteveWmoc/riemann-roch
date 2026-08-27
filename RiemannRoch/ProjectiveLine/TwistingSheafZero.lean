@@ -69,6 +69,42 @@ noncomputable def structureModuleToX1
   (x1PushedTrivialModule k).unitHomEquiv.symm
     (x1PushedTrivialUnitSection k)
 
+@[simp]
+theorem structureModuleToX0_app_one
+    (k : Type u) [CommRing k] (U : (scheme k).Opens) :
+    (structureModuleToX0 k).app U (1 : Γ(scheme k, U)) =
+      (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) := by
+  change (((x0PushedTrivialModule k).unitHomEquiv
+    (structureModuleToX0 k)).val (Opposite.op U)) = _
+  rw [Equiv.apply_symm_apply]
+  rfl
+
+@[simp]
+theorem structureModuleToX1_app_one
+    (k : Type u) [CommRing k] (U : (scheme k).Opens) :
+    (structureModuleToX1 k).app U (1 : Γ(scheme k, U)) =
+      (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) := by
+  change (((x1PushedTrivialModule k).unitHomEquiv
+    (structureModuleToX1 k)).val (Opposite.op U)) = _
+  rw [Equiv.apply_symm_apply]
+  rfl
+
+@[simp]
+theorem x0RestrictionToOverlap_app_one
+    (k : Type u) [CommRing k] (U : (scheme k).Opens) :
+    (x0RestrictionToOverlap k).app U
+        (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) =
+      (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
+  simp [x0RestrictionToOverlap]
+
+@[simp]
+theorem x1RestrictionToOverlap_app_one
+    (k : Type u) [CommRing k] (U : (scheme k).Opens) :
+    (x1RestrictionToOverlap k).app U
+        (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) =
+      (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
+  simp [x1RestrictionToOverlap]
+
 /-- Multiplication by the degree-zero transition factor is the identity on the
 trivial overlap module. -/
 @[simp]
@@ -104,8 +140,7 @@ theorem structureModule_chart_compatibility
       (1 : Γ(scheme k, U.unop)) =
     ((structureModuleToX1 k ≫ x1RestrictionToOverlap k).app U.unop)
       (1 : Γ(scheme k, U.unop))
-  simp [structureModuleToX0, structureModuleToX1,
-    x0RestrictionToOverlap, x1RestrictionToOverlap, Category.assoc]
+  simp
 
 /-- The canonical comparison from the structure module to `O(0)`. -/
 noncomputable def structureModuleToTwistingSheafZero
