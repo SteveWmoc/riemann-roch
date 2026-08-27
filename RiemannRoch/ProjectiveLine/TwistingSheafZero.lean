@@ -306,7 +306,8 @@ private theorem isIso_of_standard_chart_restrictions
                 ((x0BasicOpen k).ι y)).map φ) := by
           rw [← hconj]
           infer_instance
-        simpa only [ψ, y, Scheme.Opens.ι_apply] using hglobal
+        simpa only [Functor.comp_obj, Functor.comp_map, ψ, y,
+          Scheme.Opens.ι_apply] using hglobal
       · let y : x1ChartScheme k := ⟨x, hx1⟩
         let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
@@ -338,7 +339,8 @@ private theorem isIso_of_standard_chart_restrictions
                 ((x1BasicOpen k).ι y)).map φ) := by
           rw [← hconj]
           infer_instance
-        simpa only [ψ, y, Scheme.Opens.ι_apply] using hglobal
+        simpa only [Functor.comp_obj, Functor.comp_map, ψ, y,
+          Scheme.Opens.ι_apply] using hglobal
   letI hψ : IsIso ψ :=
     TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
   let eψ := asIso ψ
