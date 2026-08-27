@@ -278,7 +278,9 @@ private theorem isIso_of_standard_chart_restrictions
               TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                 ((x0BasicOpen k).ι y)).map φ) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
-        simpa [ψ, y] using hglobal
+        simpa [ψ, y, Scheme.Modules.Hom.mapPresheaf,
+          Scheme.Modules.toPresheaf, Scheme.Modules.toPresheafOfModules,
+          SheafOfModules.toSheaf, SheafOfModules.forget] using hglobal
       · let y : x1ChartScheme k := ⟨x, hx1⟩
         let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
@@ -293,7 +295,9 @@ private theorem isIso_of_standard_chart_restrictions
               TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                 ((x1BasicOpen k).ι y)).map φ) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
-        simpa [ψ, y] using hglobal
+        simpa [ψ, y, Scheme.Modules.Hom.mapPresheaf,
+          Scheme.Modules.toPresheaf, Scheme.Modules.toPresheafOfModules,
+          SheafOfModules.toSheaf, SheafOfModules.forget] using hglobal
   haveI : IsIso ψ :=
     TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
   rw [Scheme.Modules.Hom.isIso_iff_isIso_app]
