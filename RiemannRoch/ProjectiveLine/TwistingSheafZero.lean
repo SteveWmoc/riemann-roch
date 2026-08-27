@@ -66,8 +66,10 @@ private theorem restrict_structureModuleToPushedUnit_isIso
   have hunit :
       F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) = e.inv := by
     apply (cancel_mono e.hom).1
-    simpa [e, F, O] using
-      (Scheme.Modules.restrictAdjunction f).left_triangle_components O
+    rw [e.inv_hom_id]
+    change F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) ≫
+      (Scheme.Modules.restrictAdjunction f).counit.app (F.obj O) = 𝟙 _
+    exact (Scheme.Modules.restrictAdjunction f).left_triangle_components O
   haveI : IsIso
       (F.map ((Scheme.Modules.restrictAdjunction f).unit.app O)) := by
     rw [hunit]
