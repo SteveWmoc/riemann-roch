@@ -75,7 +75,8 @@ theorem structureModuleToX0_app_one
     (structureModuleToX0 k).app U (1 : Γ(scheme k, U)) =
       (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) := by
   change (((x0PushedTrivialModule k).unitHomEquiv
-    (structureModuleToX0 k)).val (Opposite.op U)) = _
+    ((x0PushedTrivialModule k).unitHomEquiv.symm
+      (x0PushedTrivialUnitSection k))).val (Opposite.op U)) = _
   rw [Equiv.apply_symm_apply]
   rfl
 
@@ -85,7 +86,8 @@ theorem structureModuleToX1_app_one
     (structureModuleToX1 k).app U (1 : Γ(scheme k, U)) =
       (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) := by
   change (((x1PushedTrivialModule k).unitHomEquiv
-    (structureModuleToX1 k)).val (Opposite.op U)) = _
+    ((x1PushedTrivialModule k).unitHomEquiv.symm
+      (x1PushedTrivialUnitSection k))).val (Opposite.op U)) = _
   rw [Equiv.apply_symm_apply]
   rfl
 
@@ -95,7 +97,7 @@ theorem x0RestrictionToOverlap_app_one
     (x0RestrictionToOverlap k).app U
         (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) =
       (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
-  simp [x0RestrictionToOverlap]
+  simp [x0RestrictionToOverlap, Scheme.Modules.restrictUnitIso]
 
 @[simp]
 theorem x1RestrictionToOverlap_app_one
@@ -103,7 +105,7 @@ theorem x1RestrictionToOverlap_app_one
     (x1RestrictionToOverlap k).app U
         (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) =
       (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
-  simp [x1RestrictionToOverlap]
+  simp [x1RestrictionToOverlap, Scheme.Modules.restrictUnitIso]
 
 /-- Multiplication by the degree-zero transition factor is the identity on the
 trivial overlap module. -/
