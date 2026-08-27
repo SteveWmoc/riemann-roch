@@ -247,6 +247,66 @@ theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
     rw [← F.map_comp, structureModuleToTwistingSheafZero_toX1]
   exact IsIso.of_isIso_fac_right hfac
 
+/-- A morphism of module sheaves that is an isomorphism on both
+standard charts is an isomorphism globally. -/
+private theorem isIso_of_standard_chart_restrictions
+    (k : Type u) [CommRing k] {M N : ModuleSheaf k} (φ : M ⟶ N)
+    (h0 : IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map φ))
+    (h1 : IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map φ)) :
+    IsIso φ := by
+  let ψ := (SheafOfModules.toSheaf (scheme k).ringCatSheaf).map φ
+  haveI hstalk : ∀ x : scheme k,
+      IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat x).map ψ.hom) :=
+    fun x => by
+      have hx : x ∈ x0BasicOpen k ∨ x ∈ x1BasicOpen k := by
+        have hx' : x ∈ x0BasicOpen k ⊔ x1BasicOpen k := by
+          rw [x0BasicOpen_sup_x1BasicOpen_eq_top]
+          trivial
+        simpa only [Opens.mem_sup] using hx'
+      rcases hx with hx0 | hx1
+      · let y : x0ChartScheme k := ⟨x, hx0⟩
+        let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
+        let e := Scheme.Modules.restrictStalkNatIso (x0BasicOpen k).ι y
+        letI : IsIso (F.map φ) := h0
+        haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
+            TopCat.Presheaf.stalkFunctor AddCommGrpCat y).map φ) := by
+          infer_instance
+        have hglobal : IsIso
+            ((Scheme.Modules.toPresheaf (scheme k) ⋙
+              TopCat.Presheaf.stalkFunctor AddCommGrpCat
+                ((x0BasicOpen k).ι y)).map φ) :=
+          IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
+        simpa [ψ, y] using hglobal
+      · let y : x1ChartScheme k := ⟨x, hx1⟩
+        let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
+        let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
+        letI : IsIso (F.map φ) := h1
+        haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
+            TopCat.Presheaf.stalkFunctor AddCommGrpCat y).map φ) := by
+          infer_instance
+        have hglobal : IsIso
+            ((Scheme.Modules.toPresheaf (scheme k) ⋙
+              TopCat.Presheaf.stalkFunctor AddCommGrpCat
+                ((x1BasicOpen k).ι y)).map φ) :=
+          IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
+        simpa [ψ, y] using hglobal
+  haveI : IsIso ψ :=
+    TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
+  rw [Scheme.Modules.Hom.isIso_iff_isIso_app]
+  intro U
+  change IsIso (ψ.hom.app (Opposite.op U))
+  infer_instance
+
+/-- The canonical comparison from the structure module to `O(0)` is an
+isomorphism. -/
+theorem structureModuleToTwistingSheafZero_isIso
+    (k : Type u) [CommRing k] :
+    IsIso (structureModuleToTwistingSheafZero k) :=
+  isIso_of_standard_chart_restrictions k
+    (structureModuleToTwistingSheafZero k)
+    (x0Restrict_structureModuleToTwistingSheafZero_isIso k)
+    (x1Restrict_structureModuleToTwistingSheafZero_isIso k)
+
 end
 
 end RiemannRoch.ProjectiveLine
