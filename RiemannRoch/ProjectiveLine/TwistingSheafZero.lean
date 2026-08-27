@@ -211,6 +211,38 @@ theorem structureModuleToTwistingSheafZero_toX1
       structureModuleToX1 k := by
   apply twistingSheafLift_toX1
 
+/-- The comparison from the structure module to `O(0)` is an
+isomorphism on the first standard chart. -/
+theorem x0Restrict_structureModuleToTwistingSheafZero_isIso
+    (k : Type u) [CommRing k] :
+    IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
+      (structureModuleToTwistingSheafZero k)) := by
+  let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
+  letI : IsIso (F.map (twistingSheafToX0 k 0)) :=
+    x0Restrict_twistingSheafToX0_isIso k 0
+  letI : IsIso (F.map (structureModuleToX0 k)) :=
+    x0Restrict_structureModuleToX0_isIso k
+  apply IsIso.of_isIso_fac_right
+    (g := F.map (twistingSheafToX0 k 0))
+    (h := F.map (structureModuleToX0 k))
+  rw [← F.map_comp, structureModuleToTwistingSheafZero_toX0]
+
+/-- The comparison from the structure module to `O(0)` is an
+isomorphism on the second standard chart. -/
+theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
+    (k : Type u) [CommRing k] :
+    IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
+      (structureModuleToTwistingSheafZero k)) := by
+  let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
+  letI : IsIso (F.map (twistingSheafToX1 k 0)) :=
+    x1Restrict_twistingSheafToX1_isIso k 0
+  letI : IsIso (F.map (structureModuleToX1 k)) :=
+    x1Restrict_structureModuleToX1_isIso k
+  apply IsIso.of_isIso_fac_right
+    (g := F.map (twistingSheafToX1 k 0))
+    (h := F.map (structureModuleToX1 k))
+  rw [← F.map_comp, structureModuleToTwistingSheafZero_toX1]
+
 end
 
 end RiemannRoch.ProjectiveLine
