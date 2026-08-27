@@ -31,63 +31,41 @@ universe u
 noncomputable abbrev structureModule (k : Type u) [CommRing k] : ModuleSheaf k :=
   SheafOfModules.unit (scheme k).ringCatSheaf
 
-/-- The constant unit section of the first pushed-forward trivial chart
-module. -/
-noncomputable def x0PushedTrivialUnitSection
-    (k : Type u) [CommRing k] :
-    (x0PushedTrivialModule k).sections :=
-  PresheafOfModules.sectionsMk
-    (fun X => (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ X.unop))) (by
-      intro X Y f
-      change (x0ChartScheme k).presheaf.map _ 1 = 1
-      exact map_one _)
-
-/-- The constant unit section of the second pushed-forward trivial chart
-module. -/
-noncomputable def x1PushedTrivialUnitSection
-    (k : Type u) [CommRing k] :
-    (x1PushedTrivialModule k).sections :=
-  PresheafOfModules.sectionsMk
-    (fun X => (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ X.unop))) (by
-      intro X Y f
-      change (x1ChartScheme k).presheaf.map _ 1 = 1
-      exact map_one _)
-
-/-- The structure-module map selecting the constant unit section on the first
-pushed-forward trivial chart module. -/
+/-- The canonical structure-module map to the first pushed-forward
+trivial chart module. -/
 noncomputable def structureModuleToX0
     (k : Type u) [CommRing k] :
     structureModule k ⟶ x0PushedTrivialModule k :=
-  (x0PushedTrivialModule k).unitHomEquiv.symm
-    (x0PushedTrivialUnitSection k)
+  let j := (x0BasicOpen k).ι
+  (Scheme.Modules.restrictAdjunction j).unit.app (structureModule k) ≫
+    (Scheme.Modules.pushforward j).map
+      (Scheme.Modules.restrictUnitIso j).hom
 
-/-- The structure-module map selecting the constant unit section on the second
-pushed-forward trivial chart module. -/
+/-- The canonical structure-module map to the second pushed-forward
+trivial chart module. -/
 noncomputable def structureModuleToX1
     (k : Type u) [CommRing k] :
     structureModule k ⟶ x1PushedTrivialModule k :=
-  (x1PushedTrivialModule k).unitHomEquiv.symm
-    (x1PushedTrivialUnitSection k)
+  let j := (x1BasicOpen k).ι
+  (Scheme.Modules.restrictAdjunction j).unit.app (structureModule k) ≫
+    (Scheme.Modules.pushforward j).map
+      (Scheme.Modules.restrictUnitIso j).hom
 
 theorem structureModuleToX0_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (structureModuleToX0 k).app U (1 : Γ(scheme k, U)) =
       (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) := by
-  change (((x0PushedTrivialModule k).unitHomEquiv
-    ((x0PushedTrivialModule k).unitHomEquiv.symm
-      (x0PushedTrivialUnitSection k))).val (Opposite.op U)) = _
-  rw [Equiv.apply_symm_apply]
-  rfl
+  change (((x0BasicOpen k).ι.appIso _).hom
+    ((scheme k).presheaf.map _ 1)) = 1
+  simp
 
 theorem structureModuleToX1_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (structureModuleToX1 k).app U (1 : Γ(scheme k, U)) =
       (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) := by
-  change (((x1PushedTrivialModule k).unitHomEquiv
-    ((x1PushedTrivialModule k).unitHomEquiv.symm
-      (x1PushedTrivialUnitSection k))).val (Opposite.op U)) = _
-  rw [Equiv.apply_symm_apply]
-  rfl
+  change (((x1BasicOpen k).ι.appIso _).hom
+    ((scheme k).presheaf.map _ 1)) = 1
+  simp
 
 theorem x0RestrictionToOverlap_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
