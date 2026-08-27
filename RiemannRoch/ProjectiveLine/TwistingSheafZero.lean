@@ -69,7 +69,6 @@ noncomputable def structureModuleToX1
   (x1PushedTrivialModule k).unitHomEquiv.symm
     (x1PushedTrivialUnitSection k)
 
-@[simp]
 theorem structureModuleToX0_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (structureModuleToX0 k).app U (1 : Γ(scheme k, U)) =
@@ -80,7 +79,6 @@ theorem structureModuleToX0_app_one
   rw [Equiv.apply_symm_apply]
   rfl
 
-@[simp]
 theorem structureModuleToX1_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (structureModuleToX1 k).app U (1 : Γ(scheme k, U)) =
@@ -91,7 +89,6 @@ theorem structureModuleToX1_app_one
   rw [Equiv.apply_symm_apply]
   rfl
 
-@[simp]
 theorem x0RestrictionToOverlap_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (x0RestrictionToOverlap k).app U
@@ -102,7 +99,6 @@ theorem x0RestrictionToOverlap_app_one
         ((x0ChartScheme k).presheaf.map _ 1)) = 1
   simp
 
-@[simp]
 theorem x1RestrictionToOverlap_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (x1RestrictionToOverlap k).app U
