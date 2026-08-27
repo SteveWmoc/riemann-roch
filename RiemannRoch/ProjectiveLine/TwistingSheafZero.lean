@@ -364,6 +364,14 @@ theorem structureModuleToTwistingSheafZero_isIso
     (x0Restrict_structureModuleToTwistingSheafZero_isIso k)
     (x1Restrict_structureModuleToTwistingSheafZero_isIso k)
 
+/-- The untwisted twisting sheaf is isomorphic to the structure module. -/
+noncomputable def twistingSheafZeroIso
+    (k : Type u) [CommRing k] :
+    twistingSheaf k 0 ≅ structureModule k := by
+  letI : IsIso (structureModuleToTwistingSheafZero k) :=
+    structureModuleToTwistingSheafZero_isIso k
+  exact (asIso (structureModuleToTwistingSheafZero k)).symm
+
 end
 
 end RiemannRoch.ProjectiveLine
