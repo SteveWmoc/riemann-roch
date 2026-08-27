@@ -39,6 +39,7 @@ noncomputable def x0PushedTrivialUnitSection
   PresheafOfModules.sectionsMk
     (fun X => (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ X.unop))) (by
       intro X Y f
+      change (x0ChartScheme k).presheaf.map _ 1 = 1
       exact map_one _)
 
 /-- The constant unit section of the second pushed-forward trivial chart
@@ -49,6 +50,7 @@ noncomputable def x1PushedTrivialUnitSection
   PresheafOfModules.sectionsMk
     (fun X => (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ X.unop))) (by
       intro X Y f
+      change (x1ChartScheme k).presheaf.map _ 1 = 1
       exact map_one _)
 
 /-- The structure-module map selecting the constant unit section on the first
