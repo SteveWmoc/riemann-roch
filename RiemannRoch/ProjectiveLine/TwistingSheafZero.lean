@@ -88,16 +88,24 @@ theorem x0Restrict_structureModuleToX0_isIso
     (k : Type u) [CommRing k] :
     IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
       (structureModuleToX0 k)) := by
-  simpa [structureModuleToX0] using
-    restrict_structureModuleToPushedUnit_isIso (x0BasicOpen k).ι
+  change IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
+    ((Scheme.Modules.restrictAdjunction (x0BasicOpen k).ι).unit.app
+        (SheafOfModules.unit (scheme k).ringCatSheaf) ≫
+      (Scheme.Modules.pushforward (x0BasicOpen k).ι).map
+        (Scheme.Modules.restrictUnitIso (x0BasicOpen k).ι).hom))
+  exact restrict_structureModuleToPushedUnit_isIso (x0BasicOpen k).ι
 
 /-- The second canonical structure-module chart map is locally an isomorphism. -/
 theorem x1Restrict_structureModuleToX1_isIso
     (k : Type u) [CommRing k] :
     IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
       (structureModuleToX1 k)) := by
-  simpa [structureModuleToX1] using
-    restrict_structureModuleToPushedUnit_isIso (x1BasicOpen k).ι
+  change IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
+    ((Scheme.Modules.restrictAdjunction (x1BasicOpen k).ι).unit.app
+        (SheafOfModules.unit (scheme k).ringCatSheaf) ≫
+      (Scheme.Modules.pushforward (x1BasicOpen k).ι).map
+        (Scheme.Modules.restrictUnitIso (x1BasicOpen k).ι).hom))
+  exact restrict_structureModuleToPushedUnit_isIso (x1BasicOpen k).ι
 
 theorem structureModuleToX0_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
