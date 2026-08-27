@@ -249,6 +249,7 @@ theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
 
 /-- A morphism of module sheaves that is an isomorphism on both
 standard charts is an isomorphism globally. -/
+set_option backward.defeqAttrib.useBackward true in
 private theorem isIso_of_standard_chart_restrictions
     (k : Type u) [CommRing k] {M N : ModuleSheaf k} (φ : M ⟶ N)
     (h0 : IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map φ))
@@ -306,8 +307,8 @@ private theorem isIso_of_standard_chart_restrictions
                 ((x0BasicOpen k).ι y)).map φ) := by
           rw [← hconj]
           infer_instance
-        simpa only [Functor.comp_obj, Functor.comp_map, ψ, y,
-          Scheme.Opens.ι_apply] using hglobal
+        dsimp only [Functor.comp_obj, Functor.comp_map] at hglobal
+        simpa only [ψ, y, Scheme.Opens.ι_apply] using hglobal
       · let y : x1ChartScheme k := ⟨x, hx1⟩
         let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
@@ -339,8 +340,8 @@ private theorem isIso_of_standard_chart_restrictions
                 ((x1BasicOpen k).ι y)).map φ) := by
           rw [← hconj]
           infer_instance
-        simpa only [Functor.comp_obj, Functor.comp_map, ψ, y,
-          Scheme.Opens.ι_apply] using hglobal
+        dsimp only [Functor.comp_obj, Functor.comp_map] at hglobal
+        simpa only [ψ, y, Scheme.Opens.ι_apply] using hglobal
   letI hψ : IsIso ψ :=
     TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
   let eψ := asIso ψ
