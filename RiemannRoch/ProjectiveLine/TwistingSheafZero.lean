@@ -256,7 +256,7 @@ private theorem isIso_of_standard_chart_restrictions
     IsIso φ := by
   let ψ := (SheafOfModules.toSheaf (scheme k).ringCatSheaf).map φ
   haveI hstalk : ∀ x : scheme k,
-      IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat x).map ψ.hom) :=
+      IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x).map ψ.hom) :=
     fun x => by
       have hx : x ∈ x0BasicOpen k ∨ x ∈ x1BasicOpen k := by
         have hx' : x ∈ x0BasicOpen k ⊔ x1BasicOpen k := by
@@ -269,7 +269,7 @@ private theorem isIso_of_standard_chart_restrictions
         let e := Scheme.Modules.restrictStalkNatIso (x0BasicOpen k).ι y
         letI : IsIso (F.map φ) := h0
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
-            TopCat.Presheaf.stalkFunctor AddCommGrpCat y).map φ) := by
+            TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
           infer_instance
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
@@ -282,7 +282,7 @@ private theorem isIso_of_standard_chart_restrictions
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
         letI : IsIso (F.map φ) := h1
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
-            TopCat.Presheaf.stalkFunctor AddCommGrpCat y).map φ) := by
+            TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
           infer_instance
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
