@@ -270,10 +270,12 @@ private theorem isIso_of_standard_chart_restrictions
         letI : IsIso (F.map φ) := h0
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
+          change IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map
+            ((Scheme.Modules.toPresheaf (x0ChartScheme k)).map (F.map φ)))
           infer_instance
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
-              TopCat.Presheaf.stalkFunctor AddCommGrpCat
+              TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                 ((x0BasicOpen k).ι y)).map φ) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
         simpa [ψ, y] using hglobal
@@ -283,10 +285,12 @@ private theorem isIso_of_standard_chart_restrictions
         letI : IsIso (F.map φ) := h1
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
+          change IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map
+            ((Scheme.Modules.toPresheaf (x1ChartScheme k)).map (F.map φ)))
           infer_instance
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
-              TopCat.Presheaf.stalkFunctor AddCommGrpCat
+              TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                 ((x1BasicOpen k).ι y)).map φ) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
         simpa [ψ, y] using hglobal
