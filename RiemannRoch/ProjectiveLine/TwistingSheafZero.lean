@@ -60,6 +60,13 @@ private theorem restrict_structureModuleToPushedUnit_isIso
           (SheafOfModules.unit Y.ringCatSheaf) ≫
         (Scheme.Modules.pushforward f).map
           (Scheme.Modules.restrictUnitIso f).hom)) := by
+  letI : IsIso ((Scheme.Modules.restrictAdjunction f).counit.app
+      ((Scheme.Modules.restrictFunctor f).obj
+        (SheafOfModules.unit Y.ringCatSheaf))) :=
+    inferInstanceAs (IsIso
+      ((Scheme.Modules.restrictFunctorAdjCounitIso f).hom.app
+        ((Scheme.Modules.restrictFunctor f).obj
+          (SheafOfModules.unit Y.ringCatSheaf))))
   haveI : IsIso ((Scheme.Modules.restrictFunctor f).map
       ((Scheme.Modules.restrictAdjunction f).unit.app
         (SheafOfModules.unit Y.ringCatSheaf))) :=
@@ -67,6 +74,7 @@ private theorem restrict_structureModuleToPushedUnit_isIso
       ((Scheme.Modules.restrictAdjunction f).left_triangle_components
         (SheafOfModules.unit Y.ringCatSheaf))
   rw [Functor.map_comp]
+  refine IsIso.comp_isIso' inferInstance ?_
   infer_instance
 
 /-- The first canonical structure-module chart map is locally an isomorphism. -/
