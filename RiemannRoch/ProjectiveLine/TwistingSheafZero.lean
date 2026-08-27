@@ -31,25 +31,39 @@ universe u
 noncomputable abbrev structureModule (k : Type u) [CommRing k] : ModuleSheaf k :=
   SheafOfModules.unit (scheme k).ringCatSheaf
 
-/-- Restrict the structure module to the first chart, identify it with the
-trivial chart module, and push it back to `P¹_k`. -/
+/-- The constant unit section of the first pushed-forward trivial chart
+module. -/
+noncomputable def x0PushedTrivialUnitSection
+    (k : Type u) [CommRing k] :
+    (x0PushedTrivialModule k).sections :=
+  PresheafOfModules.sectionsMk (fun _ => 1) (by
+    intro X Y f
+    exact map_one _)
+
+/-- The constant unit section of the second pushed-forward trivial chart
+module. -/
+noncomputable def x1PushedTrivialUnitSection
+    (k : Type u) [CommRing k] :
+    (x1PushedTrivialModule k).sections :=
+  PresheafOfModules.sectionsMk (fun _ => 1) (by
+    intro X Y f
+    exact map_one _)
+
+/-- The structure-module map selecting the constant unit section on the first
+pushed-forward trivial chart module. -/
 noncomputable def structureModuleToX0
     (k : Type u) [CommRing k] :
     structureModule k ⟶ x0PushedTrivialModule k :=
-  (Scheme.Modules.restrictAdjunction (x0BasicOpen k).ι).unit.app
-      (structureModule k) ≫
-    (Scheme.Modules.pushforward (x0BasicOpen k).ι).map
-      (Scheme.Modules.restrictUnitIso (x0BasicOpen k).ι).hom
+  (x0PushedTrivialModule k).unitHomEquiv.symm
+    (x0PushedTrivialUnitSection k)
 
-/-- Restrict the structure module to the second chart, identify it with the
-trivial chart module, and push it back to `P¹_k`. -/
+/-- The structure-module map selecting the constant unit section on the second
+pushed-forward trivial chart module. -/
 noncomputable def structureModuleToX1
     (k : Type u) [CommRing k] :
     structureModule k ⟶ x1PushedTrivialModule k :=
-  (Scheme.Modules.restrictAdjunction (x1BasicOpen k).ι).unit.app
-      (structureModule k) ≫
-    (Scheme.Modules.pushforward (x1BasicOpen k).ι).map
-      (Scheme.Modules.restrictUnitIso (x1BasicOpen k).ι).hom
+  (x1PushedTrivialModule k).unitHomEquiv.symm
+    (x1PushedTrivialUnitSection k)
 
 /-- Multiplication by the degree-zero transition factor is the identity on the
 trivial overlap module. -/
