@@ -60,22 +60,27 @@ private theorem restrict_structureModuleToPushedUnit_isIso
           (SheafOfModules.unit Y.ringCatSheaf) ≫
         (Scheme.Modules.pushforward f).map
           (Scheme.Modules.restrictUnitIso f).hom)) := by
-  letI : IsIso ((Scheme.Modules.restrictAdjunction f).counit.app
-      ((Scheme.Modules.restrictFunctor f).obj
-        (SheafOfModules.unit Y.ringCatSheaf))) :=
-    inferInstanceAs (IsIso
-      ((Scheme.Modules.restrictFunctorAdjCounitIso f).hom.app
-        ((Scheme.Modules.restrictFunctor f).obj
-          (SheafOfModules.unit Y.ringCatSheaf))))
-  haveI : IsIso ((Scheme.Modules.restrictFunctor f).map
-      ((Scheme.Modules.restrictAdjunction f).unit.app
-        (SheafOfModules.unit Y.ringCatSheaf))) :=
-    IsIso.of_isIso_fac_right
-      ((Scheme.Modules.restrictAdjunction f).left_triangle_components
-        (SheafOfModules.unit Y.ringCatSheaf))
+  let F := Scheme.Modules.restrictFunctor f
+  let O := SheafOfModules.unit Y.ringCatSheaf
+  let e := (Scheme.Modules.restrictFunctorAdjCounitIso f).app (F.obj O)
+  have hunit :
+      F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) = e.inv := by
+    apply (cancel_mono e.hom).1
+    simpa [e, F, O] using
+      (Scheme.Modules.restrictAdjunction f).left_triangle_components O
+  haveI : IsIso
+      (F.map ((Scheme.Modules.restrictAdjunction f).unit.app O)) := by
+    rw [hunit]
+    infer_instance
+  change IsIso (F.map
+    ((Scheme.Modules.restrictAdjunction f).unit.app O ≫
+      (Scheme.Modules.pushforward f).map
+        (Scheme.Modules.restrictUnitIso f).hom))
   rw [Functor.map_comp]
-  refine IsIso.comp_isIso' inferInstance ?_
-  infer_instance
+  exact
+    ((asIso (F.map ((Scheme.Modules.restrictAdjunction f).unit.app O))) ≪≫
+      F.mapIso ((Scheme.Modules.pushforward f).mapIso
+        (Scheme.Modules.restrictUnitIso f))).isIso_hom
 
 /-- The first canonical structure-module chart map is locally an isomorphism. -/
 theorem x0Restrict_structureModuleToX0_isIso
