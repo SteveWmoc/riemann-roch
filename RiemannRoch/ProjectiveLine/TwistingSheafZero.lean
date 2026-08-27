@@ -272,6 +272,12 @@ private theorem isIso_of_standard_chart_restrictions
       · let y : x0ChartScheme k := ⟨x, hx0⟩
         let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x0BasicOpen k).ι y
+        letI : IsIso (e.hom.app M) := by
+          change IsIso (e.app M).hom
+          infer_instance
+        letI : IsIso (e.hom.app N) := by
+          change IsIso (e.app N).hom
+          infer_instance
         letI : IsIso (F.map φ) := h0
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
@@ -283,11 +289,17 @@ private theorem isIso_of_standard_chart_restrictions
               ((x0BasicOpen k).ι y)).map
                 ((Scheme.Modules.toPresheaf (scheme k)).map φ)) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
-        simpa only [ψ, y, Scheme.Modules.toPresheaf_map,
-          Scheme.Modules.toPresheaf_obj] using hglobal
+        simpa only [ψ, y, Scheme.Opens.ι_apply,
+          Scheme.Modules.toPresheaf_map, Scheme.Modules.toPresheaf_obj] using hglobal
       · let y : x1ChartScheme k := ⟨x, hx1⟩
         let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
+        letI : IsIso (e.hom.app M) := by
+          change IsIso (e.app M).hom
+          infer_instance
+        letI : IsIso (e.hom.app N) := by
+          change IsIso (e.app N).hom
+          infer_instance
         letI : IsIso (F.map φ) := h1
         haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
@@ -299,14 +311,18 @@ private theorem isIso_of_standard_chart_restrictions
               ((x1BasicOpen k).ι y)).map
                 ((Scheme.Modules.toPresheaf (scheme k)).map φ)) :=
           IsIso.of_isIso_fac_left (e.hom.naturality φ).symm
-        simpa only [ψ, y, Scheme.Modules.toPresheaf_map,
-          Scheme.Modules.toPresheaf_obj] using hglobal
+        simpa only [ψ, y, Scheme.Opens.ι_apply,
+          Scheme.Modules.toPresheaf_map, Scheme.Modules.toPresheaf_obj] using hglobal
   haveI : IsIso ψ :=
     TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
-  rw [Scheme.Modules.Hom.isIso_iff_isIso_app]
-  intro U
-  change IsIso (ψ.hom.app (Opposite.op U))
-  infer_instance
+  haveI : IsIso ψ.hom := by
+    change IsIso
+      ((TopCat.Sheaf.forget AddCommGrpCat.{u} (scheme k)).map ψ)
+    infer_instance
+  haveI : IsIso ((Scheme.Modules.toPresheaf (scheme k)).map φ) := by
+    simpa only [ψ, Scheme.Modules.toPresheaf_map] using
+      (inferInstance : IsIso ψ.hom)
+  exact isIso_of_reflects_iso φ (Scheme.Modules.toPresheaf (scheme k))
 
 /-- The canonical comparison from the structure module to `O(0)` is an
 isomorphism. -/
