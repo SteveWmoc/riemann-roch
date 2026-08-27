@@ -91,13 +91,25 @@ theorem structureModuleToX1_app_one
   rw [Equiv.apply_symm_apply]
   rfl
 
+/-- The canonical restriction of the structure module along an open
+immersion preserves the unit section. -/
+@[simp]
+private theorem restrictUnitIso_hom_app_one
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : X.Opens) :
+    (Scheme.Modules.restrictUnitIso f).hom.app U
+        (1 : Γ(Y, f ''ᵁ U)) = (1 : Γ(X, U)) := by
+  change (f.appIso U).hom 1 = 1
+  exact map_one _
+
 @[simp]
 theorem x0RestrictionToOverlap_app_one
     (k : Type u) [CommRing k] (U : (scheme k).Opens) :
     (x0RestrictionToOverlap k).app U
         (1 : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) =
       (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
-  simp [x0RestrictionToOverlap, Scheme.Modules.restrictUnitIso]
+  simp [x0RestrictionToOverlap,
+    PresheafOfModules.pushforward_map_app_apply',
+    restrictUnitIso_hom_app_one]
 
 @[simp]
 theorem x1RestrictionToOverlap_app_one
@@ -105,7 +117,9 @@ theorem x1RestrictionToOverlap_app_one
     (x1RestrictionToOverlap k).app U
         (1 : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) =
       (1 : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
-  simp [x1RestrictionToOverlap, Scheme.Modules.restrictUnitIso]
+  simp [x1RestrictionToOverlap,
+    PresheafOfModules.pushforward_map_app_apply',
+    restrictUnitIso_hom_app_one]
 
 /-- Multiplication by the degree-zero transition factor is the identity on the
 trivial overlap module. -/
