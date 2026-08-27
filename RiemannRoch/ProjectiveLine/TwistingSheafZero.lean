@@ -60,6 +60,7 @@ theorem overlapCoefficientTransitionEnd_zero
   apply Scheme.Modules.hom_ext
   intro U
   ext x
+  change Γ(overlapScheme k, U) at x
   change x * (overlapScheme k).presheaf.map
       (homOfLE (show U ≤ ⊤ from le_top)).op
       (overlapLaurentTopSection k (twistCoefficientTransition k 0)) = x
@@ -81,7 +82,8 @@ theorem structureModule_chart_compatibility
   apply Scheme.Modules.hom_ext
   intro U
   ext x
-  rfl
+  simp [structureModuleToX0, structureModuleToX1,
+    x0RestrictionToOverlap, x1RestrictionToOverlap, Category.assoc]
 
 /-- The canonical comparison from the structure module to `O(0)`. -/
 noncomputable def structureModuleToTwistingSheafZero
