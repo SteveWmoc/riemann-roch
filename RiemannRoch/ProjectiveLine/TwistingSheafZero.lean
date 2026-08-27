@@ -79,9 +79,13 @@ theorem structureModule_chart_compatibility
     (k : Type u) [CommRing k] :
     structureModuleToX0 k ≫ x0RestrictionToOverlap k =
       structureModuleToX1 k ≫ x1RestrictionToOverlap k := by
-  apply Scheme.Modules.hom_ext
+  apply (overlapPushedTrivialModule k).unitHomEquiv.injective
+  apply PresheafOfModules.sections_ext
   intro U
-  ext x
+  change ((structureModuleToX0 k ≫ x0RestrictionToOverlap k).app U)
+      (1 : Γ(scheme k, U)) =
+    ((structureModuleToX1 k ≫ x1RestrictionToOverlap k).app U)
+      (1 : Γ(scheme k, U))
   simp [structureModuleToX0, structureModuleToX1,
     x0RestrictionToOverlap, x1RestrictionToOverlap, Category.assoc]
 
