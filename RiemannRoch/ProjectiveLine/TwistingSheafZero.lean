@@ -247,9 +247,9 @@ theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
     rw [← F.map_comp, structureModuleToTwistingSheafZero_toX1]
   exact IsIso.of_isIso_fac_right hfac
 
+set_option backward.defeqAttrib.useBackward true in
 /-- A morphism of module sheaves that is an isomorphism on both
 standard charts is an isomorphism globally. -/
-set_option backward.defeqAttrib.useBackward true in
 private theorem isIso_of_standard_chart_restrictions
     (k : Type u) [CommRing k] {M N : ModuleSheaf k} (φ : M ⟶ N)
     (h0 : IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map φ))
@@ -299,8 +299,8 @@ private theorem isIso_of_standard_chart_restrictions
               ((Scheme.Modules.toPresheaf (scheme k) ⋙
                 TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                   ((x0BasicOpen k).ι y)).map φ) := by
-          rw [e.hom.naturality φ]
-          simp
+          rw [e.hom.naturality φ, ← Category.assoc,
+            Iso.inv_hom_id_app, Category.id_comp]
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
               TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
@@ -332,8 +332,8 @@ private theorem isIso_of_standard_chart_restrictions
               ((Scheme.Modules.toPresheaf (scheme k) ⋙
                 TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
                   ((x1BasicOpen k).ι y)).map φ) := by
-          rw [e.hom.naturality φ]
-          simp
+          rw [e.hom.naturality φ, ← Category.assoc,
+            Iso.inv_hom_id_app, Category.id_comp]
         have hglobal : IsIso
             ((Scheme.Modules.toPresheaf (scheme k) ⋙
               TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u}
