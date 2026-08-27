@@ -68,7 +68,7 @@ coordinate-ring descriptions.
 - [x] Define the Laurent frame transition factors `t^n`, coefficient transport
       factors `t^(-n)`, and their basic unit and coordinate-change identities.
 - [x] Define `O(n)` for every integer `n`.
-- [ ] Prove `O(0)` is the structure sheaf.
+- [x] Prove `O(0)` is the structure sheaf.
 - [ ] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
 - [ ] Prove the expected tensor and duality isomorphisms.
 - [~] Prove restriction formulas on the two standard opens. The canonical local
