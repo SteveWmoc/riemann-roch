@@ -82,10 +82,10 @@ theorem structureModule_chart_compatibility
   apply (overlapPushedTrivialModule k).unitHomEquiv.injective
   apply PresheafOfModules.sections_ext
   intro U
-  change ((structureModuleToX0 k ≫ x0RestrictionToOverlap k).app U)
-      (1 : Γ(scheme k, U)) =
-    ((structureModuleToX1 k ≫ x1RestrictionToOverlap k).app U)
-      (1 : Γ(scheme k, U))
+  change ((structureModuleToX0 k ≫ x0RestrictionToOverlap k).app U.unop)
+      (1 : Γ(scheme k, U.unop)) =
+    ((structureModuleToX1 k ≫ x1RestrictionToOverlap k).app U.unop)
+      (1 : Γ(scheme k, U.unop))
   simp [structureModuleToX0, structureModuleToX1,
     x0RestrictionToOverlap, x1RestrictionToOverlap, Category.assoc]
 
