@@ -65,8 +65,7 @@ private theorem restrict_structureModuleToPushedUnit_isIso
   let e := (Scheme.Modules.restrictFunctorAdjCounitIso f).app (F.obj O)
   have hunit :
       F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) = e.inv := by
-    apply (cancel_mono e.hom).1
-    rw [e.inv_hom_id]
+    apply e.comp_hom_eq_id.mp
     change F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) ≫
       (Scheme.Modules.restrictAdjunction f).counit.app (F.obj O) = 𝟙 _
     exact (Scheme.Modules.restrictAdjunction f).left_triangle_components O
