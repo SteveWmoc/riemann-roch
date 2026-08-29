@@ -42,6 +42,14 @@ noncomputable section
 
 universe u
 
+/-- The pointwise monoidal structure on presheaves of modules over a scheme's
+underlying commutative-ring presheaf. -/
+private noncomputable instance schemePresheafOfModulesMonoidal
+    (X : Scheme.{u}) : MonoidalCategory (PresheafOfModules.{u} X.ringCatSheaf.obj) := by
+  change MonoidalCategory
+    (PresheafOfModules.{u} (X.presheaf ⋙ forget₂ CommRingCat RingCat))
+  infer_instance
+
 /-- The tensor product of two module sheaves, obtained by sheafifying their
 pointwise presheaf tensor product. -/
 noncomputable def moduleSheafTensor
@@ -55,8 +63,11 @@ noncomputable def presheafToRestrictScalarsId
     {C : Type u} [Category.{u} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
     (M : PresheafOfModules.{u} R) :
     M ⟶ (PresheafOfModules.restrictScalars (𝟙 R)).obj M where
-  app X := (ModuleCat.restrictScalarsId'App
-    ((𝟙 R).app X).hom rfl (M.obj X)).inv
+  app X := by
+    change M.obj X ⟶
+      (ModuleCat.restrictScalars ((𝟙 R : R ⟶ R).app X).hom).obj (M.obj X)
+    exact (ModuleCat.restrictScalarsId'App
+      ((𝟙 R : R ⟶ R).app X).hom rfl (M.obj X)).inv
   naturality {_ _} _ := by
     ext x
     rfl
@@ -98,7 +109,8 @@ private noncomputable def pushedStructureMultiplication
 private theorem pushedStructureMultiplication_app_tmul
     {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
     (x y : Γ(X, f ⁻¹ᵁ U)) :
-    (pushedStructureMultiplication f).app (op U) (x ⊗ₜ y) = x * y :=
+    (pushedStructureMultiplication f).app (op U)
+      (x ⊗ₜ[Γ(Y, U)] y) = x * y :=
   rfl
 
 /-- Multiply the two `X₀` coordinates of sections of `O(m)` and `O(n)`. -/
@@ -121,9 +133,12 @@ private noncomputable def x1TensorCoordinate
 private theorem x0RestrictionToOverlap_app_mul
     (k : Type u) [CommRing k] (U : (scheme k).Opens)
     (x y : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) :
-    (x0RestrictionToOverlap k).app U (x * y) =
-      (x0RestrictionToOverlap k).app U x *
-        (x0RestrictionToOverlap k).app U y := by
+    ((x0RestrictionToOverlap k).app U (x * y) :
+        Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) =
+      ((x0RestrictionToOverlap k).app U x :
+          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) *
+        ((x0RestrictionToOverlap k).app U y :
+          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
   change (overlapScheme k).presheaf.map _
       (((overlapToX0 k).appIso _).hom
         ((x0ChartScheme k).presheaf.map _ (x * y))) = _
@@ -133,9 +148,12 @@ private theorem x0RestrictionToOverlap_app_mul
 private theorem x1RestrictionToOverlap_app_mul
     (k : Type u) [CommRing k] (U : (scheme k).Opens)
     (x y : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) :
-    (x1RestrictionToOverlap k).app U (x * y) =
-      (x1RestrictionToOverlap k).app U x *
-        (x1RestrictionToOverlap k).app U y := by
+    ((x1RestrictionToOverlap k).app U (x * y) :
+        Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) =
+      ((x1RestrictionToOverlap k).app U x :
+          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) *
+        ((x1RestrictionToOverlap k).app U y :
+          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
   change (overlapScheme k).presheaf.map _
       (((overlapToX1 k).appIso _).hom
         ((x1ChartScheme k).presheaf.map _ (x * y))) = _
@@ -218,6 +236,11 @@ noncomputable def twistingSheafMultiplicationPresheaf
   let D := overlapPushedTrivialModule k
   let f₀ := x0TensorCoordinate k m n
   let f₁ := x1TensorCoordinate k m n
+  letI : F.Additive := inferInstance
+  letI : PreservesFiniteBiproducts F :=
+    Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproduct A B F :=
+    preservesBinaryBiproduct_of_preservesBiproduct F A B
   let e := F.mapBiprod A B
   let h : F.obj A ⊞ F.obj B ⟶ F.obj D :=
     biprod.desc
