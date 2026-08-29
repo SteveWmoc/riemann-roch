@@ -94,7 +94,7 @@ private noncomputable def pushedStructureMultiplication
       ((Scheme.Modules.pushforward f).obj
         (SheafOfModules.unit X.ringCatSheaf)).val where
   app U := ModuleCat.MonoidalCategory.tensorLift
-    (fun x y ↦ x * y)
+    (fun (x y : Γ(X, f ⁻¹ᵁ U.unop)) ↦ x * y)
     (by intros; simp [add_mul])
     (by intros; simp [mul_assoc])
     (by intros; simp [mul_add])
@@ -111,7 +111,7 @@ private theorem pushedStructureMultiplication_app_tmul
     (x y : Γ(X, f ⁻¹ᵁ U)) :
     (pushedStructureMultiplication f).app (op U)
       (x ⊗ₜ[Γ(Y, U)] y) = x * y :=
-  rfl
+  by simp [pushedStructureMultiplication]
 
 /-- Multiply the two `X₀` coordinates of sections of `O(m)` and `O(n)`. -/
 private noncomputable def x0TensorCoordinate
@@ -135,10 +135,9 @@ private theorem x0RestrictionToOverlap_app_mul
     (x y : Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U)) :
     ((x0RestrictionToOverlap k).app U (x * y) :
         Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) =
-      ((x0RestrictionToOverlap k).app U x :
-          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) *
-        ((x0RestrictionToOverlap k).app U y :
-          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
+      @Mul.mul Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U) inferInstance
+        ((x0RestrictionToOverlap k).app U x)
+        ((x0RestrictionToOverlap k).app U y) := by
   change (overlapScheme k).presheaf.map _
       (((overlapToX0 k).appIso _).hom
         ((x0ChartScheme k).presheaf.map _ (x * y))) = _
@@ -150,10 +149,9 @@ private theorem x1RestrictionToOverlap_app_mul
     (x y : Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U)) :
     ((x1RestrictionToOverlap k).app U (x * y) :
         Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) =
-      ((x1RestrictionToOverlap k).app U x :
-          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) *
-        ((x1RestrictionToOverlap k).app U y :
-          Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U)) := by
+      @Mul.mul Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U) inferInstance
+        ((x1RestrictionToOverlap k).app U x)
+        ((x1RestrictionToOverlap k).app U y) := by
   change (overlapScheme k).presheaf.map _
       (((overlapToX1 k).appIso _).hom
         ((x1ChartScheme k).presheaf.map _ (x * y))) = _
@@ -186,13 +184,17 @@ private theorem tensorCoordinates_compatible
     (overlapScheme k).presheaf.map
       (homOfLE (show (standardOverlap k).ι ⁻¹ᵁ V ≤ ⊤ from le_top)).op
       (overlapLaurentTopSection k (twistCoefficientTransition k q))
-  let a₀ := (x0RestrictionToOverlap k).app V
+  let a₀ : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ V) :=
+    (x0RestrictionToOverlap k).app V
     ((twistingSheafToX0 k m).app V x)
-  let b₀ := (x0RestrictionToOverlap k).app V
+  let b₀ : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ V) :=
+    (x0RestrictionToOverlap k).app V
     ((twistingSheafToX0 k n).app V y)
-  let a₁ := (x1RestrictionToOverlap k).app V
+  let a₁ : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ V) :=
+    (x1RestrictionToOverlap k).app V
     ((twistingSheafToX1 k m).app V x)
-  let b₁ := (x1RestrictionToOverlap k).app V
+  let b₁ : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ V) :=
+    (x1RestrictionToOverlap k).app V
     ((twistingSheafToX1 k n).app V y)
   have hm : a₀ * c m = a₁ := by
     simpa [a₀, a₁, c, Scheme.Modules.Hom.comp_app,
@@ -209,11 +211,13 @@ private theorem tensorCoordinates_compatible
   change
     (pushedOverlapCoefficientTransitionEnd k (m + n)).app V
         ((x0RestrictionToOverlap k).app V
-          ((twistingSheafToX0 k m).app V x *
-            (twistingSheafToX0 k n).app V y)) =
+          (@Mul.mul Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ V) inferInstance
+            ((twistingSheafToX0 k m).app V x)
+            ((twistingSheafToX0 k n).app V y))) =
       (x1RestrictionToOverlap k).app V
-        ((twistingSheafToX1 k m).app V x *
-          (twistingSheafToX1 k n).app V y)
+        (@Mul.mul Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ V) inferInstance
+          ((twistingSheafToX1 k m).app V x)
+          ((twistingSheafToX1 k n).app V y))
   rw [x0RestrictionToOverlap_app_mul, x1RestrictionToOverlap_app_mul,
     pushedOverlapCoefficientTransitionEnd_app_apply]
   change (a₀ * b₀) * c (m + n) = a₁ * b₁
@@ -229,8 +233,7 @@ noncomputable def twistingSheafMultiplicationPresheaf
     (k : Type u) [CommRing k] (m n : ℤ) :
     (twistingSheaf k m).val ⊗ (twistingSheaf k n).val ⟶
       (twistingSheaf k (m + n)).val := by
-  let R := (scheme k).ringCatSheaf
-  let F := SheafOfModules.forget R
+  let F := SheafOfModules.forget (scheme k).ringCatSheaf
   let A := x0PushedTrivialModule k
   let B := x1PushedTrivialModule k
   let D := overlapPushedTrivialModule k
