@@ -103,6 +103,15 @@ theorem twistCoefficientTransition_isUnit
     IsUnit (twistCoefficientTransition k n) := by
   exact twistTransition_isUnit k (-n)
 
+/-- Coefficient transition factors add exponents under multiplication. -/
+theorem twistCoefficientTransition_add
+    (k : Type u) [CommRing k] (m n : ℤ) :
+    twistCoefficientTransition k (m + n) =
+      twistCoefficientTransition k m * twistCoefficientTransition k n := by
+  change twistTransition k (-(m + n)) =
+    twistTransition k (-m) * twistTransition k (-n)
+  rw [neg_add_rev, twistTransition_add, mul_comm]
+
 /-- Changing from the `X₀` Laurent coordinate to the `X₁` Laurent coordinate
 negates the exponent of the frame transition factor. -/
 @[simp]

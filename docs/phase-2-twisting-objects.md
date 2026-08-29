@@ -5,7 +5,7 @@ transition-function convention used for the twisting sheaves `O(n)`.
 
 ## Construction choice
 
-The first implementation of `O(n)` will use transition data on the bundled
+The first implementation of `O(n)` uses transition data on the bundled
 standard cover
 
 ```text
@@ -85,19 +85,19 @@ O(m) ⊗ O(n) ≅ O(m+n)
 O(n)ᵛ ≅ O(-n).
 ```
 
-## Next construction
+## Resulting construction
 
-The next milestone is a genuine object
+The transition data is used to construct the genuine object
 
 ```lean
 twistingSheaf (k : Type u) [CommRing k] (n : ℤ) : ModuleSheaf k
 ```
 
-obtained by gluing two trivial rank-one module sheaves on the standard charts
-using `twistCoefficientTransition k n` on the overlap. A convenient categorical
-realization is expected to use a kernel/equalizer expressing compatible pairs
-of local sections.
+by gluing two trivial rank-one module sheaves on the standard charts using
+`twistCoefficientTransition k n` on the overlap. The implementation realizes
+this gluing as a kernel expressing compatible pairs of local sections.
 
-The resulting sheaf should expose explicit restriction isomorphisms on the two
-standard opens; those formulas are the interface needed by the normalized Cech
-calculation in Phase 3.
+The resulting sheaf exposes explicit restriction isomorphisms on both standard
+opens. They support the global identification `O(0) ≅ O`, the sheafified tensor
+product and multiplication maps `O(m) ⊗ O(n) ⟶ O(m+n)`, and the normalized
+Cech calculation in Phase 3.

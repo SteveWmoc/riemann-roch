@@ -68,12 +68,11 @@ coordinate-ring descriptions.
 - [x] Define the Laurent frame transition factors `t^n`, coefficient transport
       factors `t^(-n)`, and their basic unit and coordinate-change identities.
 - [x] Define `O(n)` for every integer `n`.
+- [x] Prove restriction formulas on the two standard opens and package the
+      canonical chart trivializations.
 - [x] Prove `O(0)` is the structure sheaf.
-- [ ] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
+- [x] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
 - [ ] Prove the expected tensor and duality isomorphisms.
-- [~] Prove restriction formulas on the two standard opens. The canonical local
-      components, overlap equation, and universal gluing lift are packaged;
-      the chart restriction isomorphisms remain.
 
 ### Exit criterion
 
@@ -82,13 +81,13 @@ restriction data for an explicit Cech calculation.
 
 ## Phase 3: The two-open Cech calculation
 
-- [ ] Construct a normalized project-local two-open Cech complex.
-- [ ] Construct the degree-zero Cech differential.
-- [ ] Construct the degree-one Cech differential.
+- [x] Construct a normalized project-local two-open Cech complex.
+- [x] Construct the degree-zero Cech differential.
+- [x] Construct the degree-one Cech differential.
 - [ ] Identify global sections for `n >= 0`.
 - [ ] Prove vanishing of global sections for `n < 0`.
 - [ ] Compute first cohomology for all integers `n`.
-- [ ] Prove vanishing above degree one for the normalized complex.
+- [x] Prove vanishing above degree one for the normalized complex.
 - [ ] Compare the normalized complex with Mathlib's canonical unnormalized
       `standardCechComplex`.
 - [ ] Reconcile Cech cohomology with Mathlib's abstract sheaf cohomology.

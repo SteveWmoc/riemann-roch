@@ -67,9 +67,15 @@ The implementation exposes:
 - multiplication by the coefficient transition factor on the overlap module;
 - the two chart restriction maps after pushforward;
 - the compatibility morphism;
-- `twistingSheaf k n` and its canonical kernel inclusion.
+- `twistingSheaf k n` and its canonical kernel inclusion;
+- the two local-coordinate projections, their overlap equation, and a universal
+  gluing lift;
+- trivializations on both standard affine charts;
+- the global isomorphism `O(0) ≅ O`;
+- the sheafified tensor product and multiplication maps
+  `O(m) ⊗ O(n) ⟶ O(m+n)`.
 
-The next step is to prove that restricting `twistingSheaf k n` to either
-standard chart gives the trivial rank-one module sheaf. Once those local
-trivializations are available, `O(0) ≅ O` and the later tensor/duality formulas
-can be built on a stable API rather than on the kernel implementation.
+The next step is to prove that the multiplication maps are isomorphisms and to
+deduce the expected tensor and duality formulas. The stable local-coordinate
+API keeps those results, and the later Cech calculation, insulated from the
+kernel implementation.
