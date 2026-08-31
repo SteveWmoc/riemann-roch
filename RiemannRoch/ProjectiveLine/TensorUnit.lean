@@ -36,6 +36,34 @@ noncomputable def modulePresheafTensorLeftUnitor
       change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
       exact M.map_smul f r m)
 
+/-- Restriction of scalars along the identity morphism of a ring presheaf is
+canonically isomorphic to the identity. -/
+noncomputable def presheafRestrictScalarsIdIso
+    {C : Type u} [Category.{u} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
+    (M : PresheafOfModules.{u} R) :
+    M ≅ (PresheafOfModules.restrictScalars (𝟙 R)).obj M :=
+  PresheafOfModules.isoMk
+    (fun X =>
+      (ModuleCat.restrictScalarsId'App
+        ((𝟙 R : R ⟶ R).app X).hom rfl (M.obj X)).symm)
+    (by
+      intro X Y f
+      ext x
+      rfl)
+
+/-- The structure module is the left tensor unit for the project-local
+sheafified tensor product. -/
+noncomputable def moduleSheafTensorLeftUnitor
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    moduleSheafTensor k (structureModule k) M ≅ M :=
+  let S := PresheafOfModules.sheafification
+    (𝟙 (scheme k).ringCatSheaf.obj)
+  S.mapIso
+      (modulePresheafTensorLeftUnitor (scheme k) M.val ≪≫
+        presheafRestrictScalarsIdIso M.val) ≪≫
+    asIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
+
 end
 
 end RiemannRoch.ProjectiveLine
