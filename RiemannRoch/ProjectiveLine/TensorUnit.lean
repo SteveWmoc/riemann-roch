@@ -30,6 +30,7 @@ local instance (priority := 2000) tensorUnitSchemeRingCatSheafCommRing
     CommRing (X.ringCatSheaf.obj.obj U) :=
   inferInstanceAs (CommRing (X.presheaf.obj U))
 
+set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the left by the
 structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorLeftUnitor
@@ -41,9 +42,10 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
-      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
-      exact M.map_smul f r m)
+      dsimp [modulePresheafTensor, modulePresheafTensorObjMap]
+      simp [M.map_smul])
 
+set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
 structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorRightUnitor
@@ -55,8 +57,8 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
-      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
-      exact M.map_smul f r m)
+      dsimp [modulePresheafTensor, modulePresheafTensorObjMap]
+      simp [M.map_smul])
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
@@ -75,13 +77,11 @@ noncomputable def presheafRestrictScalarsIdIso
 
 /-- The counit identifying the sheafification of an already-sheaf module with
 that module is an isomorphism. -/
+set_option synthInstance.maxHeartbeats 200000 in
 private theorem sheafificationCounitApp_isIso
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
     IsIso ((PresheafOfModules.sheafificationAdjunction
       (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M) := by
-  rw [← isIso_iff_of_reflects_iso _
-    (SheafOfModules.toSheaf (scheme k).ringCatSheaf)]
-  simp only [PresheafOfModules.toSheaf_map_sheafificationAdjunction_counit_app]
   infer_instance
 
 /-- The structure module is the left tensor unit for the project-local
