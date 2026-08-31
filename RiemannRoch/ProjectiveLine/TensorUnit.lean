@@ -12,7 +12,7 @@ import RiemannRoch.ProjectiveLine.TwistingSheafMultiplication
 
 The sheaf tensor product used for twisting sheaves is defined by sheafifying
 the pointwise tensor product of module presheaves. This file records the
-corresponding tensor-unit comparison with the structure module.
+corresponding tensor-unit comparisons with the structure module.
 -/
 
 namespace RiemannRoch.ProjectiveLine
@@ -34,6 +34,20 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
+      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
+      exact M.map_smul f r m)
+
+/-- Before sheafification, tensoring a module presheaf on the right by the
+structure module is canonically the identity. -/
+noncomputable def modulePresheafTensorRightUnitor
+    (X : Scheme.{u}) (M : X.PresheafOfModules) :
+    modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val ≅ M :=
+  PresheafOfModules.isoMk
+    (fun U => ModuleCat.MonoidalCategory.rightUnitor (M.obj U))
+    (by
+      intro U V f
+      apply ModuleCat.MonoidalCategory.tensor_ext
+      intro m r
       change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
       exact M.map_smul f r m)
 
@@ -61,6 +75,19 @@ noncomputable def moduleSheafTensorLeftUnitor
     (𝟙 (scheme k).ringCatSheaf.obj)
   S.mapIso
       (modulePresheafTensorLeftUnitor (scheme k) M.val ≪≫
+        presheafRestrictScalarsIdIso M.val) ≪≫
+    asIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
+
+/-- The structure module is the right tensor unit for the project-local
+sheafified tensor product. -/
+noncomputable def moduleSheafTensorRightUnitor
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    moduleSheafTensor k M (structureModule k) ≅ M :=
+  let S := PresheafOfModules.sheafification
+    (𝟙 (scheme k).ringCatSheaf.obj)
+  S.mapIso
+      (modulePresheafTensorRightUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
     asIso ((PresheafOfModules.sheafificationAdjunction
       (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
