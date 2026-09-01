@@ -99,7 +99,9 @@ private noncomputable def standardNormalizedCechD (M : ModuleSheaf k) :
 
 private theorem standardNormalizedCechD_squared (M : ModuleSheaf k) (i : ℕ) :
     standardNormalizedCechD M i ≫ standardNormalizedCechD M (i + 1) = 0 := by
-  cases i <;> simp only [standardNormalizedCechD, comp_zero, zero_comp]
+  cases i with
+  | zero => exact HasZeroMorphisms.comp_zero _ _
+  | succ i => exact HasZeroMorphisms.zero_comp _ _
 
 /-- The normalized Cech complex for the standard cover of `P¹_k`. It is the
 familiar two-term complex in degrees zero and one and is zero in all higher
@@ -132,8 +134,8 @@ theorem standardNormalizedCechComplex_X_add_two (M : ModuleSheaf k) (i : ℕ) :
 theorem standardNormalizedCechComplex_d_zero_one (M : ModuleSheaf k) :
     (standardNormalizedCechComplex M).d 0 1 =
       standardNormalizedCechDifferential M := by
-  simp only [standardNormalizedCechComplex, CochainComplex.of.d,
-    standardNormalizedCechD, Category.comp_id]
+  simp [standardNormalizedCechComplex, CochainComplex.of.d, standardNormalizedCechD]
+  exact Category.comp_id _
 
 end
 
