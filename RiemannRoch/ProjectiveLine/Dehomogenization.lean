@@ -171,6 +171,7 @@ theorem x0DehomogenizeHom_affineCoordinate (k : Type u) [CommRing k] :
   simpa [x0DehomogenizeHom, x0LocalizationDehomogenizeHom, x0AffineCoordinate,
     chartCoordinate, g, x0CoordinateRingDehomogenizeHom, coordinate] using h
 
+set_option backward.isDefEq.respectTransparency false in
 @[simp]
 theorem x0DehomogenizeHom_coefficient (k : Type u) [CommRing k] (r : k) :
     x0DehomogenizeHom k (coefficientToStandardAway k 0 r) = Polynomial.C r := by
