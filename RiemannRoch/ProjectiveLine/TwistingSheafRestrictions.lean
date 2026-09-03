@@ -82,6 +82,7 @@ private theorem kernelFork_fst_isIso_of_isLimit_desc_neg
   · rw [← Category.assoc, show l ≫ c.ι = s.ι from hc.fac s WalkingParallelPair.zero]
     simp [s]
 
+set_option backward.isDefEq.respectTransparency.types false in
 /-- Restriction to the first standard chart preserves the kernel diagram used
 to define `O(n)`.
 
@@ -154,6 +155,7 @@ private theorem x0_image_preimage_x1_le_overlapRange
           exact (Scheme.Opens.range_ι (standardOverlap k)).symm
         _ = j1 ''ᵁ r.opensRange := Scheme.Hom.opensRange_comp r j1
 
+set_option backward.isDefEq.respectTransparency.types false in
 /-- After restriction to the `X0` chart, the `X1`-to-overlap restriction map
 is an isomorphism. Geometrically, every point of `X1` visible inside `X0`
 already lies in `X0 ∩ X1`. -/

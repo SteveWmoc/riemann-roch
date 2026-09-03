@@ -58,12 +58,13 @@ theorem twistingSheaf_overlap_condition
         pushedOverlapCoefficientTransitionEnd k n =
       twistingSheafToX1 k n ≫ x1RestrictionToOverlap k := by
   have h := twistingSheafι_compatibility k n
+  rw [twistingCompatibilityMap, biprod.desc_eq, Preadditive.comp_add] at h
   have hzero :
       twistingSheafToX0 k n ≫ x0RestrictionToOverlap k ≫
           pushedOverlapCoefficientTransitionEnd k n -
         twistingSheafToX1 k n ≫ x1RestrictionToOverlap k = 0 := by
-    simpa [twistingSheafToX0, twistingSheafToX1, twistingCompatibilityMap,
-      biprod.desc_eq, Preadditive.comp_add, Category.assoc, sub_eq_add_neg] using h
+    simpa only [twistingSheafToX0, twistingSheafToX1, Category.assoc,
+      Preadditive.comp_neg, Preadditive.neg_comp, sub_eq_add_neg] using h
   exact sub_eq_zero.mp hzero
 
 /-- Glue a compatible pair of maps to the two pushed-forward trivial chart

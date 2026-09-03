@@ -61,6 +61,7 @@ private theorem restrictAdjunction_unit_app_isIso_of_le_range'
   rw [hHom]
   exact presheafMapEqToHom_isIso' M hEq
 
+set_option backward.isDefEq.respectTransparency.types false in
 /-- Restriction to the second standard chart preserves the kernel diagram used
 to define `O(n)`. -/
 theorem x1Restrict_preserves_twisting_kernel
@@ -114,6 +115,7 @@ private theorem x1_image_preimage_x0_le_overlapRange
           exact (Scheme.Opens.range_ι (standardOverlap k)).symm
         _ = j0 ''ᵁ r.opensRange := Scheme.Hom.opensRange_comp r j0
 
+set_option backward.isDefEq.respectTransparency.types false in
 /-- After restriction to the `X1` chart, the `X0`-to-overlap restriction map
 is an isomorphism. -/
 theorem x1Restrict_x0RestrictionToOverlap_isIso
@@ -189,6 +191,7 @@ private theorem overlapCoefficientTransitionEnd_app_apply
         (overlapLaurentTopSection k (twistCoefficientTransition k n)) := by
   rfl
 
+set_option backward.isDefEq.respectTransparency false in
 /-- Multiplication by the coefficient transition `t^(-n)` is an automorphism
 of the trivial module sheaf on the standard overlap. -/
 theorem overlapCoefficientTransitionEnd_isIso
