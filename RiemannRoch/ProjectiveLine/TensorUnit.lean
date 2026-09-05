@@ -31,58 +31,22 @@ local instance (priority := 2000) tensorUnitSchemeRingCatSheafCommRing
   inferInstanceAs (CommRing (X.presheaf.obj U))
 
 set_option backward.isDefEq.respectTransparency false in
-private theorem tensorUnit_modulePresheafTensor_map_tmul {X : Scheme.{u}}
-    {M N : X.PresheafOfModules} {U V : X.Opensᵒᵖ} (f : U ⟶ V)
-    (m : M.obj U) (n : N.obj U) :
-    (modulePresheafTensor X M N).map f
-        (m ⊗ₜ[X.ringCatSheaf.obj.obj U] n) = M.map f m ⊗ₜ N.map f n := by
-  rfl
-
-set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the left by the
 structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorLeftUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
-    modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M ≅ M :=
-  PresheafOfModules.isoMk
-    (fun U => leftUnitor (C := ModuleCat (X.ringCatSheaf.obj.obj U)) (M.obj U))
-    (by
-      intro U V f
-      apply ModuleCat.MonoidalCategory.tensor_ext
-      intro r m
-      simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
-      change
-        (λ_ (M.obj V)).hom
-            ((modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M).map f
-              (r ⊗ₜ[X.ringCatSheaf.obj.obj U] m)) =
-          M.map f ((λ_ (M.obj U)).hom (r ⊗ₜ[X.ringCatSheaf.obj.obj U] m))
-      erw [tensorUnit_modulePresheafTensor_map_tmul,
-        ModuleCat.MonoidalCategory.leftUnitor_hom_apply,
-        ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
-      exact M.map_smul f r m)
+    modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M ≅ M := by
+  change ((SheafOfModules.unit X.ringCatSheaf).val ⊗ M) ≅ M
+  exact λ_ M
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
 structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorRightUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
-    modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val ≅ M :=
-  PresheafOfModules.isoMk
-    (fun U => rightUnitor (C := ModuleCat (X.ringCatSheaf.obj.obj U)) (M.obj U))
-    (by
-      intro U V f
-      apply ModuleCat.MonoidalCategory.tensor_ext
-      intro m r
-      simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
-      change
-        (ρ_ (M.obj V)).hom
-            ((modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val).map f
-              (m ⊗ₜ[X.ringCatSheaf.obj.obj U] r)) =
-          M.map f ((ρ_ (M.obj U)).hom (m ⊗ₜ[X.ringCatSheaf.obj.obj U] r))
-      erw [tensorUnit_modulePresheafTensor_map_tmul,
-        ModuleCat.MonoidalCategory.rightUnitor_hom_apply,
-        ModuleCat.MonoidalCategory.rightUnitor_hom_apply]
-      exact M.map_smul f r m)
+    modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val ≅ M := by
+  change (M ⊗ (SheafOfModules.unit X.ringCatSheaf).val) ≅ M
+  exact ρ_ M
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
