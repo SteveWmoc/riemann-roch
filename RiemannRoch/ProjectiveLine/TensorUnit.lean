@@ -50,7 +50,10 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
-      simp [tensorUnit_modulePresheafTensor_map_tmul, M.map_smul])
+      erw [tensorUnit_modulePresheafTensor_map_tmul,
+        ModuleCat.MonoidalCategory.leftUnitor_hom_apply,
+        ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
+      exact M.map_smul f r m)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
@@ -64,7 +67,10 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
-      simp [tensorUnit_modulePresheafTensor_map_tmul, M.map_smul])
+      erw [tensorUnit_modulePresheafTensor_map_tmul,
+        ModuleCat.MonoidalCategory.rightUnitor_hom_apply,
+        ModuleCat.MonoidalCategory.rightUnitor_hom_apply]
+      exact M.map_smul f r m)
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
@@ -81,6 +87,9 @@ noncomputable def presheafRestrictScalarsIdIso
       ext x
       rfl)
 
+/-- The counit identifying the sheafification of an already-sheaf module with
+that module is an isomorphism. -/
+set_option backward.isDefEq.respectTransparency false in
 private theorem sheafificationCounitApp_isIso
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
     IsIso ((PresheafOfModules.sheafificationAdjunction
