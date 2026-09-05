@@ -50,6 +50,12 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
+      simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
+      change
+        (λ_ (M.obj V)).hom
+            ((modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M).map f
+              (r ⊗ₜ[X.ringCatSheaf.obj.obj U] m)) =
+          M.map f ((λ_ (M.obj U)).hom (r ⊗ₜ[X.ringCatSheaf.obj.obj U] m))
       erw [tensorUnit_modulePresheafTensor_map_tmul,
         ModuleCat.MonoidalCategory.leftUnitor_hom_apply,
         ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
@@ -67,6 +73,12 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
+      simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
+      change
+        (ρ_ (M.obj V)).hom
+            ((modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val).map f
+              (m ⊗ₜ[X.ringCatSheaf.obj.obj U] r)) =
+          M.map f ((ρ_ (M.obj U)).hom (m ⊗ₜ[X.ringCatSheaf.obj.obj U] r))
       erw [tensorUnit_modulePresheafTensor_map_tmul,
         ModuleCat.MonoidalCategory.rightUnitor_hom_apply,
         ModuleCat.MonoidalCategory.rightUnitor_hom_apply]
@@ -87,9 +99,9 @@ noncomputable def presheafRestrictScalarsIdIso
       ext x
       rfl)
 
+set_option backward.isDefEq.respectTransparency false in
 /-- The counit identifying the sheafification of an already-sheaf module with
 that module is an isomorphism. -/
-set_option backward.isDefEq.respectTransparency false in
 private theorem sheafificationCounitApp_isIso
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
     IsIso ((PresheafOfModules.sheafificationAdjunction
