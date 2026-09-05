@@ -42,8 +42,8 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
-      dsimp [modulePresheafTensor, modulePresheafTensorObjMap]
-      simp [M.map_smul])
+      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
+      exact M.map_smul f r m)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
@@ -57,8 +57,8 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
-      dsimp [modulePresheafTensor, modulePresheafTensorObjMap]
-      simp [M.map_smul])
+      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
+      exact M.map_smul f r m)
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
