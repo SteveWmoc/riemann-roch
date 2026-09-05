@@ -42,8 +42,7 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
-      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
-      exact M.map_smul f r m)
+      simp [modulePresheafTensor_map_tmul, M.map_smul])
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
@@ -57,8 +56,7 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
-      change M.map f (r • m) = X.ringCatSheaf.obj.map f r • M.map f m
-      exact M.map_smul f r m)
+      simp [modulePresheafTensor_map_tmul, M.map_smul])
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
@@ -75,6 +73,12 @@ noncomputable def presheafRestrictScalarsIdIso
       ext x
       rfl)
 
+private theorem sheafificationCounitApp_isIso
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    IsIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M) := by
+  infer_instance
+
 /-- The structure module is the left tensor unit for the project-local
 sheafified tensor product. -/
 noncomputable def moduleSheafTensorLeftUnitor
@@ -84,7 +88,7 @@ noncomputable def moduleSheafTensorLeftUnitor
     (𝟙 (scheme k).ringCatSheaf.obj)
   let c := (PresheafOfModules.sheafificationAdjunction
     (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := inferInstance
+  letI : IsIso c := sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorLeftUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
@@ -99,7 +103,7 @@ noncomputable def moduleSheafTensorRightUnitor
     (𝟙 (scheme k).ringCatSheaf.obj)
   let c := (PresheafOfModules.sheafificationAdjunction
     (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := inferInstance
+  letI : IsIso c := sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorRightUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
