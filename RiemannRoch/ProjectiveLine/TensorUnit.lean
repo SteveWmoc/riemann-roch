@@ -36,6 +36,10 @@ structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorLeftUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
     modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M ≅ M := by
+  letI : MonoidalCategoryStruct X.PresheafOfModules :=
+    PresheafOfModules.monoidalCategoryStruct (R := X.presheaf)
+  letI : MonoidalCategory X.PresheafOfModules :=
+    PresheafOfModules.monoidalCategory (R := X.presheaf)
   change ((SheafOfModules.unit X.ringCatSheaf).val ⊗ M) ≅ M
   exact λ_ M
 
@@ -45,6 +49,10 @@ structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorRightUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
     modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val ≅ M := by
+  letI : MonoidalCategoryStruct X.PresheafOfModules :=
+    PresheafOfModules.monoidalCategoryStruct (R := X.presheaf)
+  letI : MonoidalCategory X.PresheafOfModules :=
+    PresheafOfModules.monoidalCategory (R := X.presheaf)
   change (M ⊗ (SheafOfModules.unit X.ringCatSheaf).val) ≅ M
   exact ρ_ M
 
@@ -81,7 +89,9 @@ noncomputable def moduleSheafTensorLeftUnitor
     (𝟙 (scheme k).ringCatSheaf.obj)
   let c := (PresheafOfModules.sheafificationAdjunction
     (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := sheafificationCounitApp_isIso k M
+  letI : IsIso c := by
+    dsimp [c]
+    exact sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorLeftUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
@@ -96,7 +106,9 @@ noncomputable def moduleSheafTensorRightUnitor
     (𝟙 (scheme k).ringCatSheaf.obj)
   let c := (PresheafOfModules.sheafificationAdjunction
     (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := sheafificationCounitApp_isIso k M
+  letI : IsIso c := by
+    dsimp [c]
+    exact sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorRightUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
