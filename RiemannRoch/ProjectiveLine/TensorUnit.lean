@@ -31,6 +31,14 @@ local instance (priority := 2000) tensorUnitSchemeRingCatSheafCommRing
   inferInstanceAs (CommRing (X.presheaf.obj U))
 
 set_option backward.isDefEq.respectTransparency false in
+private theorem tensorUnit_modulePresheafTensor_map_tmul {X : Scheme.{u}}
+    {M N : X.PresheafOfModules} {U V : X.Opensᵒᵖ} (f : U ⟶ V)
+    (m : M.obj U) (n : N.obj U) :
+    (modulePresheafTensor X M N).map f
+        (m ⊗ₜ[X.ringCatSheaf.obj.obj U] n) = M.map f m ⊗ₜ N.map f n := by
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the left by the
 structure module is canonically the identity. -/
 noncomputable def modulePresheafTensorLeftUnitor
@@ -42,7 +50,7 @@ noncomputable def modulePresheafTensorLeftUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro r m
-      simp [modulePresheafTensor_map_tmul, M.map_smul])
+      simp [tensorUnit_modulePresheafTensor_map_tmul, M.map_smul])
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Before sheafification, tensoring a module presheaf on the right by the
@@ -56,7 +64,7 @@ noncomputable def modulePresheafTensorRightUnitor
       intro U V f
       apply ModuleCat.MonoidalCategory.tensor_ext
       intro m r
-      simp [modulePresheafTensor_map_tmul, M.map_smul])
+      simp [tensorUnit_modulePresheafTensor_map_tmul, M.map_smul])
 
 /-- Restriction of scalars along the identity morphism of a ring presheaf is
 canonically isomorphic to the identity. -/
