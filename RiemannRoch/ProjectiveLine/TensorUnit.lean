@@ -87,15 +87,14 @@ noncomputable def moduleSheafTensorLeftUnitor
     moduleSheafTensor k (structureModule k) M ≅ M := by
   let S := PresheafOfModules.sheafification
     (𝟙 (scheme k).ringCatSheaf.obj)
-  let c := (PresheafOfModules.sheafificationAdjunction
-    (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := by
-    dsimp [c]
-    exact sheafificationCounitApp_isIso k M
+  letI : IsIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M) :=
+    sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorLeftUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
-    asIso c
+    asIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
 
 /-- The structure module is the right tensor unit for the project-local
 sheafified tensor product. -/
@@ -104,15 +103,14 @@ noncomputable def moduleSheafTensorRightUnitor
     moduleSheafTensor k M (structureModule k) ≅ M := by
   let S := PresheafOfModules.sheafification
     (𝟙 (scheme k).ringCatSheaf.obj)
-  let c := (PresheafOfModules.sheafificationAdjunction
-    (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M
-  letI : IsIso c := by
-    dsimp [c]
-    exact sheafificationCounitApp_isIso k M
+  letI : IsIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M) :=
+    sheafificationCounitApp_isIso k M
   exact S.mapIso
       (modulePresheafTensorRightUnitor (scheme k) M.val ≪≫
         presheafRestrictScalarsIdIso M.val) ≪≫
-    asIso c
+    asIso ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
 
 end
 
