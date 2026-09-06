@@ -80,6 +80,7 @@ private theorem sheafificationCounitApp_isIso
       (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M) := by
   infer_instance
 
+set_option backward.isDefEq.respectTransparency false in
 /-- The structure module is the left tensor unit for the project-local
 sheafified tensor product. -/
 noncomputable def moduleSheafTensorLeftUnitor
@@ -96,6 +97,7 @@ noncomputable def moduleSheafTensorLeftUnitor
     asIso ((PresheafOfModules.sheafificationAdjunction
       (𝟙 (scheme k).ringCatSheaf.obj)).counit.app M)
 
+set_option backward.isDefEq.respectTransparency false in
 /-- The structure module is the right tensor unit for the project-local
 sheafified tensor product. -/
 noncomputable def moduleSheafTensorRightUnitor
