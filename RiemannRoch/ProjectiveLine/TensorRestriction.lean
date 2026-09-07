@@ -27,7 +27,7 @@ noncomputable section
 
 universe u
 
-attribute [local instance] RingHomInvPair.of_ringEquiv
+attribute [local instance] RingHomInvPair.of_ringEquiv RingHomInvPair.of_ringEquiv_symm
 
 /-- The sheafified pointwise tensor product of two module sheaves on an
 arbitrary scheme. This is the scheme-general form of `moduleSheafTensor`. -/
@@ -50,8 +50,8 @@ scalars restricted along a ring equivalence back to the original module. -/
 private noncomputable def restrictScalarsSemilinearEquiv
     {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S)
     (M : ModuleCat.{u} S) :
-    LinearEquiv (σ' := e.symm.toRingHom) e.toRingHom
-      ((ModuleCat.restrictScalars e.toRingHom).obj M : Type u)
+    LinearEquiv (σ' := (e.symm : S →+* R)) (e : R →+* S)
+      ((ModuleCat.restrictScalars (e : R →+* S)).obj M : Type u)
       (M : Type u) where
   toFun x := x
   invFun x := x
@@ -67,11 +67,11 @@ private theorem restrictScalarsTensorator_bijective
     {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S)
     (M N : ModuleCat.{u} S) :
     Function.Bijective
-      (μ (ModuleCat.restrictScalars e.toRingHom) M N) := by
+      (μ (ModuleCat.restrictScalars (e : R →+* S)) M N) := by
   let eM := restrictScalarsSemilinearEquiv e M
   let eN := restrictScalarsSemilinearEquiv e N
   let eTensor := TensorProduct.congr eM eN
-  have h : ∀ x, μ (ModuleCat.restrictScalars e.toRingHom) M N x = eTensor x := by
+  have h : ∀ x, μ (ModuleCat.restrictScalars (e : R →+* S)) M N x = eTensor x := by
     intro x
     induction x using TensorProduct.induction_on with
     | zero => simp
@@ -93,7 +93,7 @@ its canonical lax-monoidal tensorator is an isomorphism. -/
 theorem restrictScalarsTensorator_isIso_of_ringEquiv
     {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S)
     (M N : ModuleCat.{u} S) :
-    IsIso (μ (ModuleCat.restrictScalars e.toRingHom) M N) := by
+    IsIso (μ (ModuleCat.restrictScalars (e : R →+* S)) M N) := by
   rw [ConcreteCategory.isIso_iff_bijective]
   exact restrictScalarsTensorator_bijective e M N
 
