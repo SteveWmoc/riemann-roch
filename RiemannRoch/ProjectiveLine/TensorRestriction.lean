@@ -50,8 +50,9 @@ scalars restricted along a ring equivalence back to the original module. -/
 private noncomputable def restrictScalarsSemilinearEquiv
     {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S)
     (M : ModuleCat.{u} S) :
-    ((ModuleCat.restrictScalars e.toRingHom).obj M : Type u)
-      ≃ₛₗ[e.toRingHom] (M : Type u) where
+    LinearEquiv (σ' := e.symm.toRingHom) e.toRingHom
+      ((ModuleCat.restrictScalars e.toRingHom).obj M : Type u)
+      (M : Type u) where
   toFun x := x
   invFun x := x
   left_inv _ := rfl
