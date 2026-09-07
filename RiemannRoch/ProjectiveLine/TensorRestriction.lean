@@ -27,8 +27,6 @@ noncomputable section
 
 universe u
 
-attribute [local instance] RingHomInvPair.of_ringEquiv RingHomInvPair.of_ringEquiv_symm
-
 /-- The sheafified pointwise tensor product of two module sheaves on an
 arbitrary scheme. This is the scheme-general form of `moduleSheafTensor`. -/
 noncomputable def schemeModuleSheafTensor
@@ -45,22 +43,6 @@ theorem moduleSheafTensor_eq_schemeModuleSheafTensor
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/-- The identity function is a semilinear equivalence from a module with
-scalars restricted along a ring equivalence back to the original module. -/
-private noncomputable def restrictScalarsSemilinearEquiv
-    {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S)
-    (M : ModuleCat.{u} S) :
-    LinearEquiv (σ' := (e.symm : S →+* R)) (e : R →+* S)
-      ((ModuleCat.restrictScalars (e : R →+* S)).obj M : Type u)
-      (M : Type u) where
-  toFun x := x
-  invFun x := x
-  left_inv _ := rfl
-  right_inv _ := rfl
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-set_option backward.isDefEq.respectTransparency false in
 /-- The tensorator for restriction of scalars along a ring equivalence is
 bijective on underlying modules. -/
 private theorem restrictScalarsTensorator_bijective
@@ -68,8 +50,30 @@ private theorem restrictScalarsTensorator_bijective
     (M N : ModuleCat.{u} S) :
     Function.Bijective
       (μ (ModuleCat.restrictScalars (e : R →+* S)) M N) := by
-  let eM := restrictScalarsSemilinearEquiv e M
-  let eN := restrictScalarsSemilinearEquiv e N
+  letI : RingHomInvPair (e : R →+* S) (e.symm : S →+* R) :=
+    RingHomInvPair.of_ringEquiv e
+  letI : RingHomInvPair (e.symm : S →+* R) (e : R →+* S) :=
+    RingHomInvPair.of_ringEquiv e.symm
+  let eM :
+      LinearEquiv (σ' := (e.symm : S →+* R)) (e : R →+* S)
+        ((ModuleCat.restrictScalars (e : R →+* S)).obj M : Type u)
+        (M : Type u) :=
+    { toFun := fun x => x
+      invFun := fun x => x
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      map_add' := fun _ _ => rfl
+      map_smul' := fun _ _ => rfl }
+  let eN :
+      LinearEquiv (σ' := (e.symm : S →+* R)) (e : R →+* S)
+        ((ModuleCat.restrictScalars (e : R →+* S)).obj N : Type u)
+        (N : Type u) :=
+    { toFun := fun x => x
+      invFun := fun x => x
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      map_add' := fun _ _ => rfl
+      map_smul' := fun _ _ => rfl }
   let eTensor := TensorProduct.congr eM eN
   have h : ∀ x, μ (ModuleCat.restrictScalars (e : R →+* S)) M N x = eTensor x := by
     intro x
