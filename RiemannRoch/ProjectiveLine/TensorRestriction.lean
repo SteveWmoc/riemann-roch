@@ -153,15 +153,15 @@ noncomputable def restrictModulePresheafTensorIso
     let e : (X.ringCatSheaf.obj.obj U : Type u) ≃+*
         (Y.ringCatSheaf.obj.obj (f.opensFunctor.op.obj U) : Type u) :=
       (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
-    have he : ((restrictionRingHom f).app U).hom = (e : _ →+* _) := rfl
+    have he : ((restrictionRingHom f).app U).hom = e.toRingHom := rfl
     rw [he]
     letI : IsIso
-        (μ (ModuleCat.restrictScalars (e : _ →+* _))
+        (μ (ModuleCat.restrictScalars e.toRingHom)
           (M.val.obj (f.opensFunctor.op.obj U))
           (N.val.obj (f.opensFunctor.op.obj U))) :=
       restrictScalarsTensorator_isIso_of_ringEquiv e _ _
     exact asIso
-      (μ (ModuleCat.restrictScalars (e : _ →+* _))
+      (μ (ModuleCat.restrictScalars e.toRingHom)
         (M.val.obj (f.opensFunctor.op.obj U))
         (N.val.obj (f.opensFunctor.op.obj U)))
   · intro U V g
