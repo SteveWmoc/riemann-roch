@@ -6,6 +6,7 @@ Authors: Steven Sabean
 
 import RiemannRoch.ProjectiveLine.TensorUnit
 import Mathlib.Algebra.Category.ModuleCat.Monoidal.Adjunction
+import Mathlib.AlgebraicGeometry.Modules.Sheaf
 
 /-!
 # Restriction and the sheafified tensor product
@@ -100,6 +101,65 @@ theorem restrictScalarsTensorator_isIso_of_ringEquiv
     IsIso (μ (ModuleCat.restrictScalars (e : R →+* S)) M N) := by
   rw [ConcreteCategory.isIso_iff_bijective]
   exact restrictScalarsTensorator_bijective e M N
+
+/-- The morphism of ring-valued presheaves used by restriction along an open
+immersion. Its component on an open `U` is the inverse of the canonical ring
+isomorphism `Γ(Y, f(U)) ≅ Γ(X, U)`. -/
+private noncomputable def restrictionRingHom
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] :
+    X.ringCatSheaf.obj ⟶ f.opensFunctor.op ⋙ Y.ringCatSheaf.obj :=
+  Functor.whiskerRight
+    ({ app U := (f.appIso U.unop).inv } :
+      X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf)
+    (forget₂ CommRingCat RingCat)
+
+/-- On underlying module presheaves, scheme-theoretic restriction is exactly
+pushforward by the opens functor followed by restriction of scalars along
+`restrictionRingHom`. -/
+theorem restrict_val_eq_pushforward
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (M : Y.Modules) :
+    ((Scheme.Modules.restrictFunctor f).obj M).val =
+      (PresheafOfModules.pushforward (restrictionRingHom f)).obj M.val :=
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Pointwise tensor product commutes with restriction along an open immersion.
+The component on each open is the canonical tensorator for restriction of
+scalars; it is invertible because the ring map is an equivalence. -/
+noncomputable def restrictModulePresheafTensorIso
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) :
+    modulePresheafTensor X
+        ((Scheme.Modules.restrictFunctor f).obj M).val
+        ((Scheme.Modules.restrictFunctor f).obj N).val ≅
+      (PresheafOfModules.pushforward (restrictionRingHom f)).obj
+        (modulePresheafTensor Y M.val N.val) := by
+  apply PresheafOfModules.isoMk
+  · intro U
+    change
+      ((ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
+          (M.val.obj (f.opensFunctor.op.obj U)) ⊗
+        (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
+          (N.val.obj (f.opensFunctor.op.obj U))) ≅
+      (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
+        (M.val.obj (f.opensFunctor.op.obj U) ⊗
+          N.val.obj (f.opensFunctor.op.obj U))
+    let e := (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
+    have he : ((restrictionRingHom f).app U).hom = (e : _ →+* _) := rfl
+    rw [he]
+    letI : IsIso
+        (μ (ModuleCat.restrictScalars (e : _ →+* _))
+          (M.val.obj (f.opensFunctor.op.obj U))
+          (N.val.obj (f.opensFunctor.op.obj U))) :=
+      restrictScalarsTensorator_isIso_of_ringEquiv e _ _
+    exact asIso
+      (μ (ModuleCat.restrictScalars (e : _ →+* _))
+        (M.val.obj (f.opensFunctor.op.obj U))
+        (N.val.obj (f.opensFunctor.op.obj U)))
+  · intro U V g
+    apply ModuleCat.MonoidalCategory.tensor_ext
+    intro m n
+    rfl
 
 end
 
