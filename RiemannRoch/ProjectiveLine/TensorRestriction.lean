@@ -134,9 +134,8 @@ noncomputable def restrictModulePresheafTensorIso
         ((Scheme.Modules.restrictFunctor f).obj N).val ≅
       (PresheafOfModules.pushforward (restrictionRingHom f)).obj
         (modulePresheafTensor Y M.val N.val) := by
-  apply PresheafOfModules.isoMk
-  · intro U
-    change
+  refine PresheafOfModules.isoMk (fun U ↦ ?_) ?_
+  · change
       ((ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
           (M.val.obj (f.opensFunctor.op.obj U)) ⊗
         (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
