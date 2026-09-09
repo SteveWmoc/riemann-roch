@@ -167,6 +167,11 @@ noncomputable def restrictModulePresheafTensorIso
   · intro U V g
     apply ModuleCat.MonoidalCategory.tensor_ext
     intro m n
+    change
+      M.val.map (f.opensFunctor.map g.unop).op m ⊗ₜ
+          N.val.map (f.opensFunctor.map g.unop).op n =
+        M.val.map (f.opensFunctor.map g.unop).op m ⊗ₜ
+          N.val.map (f.opensFunctor.map g.unop).op n
     rfl
 
 end
