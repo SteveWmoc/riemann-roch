@@ -28,6 +28,13 @@ noncomputable section
 
 universe u
 
+/-- Sections of the ring sheaf retain their commutative-ring structure after
+forgetting from `CommRingCat` to `RingCat`. -/
+local instance (priority := 2000) tensorRestrictionSchemeRingCatSheafCommRing
+    (X : Scheme.{u}) (U : X.Opensᵒᵖ) :
+    CommRing (X.ringCatSheaf.obj.obj U) :=
+  inferInstanceAs (CommRing (X.presheaf.obj U))
+
 /-- The sheafified pointwise tensor product of two module sheaves on an
 arbitrary scheme. This is the scheme-general form of `moduleSheafTensor`. -/
 noncomputable def schemeModuleSheafTensor
@@ -143,7 +150,9 @@ noncomputable def restrictModulePresheafTensorIso
       (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
         (M.val.obj (f.opensFunctor.op.obj U) ⊗
           N.val.obj (f.opensFunctor.op.obj U))
-    let e := (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
+    let e : (X.ringCatSheaf.obj.obj U : Type u) ≃+*
+        (Y.ringCatSheaf.obj.obj (f.opensFunctor.op.obj U) : Type u) :=
+      (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
     have he : ((restrictionRingHom f).app U).hom = (e : _ →+* _) := rfl
     rw [he]
     letI : IsIso
