@@ -183,8 +183,10 @@ private theorem restrictionTensoratorIsoApp_hom_tmul
     (n : ((Scheme.Modules.restrictFunctor f).obj N).val.obj U) :
     (restrictionTensoratorIsoApp f M N U).hom
         (m ⊗ₜ[X.presheaf.obj U] n) =
-      (m ⊗ₜ[Y.presheaf.obj (f.opensFunctor.op.obj U)] n) := by
-  simp [restrictionTensoratorIsoApp, ModuleCat.restrictScalars_μ_tmul]
+      ((show M.val.obj (f.opensFunctor.op.obj U) from m) ⊗ₜ[
+          Y.presheaf.obj (f.opensFunctor.op.obj U)]
+        (show N.val.obj (f.opensFunctor.op.obj U) from n)) := by
+  simp [restrictionTensoratorIsoApp]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
@@ -209,8 +211,6 @@ private noncomputable def restrictTensorObjIso
   erw [restrictionTensoratorIsoApp_hom_tmul]
   erw [restrictionTensoratorIsoApp_hom_tmul]
   rw [PresheafOfModules.pushforward_obj_map_apply]
-  erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
-  rfl
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
