@@ -130,6 +130,16 @@ theorem restrict_val_eq_pushforward
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
+@[simp]
+private theorem modulePresheafTensor_map_tmul_restrict
+    {X : Scheme.{u}} {M N : X.PresheafOfModules}
+    {U V : X.Opensᵒᵖ} (g : U ⟶ V) (m : M.obj U) (n : N.obj U) :
+    (modulePresheafTensor X M N).map g
+        (m ⊗ₜ[X.ringCatSheaf.obj.obj U] n) =
+      M.map g m ⊗ₜ[X.ringCatSheaf.obj.obj V] N.map g n :=
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
 /-- Pointwise tensor product commutes with restriction along an open immersion.
 The component on each open is the canonical tensorator for restriction of
 scalars; it is invertible because the ring map is an equivalence. -/
@@ -167,8 +177,9 @@ noncomputable def restrictModulePresheafTensorIso
   · intro U V g
     apply ModuleCat.MonoidalCategory.tensor_ext
     intro m n
-    dsimp [modulePresheafTensor]
-    rfl
+    simp only [ModuleCat.comp_apply, modulePresheafTensor_map_tmul_restrict,
+      ModuleCat.restrictScalars_μ_tmul,
+      PresheafOfModules.pushforward_obj_map_apply]
 
 end
 
