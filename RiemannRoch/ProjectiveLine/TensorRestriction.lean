@@ -195,6 +195,18 @@ private theorem restrictionTensoratorIsoApp_hom_tmul
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
+@[simp]
+private theorem restrict_val_map_apply
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M : Y.Modules) {U V : X.Opensᵒᵖ} (g : U ⟶ V)
+    (m : ((Scheme.Modules.restrictFunctor f).obj M).val.obj U) :
+    ((Scheme.Modules.restrictFunctor f).obj M).val.map g m =
+      M.val.map (f.opensFunctor.map g.unop).op
+        (show M.val.obj (f.opensFunctor.op.obj U) from m) :=
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
 /-- Mathlib's pointwise tensor object commutes with restriction along an open
 immersion. -/
 private noncomputable def restrictTensorObjIso
@@ -217,8 +229,8 @@ private noncomputable def restrictTensorObjIso
   erw [restrictionTensoratorIsoApp_hom_tmul]
   rw [PresheafOfModules.pushforward_obj_map_apply]
   erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
-  rw [Scheme.Modules.restrict_map M f g.unop,
-    Scheme.Modules.restrict_map N f g.unop]
+  erw [restrict_val_map_apply f M g m,
+    restrict_val_map_apply f N g n]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
