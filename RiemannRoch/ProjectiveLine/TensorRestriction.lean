@@ -177,9 +177,11 @@ noncomputable def restrictModulePresheafTensorIso
   · intro U V g
     apply ModuleCat.MonoidalCategory.tensor_ext
     intro m n
-    simp only [ModuleCat.comp_apply, modulePresheafTensor_map_tmul_restrict,
-      ModuleCat.restrictScalars_μ_tmul,
+    simp only [ModuleCat.comp_apply, ModuleCat.restrictScalars.map_apply,
       PresheafOfModules.pushforward_obj_map_apply]
+    simp_rw [modulePresheafTensor_map_tmul_restrict]
+    dsimp
+    simp only [ModuleCat.restrictScalars_μ_tmul]
 
 end
 
