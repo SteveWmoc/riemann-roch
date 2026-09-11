@@ -130,14 +130,86 @@ theorem restrict_val_eq_pushforward
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
+/-- Our project-local pointwise tensor is the tensor object from Mathlib's
+monoidal structure on presheaves of modules. -/
+private theorem modulePresheafTensor_eq_tensorObj
+    (X : Scheme.{u}) (M N : X.PresheafOfModules) :
+    modulePresheafTensor X M N =
+      PresheafOfModules.Monoidal.tensorObj (R := X.presheaf) M N :=
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- The componentwise tensorator used to compare tensor product with
+restriction along an open immersion. Naming it separately keeps the naturality
+proof on Mathlib's stable elementwise API. -/
+private noncomputable def restrictionTensoratorIsoApp
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) (U : X.Opensᵒᵖ) :
+    ((Scheme.Modules.restrictFunctor f).obj M).val.obj U ⊗
+        ((Scheme.Modules.restrictFunctor f).obj N).val.obj U ≅
+      (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
+        (M.val.obj (f.opensFunctor.op.obj U) ⊗
+          N.val.obj (f.opensFunctor.op.obj U)) := by
+  let e : (X.presheaf.obj U : Type u) ≃+*
+      (Y.presheaf.obj (f.opensFunctor.op.obj U) : Type u) :=
+    (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
+  have he : ((restrictionRingHom f).app U).hom = e.toRingHom := rfl
+  change
+    ((ModuleCat.restrictScalars e.toRingHom).obj
+        (M.val.obj (f.opensFunctor.op.obj U)) ⊗
+      (ModuleCat.restrictScalars e.toRingHom).obj
+        (N.val.obj (f.opensFunctor.op.obj U))) ≅
+    (ModuleCat.restrictScalars e.toRingHom).obj
+      (M.val.obj (f.opensFunctor.op.obj U) ⊗
+        N.val.obj (f.opensFunctor.op.obj U))
+  letI : IsIso
+      (μ (ModuleCat.restrictScalars e.toRingHom)
+        (M.val.obj (f.opensFunctor.op.obj U))
+        (N.val.obj (f.opensFunctor.op.obj U))) :=
+    restrictScalarsTensorator_isIso_of_ringEquiv e _ _
+  exact asIso
+    (μ (ModuleCat.restrictScalars e.toRingHom)
+      (M.val.obj (f.opensFunctor.op.obj U))
+      (N.val.obj (f.opensFunctor.op.obj U)))
+
+set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-private theorem modulePresheafTensor_map_tmul_restrict
-    {X : Scheme.{u}} {M N : X.PresheafOfModules}
-    {U V : X.Opensᵒᵖ} (g : U ⟶ V) (m : M.obj U) (n : N.obj U) :
-    (modulePresheafTensor X M N).map g
+private theorem restrictionTensoratorIsoApp_hom_tmul
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) (U : X.Opensᵒᵖ)
+    (m : ((Scheme.Modules.restrictFunctor f).obj M).val.obj U)
+    (n : ((Scheme.Modules.restrictFunctor f).obj N).val.obj U) :
+    (restrictionTensoratorIsoApp f M N U).hom
         (m ⊗ₜ[X.presheaf.obj U] n) =
-      M.map g m ⊗ₜ[X.presheaf.obj V] N.map g n :=
+      (m ⊗ₜ[Y.presheaf.obj (f.opensFunctor.op.obj U)] n) := by
+  simp [restrictionTensoratorIsoApp, ModuleCat.restrictScalars_μ_tmul]
+
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- Mathlib's pointwise tensor object commutes with restriction along an open
+immersion. -/
+private noncomputable def restrictTensorObjIso
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) :
+    PresheafOfModules.Monoidal.tensorObj (R := X.presheaf)
+        ((Scheme.Modules.restrictFunctor f).obj M).val
+        ((Scheme.Modules.restrictFunctor f).obj N).val ≅
+      (PresheafOfModules.pushforward (restrictionRingHom f)).obj
+        (PresheafOfModules.Monoidal.tensorObj (R := Y.presheaf) M.val N.val) := by
+  refine PresheafOfModules.isoMk
+    (fun U ↦ restrictionTensoratorIsoApp f M N U) ?_
+  intro U V g
+  apply ModuleCat.MonoidalCategory.tensor_ext
+  intro m n
+  rw [ModuleCat.comp_apply, ModuleCat.comp_apply]
+  erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
+  rw [ModuleCat.restrictScalars.map_apply]
+  erw [restrictionTensoratorIsoApp_hom_tmul]
+  erw [restrictionTensoratorIsoApp_hom_tmul]
+  rw [PresheafOfModules.pushforward_obj_map_apply]
+  erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
@@ -153,36 +225,9 @@ noncomputable def restrictModulePresheafTensorIso
         ((Scheme.Modules.restrictFunctor f).obj N).val ≅
       (PresheafOfModules.pushforward (restrictionRingHom f)).obj
         (modulePresheafTensor Y M.val N.val) := by
-  refine PresheafOfModules.isoMk (fun U ↦ ?_) ?_
-  · change
-      ((ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
-          (M.val.obj (f.opensFunctor.op.obj U)) ⊗
-        (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
-          (N.val.obj (f.opensFunctor.op.obj U))) ≅
-      (ModuleCat.restrictScalars ((restrictionRingHom f).app U).hom).obj
-        (M.val.obj (f.opensFunctor.op.obj U) ⊗
-          N.val.obj (f.opensFunctor.op.obj U))
-    let e : (X.ringCatSheaf.obj.obj U : Type u) ≃+*
-        (Y.ringCatSheaf.obj.obj (f.opensFunctor.op.obj U) : Type u) :=
-      (f.appIso U.unop).symm.commRingCatIsoToRingEquiv
-    have he : ((restrictionRingHom f).app U).hom = e.toRingHom := rfl
-    rw [he]
-    letI : IsIso
-        (μ (ModuleCat.restrictScalars e.toRingHom)
-          (M.val.obj (f.opensFunctor.op.obj U))
-          (N.val.obj (f.opensFunctor.op.obj U))) :=
-      restrictScalarsTensorator_isIso_of_ringEquiv e _ _
-    exact asIso
-      (μ (ModuleCat.restrictScalars e.toRingHom)
-        (M.val.obj (f.opensFunctor.op.obj U))
-        (N.val.obj (f.opensFunctor.op.obj U)))
-  · intro U V g
-    apply ModuleCat.MonoidalCategory.tensor_ext
-    intro m n
-    simp only [ModuleCat.comp_apply, ModuleCat.restrictScalars.map_apply,
-      PresheafOfModules.pushforward_obj_map_apply]
-    simp_rw [modulePresheafTensor_map_tmul_restrict]
-    simp only [asIso_hom, ModuleCat.restrictScalars_μ_tmul]
+  rw [modulePresheafTensor_eq_tensorObj X,
+    modulePresheafTensor_eq_tensorObj Y]
+  exact restrictTensorObjIso f M N
 
 end
 
