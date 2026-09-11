@@ -180,8 +180,7 @@ noncomputable def restrictModulePresheafTensorIso
     simp only [ModuleCat.comp_apply, ModuleCat.restrictScalars.map_apply,
       PresheafOfModules.pushforward_obj_map_apply]
     simp_rw [modulePresheafTensor_map_tmul_restrict]
-    dsimp
-    simp only [ModuleCat.restrictScalars_μ_tmul]
+    simp only [asIso_hom, ModuleCat.restrictScalars_μ_tmul]
 
 end
 
