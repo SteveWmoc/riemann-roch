@@ -26,6 +26,7 @@ import RiemannRoch.ProjectiveLine.StandardChartIso
 import RiemannRoch.ProjectiveLine.TwistingSheafMultiplication
 import RiemannRoch.ProjectiveLine.TensorUnit
 import RiemannRoch.ProjectiveLine.TensorRestriction
+import RiemannRoch.ProjectiveLine.TensorRestrictionSheafification
 import RiemannRoch.ProjectiveLine.Target
 
 /-!
