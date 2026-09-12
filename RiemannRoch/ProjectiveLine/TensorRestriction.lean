@@ -175,7 +175,6 @@ private noncomputable def restrictionTensoratorIsoApp
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
-@[simp]
 private theorem restrictionTensoratorIsoApp_hom_tmul
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
     (M N : Y.Modules) (U : X.Opensᵒᵖ)
