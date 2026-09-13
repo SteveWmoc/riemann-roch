@@ -1,8 +1,11 @@
 # Phase 0 inventory: sheaves of modules and Cech infrastructure
 
-This note records the Mathlib `v4.32.1` declarations relevant to sheaves of
-modules on `P^1_k`, the standard two-open Cech complex, and abstract sheaf
-cohomology.
+This note began as an inventory of the Mathlib `v4.32.1` declarations relevant
+to sheaves of modules on `P^1_k`, the standard two-open Cech complex, and
+abstract sheaf cohomology. The repository now targets Lean/Mathlib 4.33.1.
+The project code using the interfaces below has been ported to that pin; the
+historical limitations are retained here, with the project-local infrastructure
+added since the original survey recorded separately.
 
 ## The category of module sheaves on a scheme
 
@@ -69,8 +72,10 @@ Scheme.Modules.restrictAppIso
 Scheme.Modules.restrictUnitIso
 ```
 
-These will be the natural interfaces for restricting `O(n)` to the two standard
-opens.
+These are now used throughout Phase 2. In particular, the project packages
+explicit chart trivializations of `O(n)`, a local-to-global isomorphism
+criterion on the two standard charts, and tensor/restriction comparison
+isomorphisms for open immersions.
 
 ## Quasi-coherent and locally free module sheaves
 
@@ -98,7 +103,7 @@ AlgebraicGeometry.tilde M : (Spec R).Modules
 
 with accompanying functoriality and localization results on principal opens.
 In particular, `tilde.isoTop` identifies the original module with the global
-sections of its associated sheaf. This will be useful after each standard open
+sections of its associated sheaf. This remains useful after each standard open
 of `P^1_k` is identified with an affine line.
 
 ## Forgetting to abelian sheaves and abstract cohomology
@@ -133,12 +138,12 @@ A direct project abbreviation for
 Sheaf.H (underlyingAbelianSheaf M) n
 ```
 
-was tested during this inventory. Typeclass search reached the derived-category
-localization requirement `Localization.HasSmallLocalizedHom` and did not
-synthesize within the default heartbeat budget. We therefore expose the
-forgetful bridge but do not conceal the derived-category requirements behind a
-project abbreviation. Establishing a stable scheme-module cohomology wrapper is
-a later infrastructure task.
+was tested during the original inventory. Typeclass search reached the
+derived-category localization requirement `Localization.HasSmallLocalizedHom`
+and did not synthesize within the default heartbeat budget. We therefore expose
+the forgetful bridge but still do not conceal the derived-category requirements
+behind a project abbreviation. Establishing a stable scheme-module cohomology
+wrapper remains a later infrastructure task.
 
 ## General Cech-complex infrastructure
 
@@ -175,24 +180,26 @@ FormalCoproduct.cochainComplexFunctor
 AlgebraicTopology.alternatingCofaceMapComplex
 ```
 
-The project specializes this construction to the standard family
+The project specializes this construction to the family of ranges of the
+bundled standard cover
 
 ```lean
-standardBasicOpen k : Fin 2 → (scheme k).Opens
+standardOpenCover k
 ```
 
 and defines
 
 ```lean
+standardCoverOpens k
 standardCechComplexFunctor k
 standardCechComplex M
 ```
 
-for `M : (scheme k).Modules`. The target category and universe must be stated
-explicitly as `AddCommGrpCat.{u}` for typeclass inference to recognize the
+for `M : (scheme k).Modules`. The target category and universe are stated
+explicitly as `AddCommGrpCat.{u}` so typeclass inference recognizes the
 required preadditive and product instances.
 
-## Important limitation: the complex is unnormalized
+## The canonical Cech complex is unnormalized
 
 The indexing by all functions `Fin (n + 1) → Fin 2` permits repeated indices.
 Consequently, the canonical Mathlib complex is the unnormalized alternating
@@ -203,37 +210,46 @@ degree; it is not definitionally the familiar two-term complex
 Γ(U_0, M) × Γ(U_1, M)  ⟶  Γ(U_0 ∩ U_1, M).
 ```
 
-Mathlib contains general normalized-complex and Dold-Kan infrastructure, but
-there is not currently a project-ready wrapper turning this particular Cech
-object into the explicit two-term complex needed for our calculation.
+This was an important Phase 0 gap. The project has since filled the concrete
+side of that gap with `RiemannRoch.ProjectiveLine.NormalizedCech`, which defines
+a project-local normalized complex concentrated in degrees zero and one, with
+the expected difference-of-restrictions differential and vanishing above
+one. The remaining task is not to construct the normalized complex, but to
+compare it formally with Mathlib's canonical unnormalized Cech complex.
 
 ## Important limitation: no Cech-to-derived comparison is packaged
 
-`CategoryTheory.Sheaf.H` and `CategoryTheory.cechComplexFunctor` are presently
-separate constructions. The inventoried API does not provide a theorem that
-the cohomology of this Cech complex agrees with abstract sheaf cohomology, nor
-a scheme-specific acyclic-cover theorem for quasi-coherent sheaves on affine
-opens.
+`CategoryTheory.Sheaf.H` and `CategoryTheory.cechComplexFunctor` remain separate
+constructions in the interfaces used by this project. We do not currently have
+a project theorem identifying the cohomology of the explicit normalized Cech
+complex with abstract sheaf cohomology, nor a scheme-specific acyclic-cover
+theorem specialized to the standard affine cover.
 
-For the project, these must be treated as distinct goals:
+For the project, the remaining comparison goals are:
 
-1. compute an explicit normalized two-open complex;
-2. compare it with Mathlib's canonical unnormalized Cech complex;
+1. compute the explicit normalized two-open complex for `O(n)`;
+2. compare the normalized complex with Mathlib's canonical unnormalized Cech
+   complex;
 3. establish the derived-category instances needed to use `Sheaf.H` reliably;
 4. prove that the resulting Cech cohomology agrees with abstract sheaf
    cohomology for the sheaves and cover under consideration.
 
-## Design decision
+## Current project-local layer
 
-The project will retain `standardCechComplex M` as the canonical Mathlib-backed
-Cech object. For the concrete calculation on `P^1`, it will probably also define
-a project-local normalized two-term complex and a comparison map.
+The original inventory deliberately avoided inventing wrappers before the
+geometry was understood. The project now contains both sides needed for the
+concrete computation:
 
-This separates the elementary Laurent-polynomial calculation from the deeper
-comparison theorem. The likely upstream contributions are:
+- `standardCechComplex M`, backed directly by Mathlib's `cechComplexFunctor`;
+- a normalized two-term project-local complex for the standard cover;
+- explicit standard-chart and overlap coordinate rings;
+- global twisting sheaves with chart trivializations.
 
-- a scheme/open-cover wrapper around `cechComplexFunctor`;
-- a normalized finite-cover Cech complex with convenient formulas;
+This keeps the elementary polynomial/Laurent-polynomial calculation separate
+from the deeper comparison theorem. Likely reusable or upstream-facing work
+still includes:
+
+- a normalized finite-cover Cech complex with convenient general formulas;
 - comparison maps between normalized and unnormalized Cech complexes;
 - an ergonomic scheme-module interface to derived sheaf cohomology;
 - an acyclic-cover theorem comparing Cech cohomology with `Sheaf.H`.

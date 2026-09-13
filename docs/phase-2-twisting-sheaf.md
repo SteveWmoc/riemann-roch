@@ -1,6 +1,7 @@
 # Phase 2 construction: the twisting sheaf
 
-This note records the first global construction of `O(n)` on `P^1_k`.
+This note records the first global construction of `O(n)` on `P^1_k` and the
+current public infrastructure built around it.
 
 ## Construction
 
@@ -71,11 +72,31 @@ The implementation exposes:
 - the two local-coordinate projections, their overlap equation, and a universal
   gluing lift;
 - trivializations on both standard affine charts;
+- `isIso_of_standard_chart_restrictions`, which upgrades isomorphisms on both
+  standard-chart restrictions to a global isomorphism;
 - the global isomorphism `O(0) ≅ O`;
 - the sheafified tensor product and multiplication maps
-  `O(m) ⊗ O(n) ⟶ O(m+n)`.
+  `O(m) ⊗ O(n) ⟶ O(m+n)`;
+- left and right tensor-unit isomorphisms with the structure module;
+- the scheme-general tensor construction `schemeModuleSheafTensor`;
+- the presheaf-level tensor/restriction comparison for open immersions;
+- the sheafification/restriction comparison and the resulting public
+  `restrictSchemeModuleSheafTensorIso`.
 
-The next step is to prove that the multiplication maps are isomorphisms and to
-deduce the expected tensor and duality formulas. The stable local-coordinate
-API keeps those results, and the later Cech calculation, insulated from the
-kernel implementation.
+## Current tensor strategy
+
+The multiplication map is already defined globally. To show that it is an
+isomorphism, the intended route is now local:
+
+1. restrict the multiplication map to `U_0` and `U_1`;
+2. use `restrictSchemeModuleSheafTensorIso` to commute restriction past the
+   sheafified tensor product;
+3. identify both restricted twisting sheaves with the trivial rank-one module
+   through the existing chart trivializations;
+4. reduce the restricted multiplication map to the evident multiplication map
+   on a trivial rank-one module;
+5. apply `isIso_of_standard_chart_restrictions` to conclude globally.
+
+The hard functorial comparison required by this strategy is therefore complete.
+The remaining Phase 2 work is to prove the multiplication maps are isomorphisms
+and then identify the dual of `O(n)` with `O(-n)`.

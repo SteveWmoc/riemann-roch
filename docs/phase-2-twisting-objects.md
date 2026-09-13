@@ -12,9 +12,9 @@ standard cover
 U_0 = D_+(X_0),  U_1 = D_+(X_1).
 ```
 
-Phase 1 already identifies both charts with the affine line and identifies the
-overlap with the Laurent polynomial ring `k[t,t⁻¹]`. It also proves that the two
-Laurent coordinates differ by inversion.
+Phase 1 identifies both charts with the affine line and identifies the overlap
+with the Laurent polynomial ring `k[t,t⁻¹]`. It also proves that the two Laurent
+coordinates differ by inversion.
 
 Mathlib contains general graded-module infrastructure and the affine tilde
 construction `M ↦ M̃` on `Spec R`, but the pinned version does not provide a
@@ -22,9 +22,9 @@ project-ready construction taking a shifted graded module to its associated
 module sheaf on `Proj`. Building that infrastructure first would substantially
 increase the scope of the initial projective-line calculation.
 
-The transition-data construction therefore comes first. The public API should
-remain intrinsic enough that a future shifted-graded-module construction can be
-proved isomorphic to it without changing downstream statements.
+The transition-data construction therefore comes first. The public API remains
+intrinsic enough that a future shifted-graded-module construction can be proved
+isomorphic to it without changing downstream statements.
 
 ## Sign convention
 
@@ -77,13 +77,17 @@ and proves that every transition factor is a unit. Under the change from the
 `X_0` Laurent coordinate to the `X_1` Laurent coordinate, inversion sends the
 frame factor for `n` to the frame factor for `-n`.
 
-These are the scalar identities needed for the later constructions
+These scalar identities support the constructions
 
 ```text
 O(0) ≅ O
-O(m) ⊗ O(n) ≅ O(m+n)
+O(m) ⊗ O(n) ⟶ O(m+n)
 O(n)ᵛ ≅ O(-n).
 ```
+
+The first is proved. The multiplication morphism in the second line is
+constructed; proving it is an isomorphism is the next Phase 2 theorem. The
+third remains subsequent work.
 
 ## Resulting construction
 
@@ -98,6 +102,20 @@ by gluing two trivial rank-one module sheaves on the standard charts using
 this gluing as a kernel expressing compatible pairs of local sections.
 
 The resulting sheaf exposes explicit restriction isomorphisms on both standard
-opens. They support the global identification `O(0) ≅ O`, the sheafified tensor
-product and multiplication maps `O(m) ⊗ O(n) ⟶ O(m+n)`, and the normalized
-Cech calculation in Phase 3.
+opens. The project additionally packages a local-to-global isomorphism
+criterion for this cover. Together these support the global identification
+`O(0) ≅ O` and the planned proof that the multiplication map is an isomorphism.
+
+The tensor infrastructure is no longer projective-line-only: the sheafified
+tensor product has been generalized to an arbitrary scheme as
+`schemeModuleSheafTensor`, with left and right unit comparisons in the
+projective-line specialization. For an open immersion `f : X ⟶ Y`, the project
+proves both the presheaf-level tensor/restriction comparison and the sheafified
+comparison
+
+```text
+restrict_f (M ⊗ N) ≅ restrict_f M ⊗ restrict_f N.
+```
+
+This removes the main functorial obstruction to checking the twisting-sheaf
+multiplication map on the two standard charts.

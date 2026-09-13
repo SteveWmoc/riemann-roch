@@ -70,14 +70,25 @@ coordinate-ring descriptions.
 - [x] Define `O(n)` for every integer `n`.
 - [x] Prove restriction formulas on the two standard opens and package the
       canonical chart trivializations.
+- [x] Package the standard-chart local-to-global isomorphism criterion.
 - [x] Prove `O(0)` is the structure sheaf.
 - [x] Construct multiplication maps `O(m) tensor O(n) -> O(m+n)`.
-- [ ] Prove the expected tensor and duality isomorphisms.
+- [x] Prove left and right tensor-unit comparisons with the structure module.
+- [x] Generalize the sheafified tensor construction from `P^1_k` to arbitrary
+      schemes.
+- [x] Prove pointwise tensor/restriction compatibility for module presheaves
+      along open immersions.
+- [x] Prove sheafification/restriction compatibility and deduce the sheafified
+      tensor restriction isomorphism.
+- [ ] Prove the multiplication maps `O(m) tensor O(n) -> O(m+n)` are
+      isomorphisms.
+- [ ] Identify the dual of `O(n)` with `O(-n)`.
 
 ### Exit criterion
 
 The family `O(n)` is available through a stable public API, with enough
-restriction data for an explicit Cech calculation.
+restriction data for an explicit Cech calculation and the expected tensor and
+duality formulas established.
 
 ## Phase 3: The two-open Cech calculation
 
