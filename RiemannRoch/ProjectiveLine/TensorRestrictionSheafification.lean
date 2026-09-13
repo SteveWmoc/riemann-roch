@@ -56,6 +56,30 @@ private noncomputable def restrictSheafificationComparison
           (𝟙 Y.ringCatSheaf.obj)).unit.app P))
 
 set_option backward.isDefEq.respectTransparency false in
+private theorem restrictSheafificationComparison_toSheaf
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (P : Y.PresheafOfModules) :
+    (SheafOfModules.toSheaf X.ringCatSheaf).map
+        (restrictSheafificationComparison f P) =
+      (f.opensFunctor.pushforwardContinuousSheafificationCompatibility
+        AddCommGrpCat (Opens.grothendieckTopology X)
+          (Opens.grothendieckTopology Y)).hom.app P.presheaf := by
+  rw [restrictSheafificationComparison,
+    PresheafOfModules.toSheaf_map_sheafificationHomEquiv_symm]
+  apply (CategoryTheory.sheafificationAdjunction
+    (Opens.grothendieckTopology X) AddCommGrpCat).homEquiv _ _ |>.injective
+  rw [Equiv.apply_symm_apply, Adjunction.homEquiv_unit]
+  change
+    whiskerLeft f.opensFunctor.op
+      ((PresheafOfModules.toPresheaf Y.ringCatSheaf.obj).map
+        ((PresheafOfModules.sheafificationAdjunction
+          (𝟙 Y.ringCatSheaf.obj)).unit.app P)) = _
+  rw [PresheafOfModules.toPresheaf_map_sheafificationAdjunction_unit_app]
+  exact (f.opensFunctor.toSheafify_pullbackSheafificationCompatibility
+    AddCommGrpCat (Opens.grothendieckTopology X)
+      (Opens.grothendieckTopology Y) P.presheaf).symm
+
+set_option backward.isDefEq.respectTransparency false in
 private theorem restrictSheafificationComparison_isIso
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
     (P : Y.PresheafOfModules) :
@@ -63,10 +87,7 @@ private theorem restrictSheafificationComparison_isIso
   rw [← isIso_iff_of_reflects_iso
     (restrictSheafificationComparison f P)
     (SheafOfModules.toSheaf X.ringCatSheaf)]
-  change IsIso
-    ((f.opensFunctor.pushforwardContinuousSheafificationCompatibility
-      AddCommGrpCat (Opens.grothendieckTopology X)
-        (Opens.grothendieckTopology Y)).hom.app P.presheaf)
+  rw [restrictSheafificationComparison_toSheaf]
   infer_instance
 
 end
