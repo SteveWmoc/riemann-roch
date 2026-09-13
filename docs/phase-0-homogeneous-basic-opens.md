@@ -1,7 +1,9 @@
 # Phase 0 inventory: homogeneous basic opens
 
-This note records the Mathlib `v4.32.1` declarations used for the standard
-homogeneous basic opens of the projective line.
+This note began as an inventory of the Mathlib `v4.32.1` declarations used for
+the standard homogeneous basic opens of the projective line. The repository now
+targets Lean/Mathlib 4.33.1, and the construction described here is implemented
+in `RiemannRoch.ProjectiveLine.BasicOpens` and its downstream chart modules.
 
 ## Projective spectrum as a scheme
 
@@ -32,14 +34,15 @@ AlgebraicGeometry.Proj.basicOpen A f : (AlgebraicGeometry.Proj A).Opens
 No homogeneity hypothesis is required to define the open. Homogeneity and
 positive degree enter later when identifying the open with an affine scheme.
 
-The standard opens are therefore represented by:
+The standard opens are represented by:
 
 ```lean
 standardBasicOpen k i :=
   AlgebraicGeometry.Proj.basicOpen (grading k) (MvPolynomial.X i)
 ```
 
-with `i : Fin 2`.
+with `i : Fin 2`, together with the aliases `x0BasicOpen k` and
+`x1BasicOpen k`.
 
 ## Membership and elementary identities
 
@@ -62,8 +65,8 @@ In particular:
 Proj.basicOpen A (f * g) = Proj.basicOpen A f ⊓ Proj.basicOpen A g
 ```
 
-will later identify the overlap of the two standard opens with
-`D_+(X_0 X_1)`.
+identifies the overlap of the two standard opens with `D_+(X_0 X_1)` and is
+used by the later overlap construction.
 
 ## Cover theorems
 
@@ -98,9 +101,12 @@ and derives the binary form:
 x0BasicOpen k ⊔ x1BasicOpen k = ⊤
 ```
 
-## Affine identification available for the next phase
+This cover theorem is now used by the bundled `standardOpenCover` and by the
+standard-chart local-to-global isomorphism criterion.
 
-If `f ∈ A m` and `0 < m`, Mathlib already provides:
+## Affine identification used downstream
+
+If `f ∈ A m` and `0 < m`, Mathlib provides:
 
 ```lean
 AlgebraicGeometry.Proj.basicOpenIsoSpec
@@ -117,19 +123,19 @@ HomogeneousLocalization.Away A f
 
 which is the degree-zero part of the localization away from `f`.
 
-For intersections and pullbacks, the relevant declarations are:
+For intersections and pullbacks, the relevant declarations include:
 
 ```lean
 AlgebraicGeometry.Proj.basicOpen_mul
 AlgebraicGeometry.Proj.pullbackAwayιIso
 ```
 
-These are the entry points for identifying each standard open with the affine
-line and their overlap with a Laurent polynomial ring.
+The project has since used these entry points to identify each standard open
+with the affine line and their overlap with a Laurent polynomial ring.
 
 ## Design decision
 
-The project will use Mathlib's scheme-level `AlgebraicGeometry.Proj.basicOpen`
-rather than the lower-level topological
-`ProjectiveSpectrum.basicOpen`. This keeps subsequent restriction, affine-open,
-and sheaf constructions in the `Scheme` API.
+The project uses Mathlib's scheme-level `AlgebraicGeometry.Proj.basicOpen`
+rather than the lower-level topological `ProjectiveSpectrum.basicOpen`. This
+keeps restriction, affine-open, sheaf, and chart constructions in the `Scheme`
+API and has remained the stable choice through the subsequent phases.
