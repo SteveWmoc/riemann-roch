@@ -1,7 +1,9 @@
 # Phase 0 inventory: graded polynomial rings
 
-This note records the Mathlib `v4.32.1` declarations chosen to represent the
-standard graded coordinate ring of the projective line.
+This note began as an inventory of the Mathlib `v4.32.1` declarations chosen to
+represent the standard graded coordinate ring of the projective line. The
+repository now targets Lean/Mathlib 4.33.1, and the implementation described
+below is in place in `RiemannRoch.ProjectiveLine.GradedPolynomialRing`.
 
 ## Chosen representation
 
@@ -37,8 +39,7 @@ Construction of `Proj` and its homogeneous basic opens additionally needs
 import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic
 ```
 
-The project should import both explicitly rather than rely on transitive
-imports.
+The project imports these explicitly rather than relying on transitive imports.
 
 ## Core polynomial declarations
 
@@ -111,20 +112,19 @@ GradedAlgebra (MvPolynomial.homogeneousSubmodule σ k)
 ```
 
 This is deliberately **not** a global instance, because Mathlib also supports
-weighted gradings on the same polynomial ring. Our project must install it
-locally or define a project-local instance with an explicit expected type.
+weighted gradings on the same polynomial ring. The project therefore installs a
+project-local instance with an explicit expected type.
 
-Chosen pattern:
+The current implementation is:
 
 ```lean
-local instance (k : Type*) [CommRing k] :
-    GradedAlgebra (MvPolynomial.homogeneousSubmodule (Fin 2) k) :=
+noncomputable instance gradingGradedAlgebra (k : Type*) [CommRing k] :
+    GradedAlgebra (grading k) :=
   MvPolynomial.gradedAlgebra
 ```
 
-A later project-local abbreviation may hide the full family name, but the
-underlying Mathlib grading should remain definitionally visible whenever
-possible.
+This keeps the underlying Mathlib grading definitionally visible to downstream
+proofs.
 
 ## Interface with `Proj`
 
@@ -144,13 +144,12 @@ AlgebraicGeometry.Proj 𝒜
 
 No custom grading construction is required.
 
-The next inventory should identify the declarations for
-`AlgebraicGeometry.Proj.basicOpen`, the two opens associated to `X0` and `X1`,
-and the theorem best suited to proving that they cover the projective line.
+The subsequent `BasicOpens` module uses this representation to define `P^1_k`,
+the two standard homogeneous coordinates, and the standard basic-open cover.
 
-## Project-local names to introduce
+## Project-local interface
 
-The first implementation file should introduce only thin aliases:
+The implementation deliberately introduces thin aliases:
 
 ```lean
 abbrev Variable := Fin 2
@@ -158,9 +157,14 @@ abbrev CoordinateRing (k : Type*) [CommRing k] := MvPolynomial Variable k
 abbrev grading (k : Type*) [CommRing k] :
     ℕ → Submodule k (CoordinateRing k) :=
   MvPolynomial.homogeneousSubmodule Variable k
+
+abbrev x0 (k : Type*) [CommRing k] : CoordinateRing k :=
+  MvPolynomial.X (0 : Variable)
+
+abbrev x1 (k : Type*) [CommRing k] : CoordinateRing k :=
+  MvPolynomial.X (1 : Variable)
 ```
 
-It should then install the graded-algebra instance and define `x0` and `x1`.
-The actual `Proj` abbreviation may be introduced either in the same file or in
-the following homogeneous-basic-open milestone, depending on which import
-boundary gives the cleanest API.
+The file also records homogeneity and degree-one membership lemmas for both
+coordinates. This is the stable foundation used by the rest of the
+projective-line development.
