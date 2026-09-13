@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is nearing completion: `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical multiplication maps. A normalized two-open Cech complex is also available. The next step is to prove the tensor and duality isomorphisms and then specialize the Cech complex to `O(n)`. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is nearing completion: `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical multiplication maps. The project now also has a local-to-global isomorphism criterion on the standard cover, tensor-unit comparisons, a scheme-general sheafified tensor product, and a proof that this tensor product commutes with restriction along open immersions. A normalized two-open Cech complex is available. The next step is to prove that `O(m) ⊗ O(n) ⟶ O(m+n)` is an isomorphism, then establish duality and specialize the Cech complex to `O(n)`. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -48,11 +48,17 @@ The repository currently provides:
 - the global twisting sheaf `twistingSheaf k n` for every `n : ℤ`, constructed as the kernel of the compatibility map between the two pushed-forward trivial rank-one chart modules and the overlap module;
 - canonical maps from `twistingSheaf k n` to both pushed-forward trivial chart modules, their overlap equation `a₁ = t^(-n) a₀`, and a universal gluing lift for compatible local data;
 - canonical trivializations of `O(n)` on both standard affine charts;
+- a local-to-global criterion proving that a morphism of module sheaves is an isomorphism when its restrictions to both standard charts are isomorphisms;
 - a global isomorphism `O(0) ≅ O` with the structure module;
 - sheafified tensor products of module sheaves and canonical multiplication maps `O(m) ⊗ O(n) ⟶ O(m+n)`;
-- design notes recording the relevant Mathlib APIs and the principal missing comparison theorems.
+- left and right tensor-unit isomorphisms with the structure module;
+- a scheme-general sheafified tensor product `schemeModuleSheafTensor`;
+- pointwise tensor/restriction compatibility for module presheaves along open immersions;
+- sheafification/restriction compatibility and the resulting isomorphism
+  `restrict (M ⊗ N) ≅ restrict M ⊗ restrict N` for the scheme-general sheafified tensor product;
+- design notes recording the relevant Mathlib APIs and the completed Phase 2 comparison infrastructure.
 
-The next Phase 2 milestone is to prove that the multiplication maps are isomorphisms and identify the dual of `O(n)` with `O(-n)`. After that, the local trivializations and normalized complex provide the inputs for the explicit polynomial/Laurent-polynomial Cech calculation.
+The next Phase 2 milestone is to restrict the multiplication map `O(m) ⊗ O(n) ⟶ O(m+n)` to the two standard charts, identify those restrictions through the trivializations and tensor-restriction comparison, and use the standard-chart local-to-global criterion to prove the multiplication map is an isomorphism. The duality formula `O(n)ᵛ ≅ O(-n)` then becomes the remaining Phase 2 target. After that, the local trivializations and normalized complex provide the inputs for the explicit polynomial/Laurent-polynomial Cech calculation.
 
 ## Repository layout
 
@@ -75,11 +81,15 @@ The next Phase 2 milestone is to prove that the multiplication maps are isomorph
 | `RiemannRoch.ProjectiveLine.TwistingSheafRestrictions` | The `X0`-chart trivialization of `O(n)` |
 | `RiemannRoch.ProjectiveLine.TwistingSheafX1Trivialization` | The `X1`-chart trivialization of `O(n)` |
 | `RiemannRoch.ProjectiveLine.TwistingSheafZero` | The global identification `O(0) ≅ O` |
+| `RiemannRoch.ProjectiveLine.StandardChartIso` | Local-to-global isomorphism detection on the two standard charts |
 | `RiemannRoch.ProjectiveLine.TwistingSheafMultiplication` | Sheafified tensor products and the maps `O(m) ⊗ O(n) ⟶ O(m+n)` |
+| `RiemannRoch.ProjectiveLine.TensorUnit` | Left and right unit isomorphisms for the sheafified tensor product |
+| `RiemannRoch.ProjectiveLine.TensorRestriction` | Scheme-general tensor construction and presheaf-level compatibility with open restriction |
+| `RiemannRoch.ProjectiveLine.TensorRestrictionSheafification` | Sheafification/restriction compatibility and the sheafified tensor restriction isomorphism |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
 | [`BLUEPRINT.md`](BLUEPRINT.md) | Detailed phased roadmap and progress tracker |
-| [`docs/`](docs/) | API inventories and design decisions, including the Phase 2 twisting-object construction |
+| [`docs/`](docs/) | API inventories and design notes, including the Phase 2 twisting-sheaf and tensor-restriction constructions |
 
 ## Quick start
 
