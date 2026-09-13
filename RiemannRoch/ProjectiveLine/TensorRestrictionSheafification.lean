@@ -70,7 +70,7 @@ private theorem restrictSheafificationComparison_toSheaf
     (Opens.grothendieckTopology X) AddCommGrpCat).homEquiv _ _ |>.injective
   rw [Equiv.apply_symm_apply, Adjunction.homEquiv_unit]
   change
-    whiskerLeft f.opensFunctor.op
+    Functor.whiskerLeft f.opensFunctor.op
       ((PresheafOfModules.toPresheaf Y.ringCatSheaf.obj).map
         ((PresheafOfModules.sheafificationAdjunction
           (𝟙 Y.ringCatSheaf.obj)).unit.app P)) = _
