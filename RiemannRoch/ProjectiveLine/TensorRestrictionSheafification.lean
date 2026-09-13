@@ -90,6 +90,35 @@ private theorem restrictSheafificationComparison_isIso
   rw [restrictSheafificationComparison_toSheaf]
   infer_instance
 
+/-- Sheafification commutes with restriction along an open immersion. -/
+private noncomputable def restrictSheafificationIso
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (P : Y.PresheafOfModules) :
+    (PresheafOfModules.sheafification (𝟙 X.ringCatSheaf.obj)).obj
+        ((PresheafOfModules.pushforward
+          (sheafificationRestrictionRingHom f)).obj P) ≅
+      (SheafOfModules.pushforward (restrictionSheafHom f)).obj
+        ((PresheafOfModules.sheafification (𝟙 Y.ringCatSheaf.obj)).obj P) := by
+  letI : IsIso (restrictSheafificationComparison f P) :=
+    restrictSheafificationComparison_isIso f P
+  exact asIso (restrictSheafificationComparison f P)
+
+set_option backward.isDefEq.respectTransparency false in
+/-- The sheafified tensor product commutes with restriction along an open immersion. -/
+noncomputable def restrictSchemeModuleSheafTensorIso
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) :
+    (Scheme.Modules.restrictFunctor f).obj (schemeModuleSheafTensor Y M N) ≅
+      schemeModuleSheafTensor X
+        ((Scheme.Modules.restrictFunctor f).obj M)
+        ((Scheme.Modules.restrictFunctor f).obj N) := by
+  let e₁ :=
+    (PresheafOfModules.sheafification (𝟙 X.ringCatSheaf.obj)).mapIso
+      (restrictModulePresheafTensorIso f M N)
+  let e₂ :=
+    restrictSheafificationIso f (modulePresheafTensor Y M.val N.val)
+  exact (e₁ ≪≫ e₂).symm
+
 end
 
 end RiemannRoch.ProjectiveLine
