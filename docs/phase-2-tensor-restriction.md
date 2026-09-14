@@ -123,13 +123,13 @@ isIso_of_standard_chart_restrictions
 which proves that a morphism of module sheaves on `P^1_k` is an isomorphism if
 its restrictions to both standard charts are isomorphisms.
 
-Together, the intended proof of
+Together, the completed proof of
 
 ```text
 O(m) ⊗ O(n) ≅ O(m+n)
 ```
 
-is now structurally straightforward:
+in `TwistingSheafTensorIso.lean` proceeds as follows:
 
 1. restrict the canonical multiplication map to each standard chart;
 2. commute restriction with tensor using
@@ -138,5 +138,14 @@ is now structurally straightforward:
 4. prove the resulting rank-one multiplication map is an isomorphism;
 5. conclude globally with `isIso_of_standard_chart_restrictions`.
 
-No further general restriction/sheafification infrastructure is expected to be
-needed for that theorem.
+The computation rule
+`restrictSchemeModuleSheafTensorIso_inv_homEquiv_app_tmul` identifies the
+restricted sheafified bilinear map on pure tensors. The multiplication module
+also exposes its two coefficient computation rules. These establish that the
+local isomorphisms apply to the original canonical multiplication map.
+
+The public API consists of `twistingSheafMultiplication_isIso` and
+`twistingSheafTensorIso`, with `twistingSheafTensorIso_hom` recording their
+connection. The two restricted multiplication isomorphism theorems are also
+available separately. These results hold over an arbitrary commutative
+base ring.

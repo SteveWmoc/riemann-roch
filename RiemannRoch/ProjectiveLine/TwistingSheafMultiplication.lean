@@ -511,6 +511,52 @@ theorem twistingSheafMultiplication_toX1
       twistingSheafTensorToX1 k m n := by
   simp [twistingSheafMultiplication]
 
+set_option backward.defeqAttrib.useBackward true in
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- On pure tensors before sheafification, the first coordinate of the
+canonical multiplication map is multiplication of coefficients. -/
+theorem twistingSheafMultiplication_homEquiv_app_tmul_toX0
+    (k : Type u) [CommRing k] (m n : ℤ) (U : (scheme k).Opens)
+    (x : (twistingSheaf k m).val.obj (op U))
+    (y : (twistingSheaf k n).val.obj (op U)) :
+    (twistingSheafToX0 k (m + n)).app U
+        ((moduleSheafTensorHomEquiv k (twistingSheafMultiplication k m n)).app
+          (op U) (x ⊗ₜ[Γ(scheme k, U)] y)) =
+      (show Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U) from
+        (twistingSheafToX0 k m).app U x) *
+      (show Γ(x0ChartScheme k, (x0BasicOpen k).ι ⁻¹ᵁ U) from
+        (twistingSheafToX0 k n).app U y) := by
+  have h := moduleSheafTensorHomEquiv_comp k
+    (twistingSheafMultiplication k m n) (twistingSheafToX0 k (m + n))
+  rw [twistingSheafMultiplication_toX0] at h
+  have h' := congrArg (fun a ↦ a.app (op U) (x ⊗ₜ[Γ(scheme k, U)] y)) h
+  simp only [twistingSheafTensorToX0, Equiv.apply_symm_apply] at h'
+  exact h'.symm
+
+set_option backward.defeqAttrib.useBackward true in
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- On pure tensors before sheafification, the second coordinate of the
+canonical multiplication map is multiplication of coefficients. -/
+theorem twistingSheafMultiplication_homEquiv_app_tmul_toX1
+    (k : Type u) [CommRing k] (m n : ℤ) (U : (scheme k).Opens)
+    (x : (twistingSheaf k m).val.obj (op U))
+    (y : (twistingSheaf k n).val.obj (op U)) :
+    (twistingSheafToX1 k (m + n)).app U
+        ((moduleSheafTensorHomEquiv k (twistingSheafMultiplication k m n)).app
+          (op U) (x ⊗ₜ[Γ(scheme k, U)] y)) =
+      (show Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U) from
+        (twistingSheafToX1 k m).app U x) *
+      (show Γ(x1ChartScheme k, (x1BasicOpen k).ι ⁻¹ᵁ U) from
+        (twistingSheafToX1 k n).app U y) := by
+  have h := moduleSheafTensorHomEquiv_comp k
+    (twistingSheafMultiplication k m n) (twistingSheafToX1 k (m + n))
+  rw [twistingSheafMultiplication_toX1] at h
+  have h' := congrArg (fun a ↦ a.app (op U) (x ⊗ₜ[Γ(scheme k, U)] y)) h
+  simp only [twistingSheafTensorToX1, Equiv.apply_symm_apply] at h'
+  exact h'.symm
+
 end
 
 end RiemannRoch.ProjectiveLine

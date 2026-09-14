@@ -119,6 +119,46 @@ noncomputable def restrictSchemeModuleSheafTensorIso
     restrictSheafificationIso f (modulePresheafTensor Y M.val N.val)
   exact (e₁ ≪≫ e₂).symm
 
+set_option backward.defeqAttrib.useBackward true in
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- The inverse tensor restriction comparison is characterized on pure tensors
+by the sheafification universal property. This computes restricted bilinear
+maps without unfolding sheafification. -/
+theorem restrictSchemeModuleSheafTensorIso_inv_homEquiv_app_tmul
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N P : Y.Modules) (a : schemeModuleSheafTensor Y M N ⟶ P)
+    (U : X.Opens)
+    (x : (M.restrict f).val.obj (Opposite.op U))
+    (y : (N.restrict f).val.obj (Opposite.op U)) :
+    (PresheafOfModules.sheafificationHomEquiv (𝟙 X.ringCatSheaf.obj)
+      ((restrictSchemeModuleSheafTensorIso f M N).inv ≫
+        (Scheme.Modules.restrictFunctor f).map a)).app (Opposite.op U)
+          (x ⊗ₜ[Γ(X, U)] y) =
+    (PresheafOfModules.sheafificationHomEquiv (𝟙 Y.ringCatSheaf.obj) a).app
+      (Opposite.op (f ''ᵁ U))
+        ((show M.val.obj (Opposite.op (f ''ᵁ U)) from x) ⊗ₜ[Γ(Y, f ''ᵁ U)]
+          (show N.val.obj (Opposite.op (f ''ᵁ U)) from y)) := by
+  change ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 X.ringCatSheaf.obj)).homEquiv _ _
+        ((PresheafOfModules.sheafification (𝟙 X.ringCatSheaf.obj)).map
+            (restrictModulePresheafTensorIso f M N).hom ≫
+          restrictSheafificationComparison f (modulePresheafTensor Y M.val N.val) ≫
+          (Scheme.Modules.restrictFunctor f).map a)).app (Opposite.op U) _ = _
+  rw [Adjunction.homEquiv_naturality_left, Adjunction.homEquiv_naturality_right]
+  change ((restrictModulePresheafTensorIso f M N).hom ≫
+      ((PresheafOfModules.sheafificationHomEquiv (𝟙 X.ringCatSheaf.obj))
+        (restrictSheafificationComparison f (modulePresheafTensor Y M.val N.val))) ≫
+      _).app (Opposite.op U) _ = _
+  rw [restrictSheafificationComparison]
+  erw [Equiv.apply_symm_apply]
+  change _ = ((PresheafOfModules.sheafificationAdjunction
+      (𝟙 Y.ringCatSheaf.obj)).homEquiv _ _ a).app _ _
+  rw [Adjunction.homEquiv_unit]
+  simp only [PresheafOfModules.comp_app, ModuleCat.comp_apply,
+    restrictModulePresheafTensorIso_hom_app_tmul]
+  rfl
+
 end
 
 end RiemannRoch.ProjectiveLine

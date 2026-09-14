@@ -80,7 +80,7 @@ coordinate-ring descriptions.
       along open immersions.
 - [x] Prove sheafification/restriction compatibility and deduce the sheafified
       tensor restriction isomorphism.
-- [ ] Prove the multiplication maps `O(m) tensor O(n) -> O(m+n)` are
+- [x] Prove the multiplication maps `O(m) tensor O(n) -> O(m+n)` are
       isomorphisms.
 - [ ] Identify the dual of `O(n)` with `O(-n)`.
 

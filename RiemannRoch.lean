@@ -27,6 +27,7 @@ import RiemannRoch.ProjectiveLine.TwistingSheafMultiplication
 import RiemannRoch.ProjectiveLine.TensorUnit
 import RiemannRoch.ProjectiveLine.TensorRestriction
 import RiemannRoch.ProjectiveLine.TensorRestrictionSheafification
+import RiemannRoch.ProjectiveLine.TwistingSheafTensorIso
 import RiemannRoch.ProjectiveLine.Target
 
 /-!
@@ -39,7 +40,7 @@ coordinate transition map, the bundled standard open cover, the module-sheaf
 and Cech-complex interfaces used by the planned cohomology calculation, and the
 transition-data construction and local-coordinate API of the twisting sheaves
 `O(n)` together with their standard-chart trivializations, the identification
-`O(0) ≅ O`, the canonical multiplication maps, the tensor-unit comparisons,
+`O(0) ≅ O`, the canonical tensor addition isomorphisms, the tensor-unit comparisons,
 and the scheme-general sheafified tensor product used for restriction
 compatibility.
 -/

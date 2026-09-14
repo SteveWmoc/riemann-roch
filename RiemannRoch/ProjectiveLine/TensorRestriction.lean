@@ -249,6 +249,22 @@ noncomputable def restrictModulePresheafTensorIso
     modulePresheafTensor_eq_tensorObj Y]
   exact restrictTensorObjIso f M N
 
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+/-- The presheaf restriction comparison sends a pure tensor to the same two
+sections, tensored over the ring of sections on the image open. -/
+@[simp]
+theorem restrictModulePresheafTensorIso_hom_app_tmul
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+    (M N : Y.Modules) (U : X.Opens)
+    (x : (M.restrict f).val.obj (Opposite.op U))
+    (y : (N.restrict f).val.obj (Opposite.op U)) :
+    (restrictModulePresheafTensorIso f M N).hom.app (Opposite.op U)
+        (x ⊗ₜ[Γ(X, U)] y) =
+      (show M.val.obj (Opposite.op (f ''ᵁ U)) from x) ⊗ₜ[Γ(Y, f ''ᵁ U)]
+        (show N.val.obj (Opposite.op (f ''ᵁ U)) from y) := by
+  exact restrictionTensoratorIsoApp_hom_tmul f M N (Opposite.op U) x y
+
 end
 
 end RiemannRoch.ProjectiveLine

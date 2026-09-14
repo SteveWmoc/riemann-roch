@@ -85,9 +85,9 @@ O(m) ⊗ O(n) ⟶ O(m+n)
 O(n)ᵛ ≅ O(-n).
 ```
 
-The first is proved. The multiplication morphism in the second line is
-constructed; proving it is an isomorphism is the next Phase 2 theorem. The
-third remains subsequent work.
+The first two are proved. The tensor addition isomorphism is
+`twistingSheafTensorIso`, whose forward map is the canonical multiplication
+morphism. The duality formula remains the next Phase 2 target.
 
 ## Resulting construction
 
@@ -104,7 +104,7 @@ this gluing as a kernel expressing compatible pairs of local sections.
 The resulting sheaf exposes explicit restriction isomorphisms on both standard
 opens. The project additionally packages a local-to-global isomorphism
 criterion for this cover. Together these support the global identification
-`O(0) ≅ O` and the planned proof that the multiplication map is an isomorphism.
+`O(0) ≅ O` and the proof that the multiplication map is an isomorphism.
 
 The tensor infrastructure is no longer projective-line-only: the sheafified
 tensor product has been generalized to an arbitrary scheme as
