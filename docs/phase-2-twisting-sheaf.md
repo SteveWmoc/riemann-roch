@@ -75,8 +75,8 @@ The implementation exposes:
 - `isIso_of_standard_chart_restrictions`, which upgrades isomorphisms on both
   standard-chart restrictions to a global isomorphism;
 - the global isomorphism `O(0) ≅ O`;
-- the sheafified tensor product and multiplication maps
-  `O(m) ⊗ O(n) ⟶ O(m+n)`;
+- the sheafified tensor product and canonical multiplication isomorphisms
+  `O(m) ⊗ O(n) ≅ O(m+n)`;
 - left and right tensor-unit isomorphisms with the structure module;
 - the scheme-general tensor construction `schemeModuleSheafTensor`;
 - the presheaf-level tensor/restriction comparison for open immersions;
@@ -85,8 +85,8 @@ The implementation exposes:
 
 ## Current tensor strategy
 
-The multiplication map is already defined globally. To show that it is an
-isomorphism, the intended route is now local:
+The global multiplication map is proved to be an isomorphism in
+`TwistingSheafTensorIso.lean` by a local argument:
 
 1. restrict the multiplication map to `U_0` and `U_1`;
 2. use `restrictSchemeModuleSheafTensorIso` to commute restriction past the
@@ -97,6 +97,6 @@ isomorphism, the intended route is now local:
    on a trivial rank-one module;
 5. apply `isIso_of_standard_chart_restrictions` to conclude globally.
 
-The hard functorial comparison required by this strategy is therefore complete.
-The remaining Phase 2 work is to prove the multiplication maps are isomorphisms
-and then identify the dual of `O(n)` with `O(-n)`.
+The restriction computation and coefficient formulas are described in
+[the tensor restriction note](phase-2-tensor-restriction.md). The remaining
+Phase 2 work is to identify the dual of `O(n)` with `O(-n)`.
