@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance and Phase 1's explicit projective-line geometry are complete. Phase 2 is nearing completion: `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical multiplication maps. The project now also has a local-to-global isomorphism criterion on the standard cover, tensor-unit comparisons, a scheme-general sheafified tensor product, and a proof that this tensor product commutes with restriction along open immersions. A normalized two-open Cech complex is available. The canonical multiplication maps now give isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)` for all integer twists over any commutative base ring. The next step is to establish duality and specialize the Cech complex to `O(n)`. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance, Phase 1's explicit projective-line geometry, and Phase 2's twisting-sheaf infrastructure are complete. `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical tensor addition isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)`. The project also packages `O(-n)` as the two-sided tensor inverse of `O(n)`, giving the expected project-local duality formula. A normalized two-open Cech complex is available. The next step is Phase 3: specialize that complex to `O(n)` and compute its global sections and first cohomology. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -51,6 +51,7 @@ The repository currently provides:
 - a local-to-global criterion proving that a morphism of module sheaves is an isomorphism when its restrictions to both standard charts are isomorphisms;
 - a global isomorphism `O(0) ≅ O` with the structure module;
 - sheafified tensor products of module sheaves and canonical tensor addition isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)`, whose forward maps are the existing coefficientwise multiplication maps;
+- two-sided tensor-inverse data identifying `O(-n)` as the project-local dual of `O(n)`, with canonical isomorphisms `O(n) ⊗ O(-n) ≅ O` and `O(-n) ⊗ O(n) ≅ O`;
 - left and right tensor-unit isomorphisms with the structure module;
 - a scheme-general sheafified tensor product `schemeModuleSheafTensor`;
 - pointwise tensor/restriction compatibility for module presheaves along open immersions;
@@ -58,7 +59,7 @@ The repository currently provides:
   `restrict (M ⊗ N) ≅ restrict M ⊗ restrict N` for the scheme-general sheafified tensor product;
 - design notes recording the relevant Mathlib APIs and the completed Phase 2 comparison infrastructure.
 
-The tensor addition theorem is proved on both standard charts using the existing trivializations, a computation rule for the tensor-restriction comparison on pure tensors, and the standard-chart local-to-global criterion. The duality formula `O(n)ᵛ ≅ O(-n)` is the remaining Phase 2 target. After that, the local trivializations and normalized complex provide the inputs for the explicit polynomial/Laurent-polynomial Cech calculation.
+Phase 2 is complete. The tensor addition theorem is proved on both standard charts using the existing trivializations, a computation rule for the tensor-restriction comparison on pure tensors, and the standard-chart local-to-global criterion. Duality then follows from `O(n) ⊗ O(-n) ≅ O(0) ≅ O` (and similarly on the other side). Because the project-local sheafified tensor product is not yet registered as a monoidal structure on `Scheme.Modules`, the current API records this as explicit two-sided tensor-inverse data rather than an ambient categorical `Dual`. Phase 3 now begins with the explicit Cech calculation for `O(n)`.
 
 ## Repository layout
 
@@ -87,6 +88,7 @@ The tensor addition theorem is proved on both standard charts using the existing
 | `RiemannRoch.ProjectiveLine.TensorRestriction` | Scheme-general tensor construction and presheaf-level compatibility with open restriction |
 | `RiemannRoch.ProjectiveLine.TensorRestrictionSheafification` | Sheafification/restriction compatibility and the sheafified tensor restriction isomorphism |
 | `RiemannRoch.ProjectiveLine.TwistingSheafTensorIso` | The canonical tensor addition isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)` |
+| `RiemannRoch.ProjectiveLine.TwistingSheafDuality` | Two-sided tensor-inverse data realizing the project-local duality `O(n)ᵛ ≅ O(-n)` |
 | `RiemannRoch.ProjectiveLine.Target` | Integration boundary and projective-line theorem target |
 | `RiemannRoch` | Main import file exporting the public development |
 | [`BLUEPRINT.md`](BLUEPRINT.md) | Detailed phased roadmap and progress tracker |
@@ -107,35 +109,3 @@ To use the full public development from another Lean file:
 ```lean
 import RiemannRoch
 ```
-
-Run `lake update` only when intentionally changing the pinned dependency metadata.
-
-## Roadmap
-
-1. Construct the twisting objects `O(n)` with explicit restriction data on the standard cover.
-2. Calculate a normalized two-open Cech complex.
-3. Prove `chi(P^1_k, O(n)) = n + 1`.
-4. Extend the infrastructure to smooth projective curves.
-5. Develop the K-theoretic and intersection-theoretic ingredients for Hirzebruch-Riemann-Roch and Grothendieck-Riemann-Roch.
-
-The full dependency-aware roadmap is maintained in [`BLUEPRINT.md`](BLUEPRINT.md).
-
-## Development standards
-
-Every pull request is checked by GitHub Actions. CI builds the library, verifies that every module is exported by `RiemannRoch.lean`, and rejects unfinished `sorry` or `admit` placeholders.
-
-Focused contributions, API suggestions, and mathematical corrections are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## References and acknowledgments
-
-The project relies on [Mathlib](https://github.com/leanprover-community/mathlib4), particularly its implementations of graded rings, `Proj`, scheme-level basic opens, sheaves of modules, homogeneous localization, and sheaf cohomology.
-
-The mathematical organization follows the standard route from the projective-line calculation to Riemann-Roch for curves and then toward its K-theoretic generalizations.
-
-## Citation
-
-Citation metadata is provided in [`CITATION.cff`](CITATION.cff). GitHub can also generate a formatted citation from the repository page.
-
-## License
-
-MIT License. See [`LICENSE`](LICENSE).
