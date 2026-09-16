@@ -109,3 +109,34 @@ To use the full public development from another Lean file:
 ```lean
 import RiemannRoch
 ```
+
+Run `lake update` only when intentionally changing the pinned dependency metadata.
+
+## Roadmap
+
+1. Compute the normalized two-open Cech complex for `O(n)`, including `H^0` and `H^1` for all integer twists.
+2. Prove `chi(P^1_k, O(n)) = n + 1`.
+3. Extend the infrastructure to smooth projective curves.
+4. Develop the K-theoretic and intersection-theoretic ingredients for Hirzebruch-Riemann-Roch and Grothendieck-Riemann-Roch.
+
+The full dependency-aware roadmap is maintained in [`BLUEPRINT.md`](BLUEPRINT.md).
+
+## Development standards
+
+Every pull request is checked by GitHub Actions. CI builds the library, verifies that every module is exported by `RiemannRoch.lean`, and rejects unfinished `sorry` or `admit` placeholders.
+
+Focused contributions, API suggestions, and mathematical corrections are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## References and acknowledgments
+
+The project relies on [Mathlib](https://github.com/leanprover-community/mathlib4), particularly its implementations of graded rings, `Proj`, scheme-level basic opens, sheaves of modules, homogeneous localization, and sheaf cohomology.
+
+The mathematical organization follows the standard route from the projective-line calculation to Riemann-Roch for curves and then toward its K-theoretic generalizations.
+
+## Citation
+
+Citation metadata is provided in [`CITATION.cff`](CITATION.cff). GitHub can also generate a formatted citation from the repository page.
+
+## License
+
+MIT License. See [`LICENSE`](LICENSE).
