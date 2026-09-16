@@ -1,7 +1,7 @@
 # Phase 2 construction: the twisting sheaf
 
 This note records the first global construction of `O(n)` on `P^1_k` and the
-current public infrastructure built around it.
+public infrastructure built around it.
 
 ## Construction
 
@@ -77,13 +77,15 @@ The implementation exposes:
 - the global isomorphism `O(0) ≅ O`;
 - the sheafified tensor product and canonical multiplication isomorphisms
   `O(m) ⊗ O(n) ≅ O(m+n)`;
+- two-sided tensor-inverse data identifying `O(-n)` as the project-local dual of
+  `O(n)`, with `O(n) ⊗ O(-n) ≅ O` and `O(-n) ⊗ O(n) ≅ O`;
 - left and right tensor-unit isomorphisms with the structure module;
 - the scheme-general tensor construction `schemeModuleSheafTensor`;
 - the presheaf-level tensor/restriction comparison for open immersions;
 - the sheafification/restriction comparison and the resulting public
   `restrictSchemeModuleSheafTensorIso`.
 
-## Current tensor strategy
+## Completed tensor and duality strategy
 
 The global multiplication map is proved to be an isomorphism in
 `TwistingSheafTensorIso.lean` by a local argument:
@@ -98,5 +100,20 @@ The global multiplication map is proved to be an isomorphism in
 5. apply `isIso_of_standard_chart_restrictions` to conclude globally.
 
 The restriction computation and coefficient formulas are described in
-[the tensor restriction note](phase-2-tensor-restriction.md). The remaining
-Phase 2 work is to identify the dual of `O(n)` with `O(-n)`.
+[the tensor restriction note](phase-2-tensor-restriction.md).
+
+Duality then requires no second local calculation. Substituting `-n` into the
+tensor-addition theorem gives
+
+```text
+O(n) ⊗ O(-n) ≅ O(0) ≅ O,
+O(-n) ⊗ O(n) ≅ O(0) ≅ O.
+```
+
+`TwistingSheafDuality.lean` packages these isomorphisms and records `O(-n)` as
+the chosen two-sided tensor inverse of `O(n)`. The project-local tensor product
+is not yet registered as a monoidal structure on `Scheme.Modules`, so this is
+the appropriate present form of the expected formula `O(n)ᵛ ≅ O(-n)`.
+
+This completes Phase 2. The next mathematical work is the explicit normalized
+Cech calculation for `O(n)` in Phase 3.

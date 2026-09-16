@@ -82,7 +82,7 @@ coordinate-ring descriptions.
       tensor restriction isomorphism.
 - [x] Prove the multiplication maps `O(m) tensor O(n) -> O(m+n)` are
       isomorphisms.
-- [ ] Identify the dual of `O(n)` with `O(-n)`.
+- [x] Identify the dual of `O(n)` with `O(-n)`.
 
 ### Exit criterion
 

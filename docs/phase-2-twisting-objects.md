@@ -81,13 +81,26 @@ These scalar identities support the constructions
 
 ```text
 O(0) ≅ O
-O(m) ⊗ O(n) ⟶ O(m+n)
+O(m) ⊗ O(n) ≅ O(m+n)
 O(n)ᵛ ≅ O(-n).
 ```
 
-The first two are proved. The tensor addition isomorphism is
-`twistingSheafTensorIso`, whose forward map is the canonical multiplication
-morphism. The duality formula remains the next Phase 2 target.
+All three expected formulas are now represented in the project API. The tensor
+addition isomorphism is `twistingSheafTensorIso`, whose forward map is the
+canonical multiplication morphism. Duality is packaged in
+`TwistingSheafDuality`: `twistingSheafTensorNegIso` and
+`twistingSheafNegTensorIso` give
+
+```text
+O(n) ⊗ O(-n) ≅ O,
+O(-n) ⊗ O(n) ≅ O,
+```
+
+and `twistingSheafTensorInverse` records `O(-n)` as the chosen two-sided tensor
+inverse of `O(n)`. Since the project-local sheafified tensor product is not yet
+installed as a monoidal structure on `Scheme.Modules`, this records the
+mathematical duality content directly rather than introducing an ambient
+categorical `Dual` interface prematurely.
 
 ## Resulting construction
 
@@ -117,5 +130,6 @@ comparison
 restrict_f (M ⊗ N) ≅ restrict_f M ⊗ restrict_f N.
 ```
 
-This removes the main functorial obstruction to checking the twisting-sheaf
-multiplication map on the two standard charts.
+This comparison supplies the local proof of tensor addition. Once tensor
+addition is known, the inverse exponent immediately gives the two-sided
+tensor-inverse formula and completes the Phase 2 twisting-object milestone.
