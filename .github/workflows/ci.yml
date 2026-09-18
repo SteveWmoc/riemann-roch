@@ -29,7 +29,7 @@ jobs:
                ! sed -n '2p' "${file}" | grep -Eq '^Copyright \(c\) [0-9]{4} Steven Sabean\. All rights reserved\.$' ||
                ! sed -n '3p' "${file}" | grep -Fxq 'Released under MIT license as described in the file LICENSE.' ||
                ! sed -n '4p' "${file}" | grep -Eq '^Authors: .+' ||
-               ! sed -n '5p' "${file}" | grep -Fxq '-/'; then
+               ! sed -n '5p' "${file}" | grep -Fxq -- '-/'; then
               echo "Missing or malformed license header: ${file}"
               missing=1
             fi
