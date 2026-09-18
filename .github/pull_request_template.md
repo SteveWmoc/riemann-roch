@@ -13,6 +13,8 @@ State what is intentionally included and deferred.
 ## Verification
 
 - [ ] `lake build` passes
+- [ ] `lake env lean test/PublicAPI.lean` passes
+- [ ] `lake lint` passes
 - [ ] all Lean modules are imported by `RiemannRoch.lean`
 - [ ] no `sorry` or `admit` placeholders were introduced
 - [ ] public declarations have appropriate documentation

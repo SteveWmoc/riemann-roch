@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Reject unfinished proofs
         run: |
@@ -41,10 +41,13 @@ jobs:
           done < <(find RiemannRoch -type f -name '*.lean' | sort)
           exit "${missing}"
 
-      - uses: leanprover/lean-action@v1
+      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1.5.0
         with:
           auto-config: false
           build: true
+
+      - name: Check public API smoke test
+        run: lake env lean test/PublicAPI.lean
 
       - name: Lint declarations
         run: lake lint

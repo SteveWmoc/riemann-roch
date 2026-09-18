@@ -10,7 +10,11 @@ The project uses Lean 4 and Mathlib through Lake. The exact versions are pinned 
 git clone https://github.com/SteveWmoc/riemann-roch.git
 cd riemann-roch
 lake build
+lake env lean test/PublicAPI.lean
+lake lint
 ```
+
+The public API smoke test imports only `RiemannRoch` and checks representative declarations from the exported projective-line API. CI additionally verifies that every library module is imported by `RiemannRoch.lean` and rejects unfinished proof placeholders.
 
 Run `lake update` only when intentionally refreshing dependency metadata.
 
