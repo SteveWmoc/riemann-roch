@@ -4,7 +4,7 @@
 
 An experimental Lean 4 formalization of Riemann-Roch, beginning with the projective line and organized toward reusable algebraic-geometry infrastructure.
 
-> **Project status:** active research. Phase 0 API reconnaissance, Phase 1's explicit projective-line geometry, and Phase 2's twisting-sheaf infrastructure are complete. `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical tensor addition isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)`. The project also packages `O(-n)` as the two-sided tensor inverse of `O(n)`, giving the expected project-local duality formula. A normalized two-open Cech complex is available. The next step is Phase 3: specialize that complex to `O(n)` and compute its global sections and first cohomology. The Riemann-Roch theorem itself has not yet been formalized.
+> **Project status:** active research. Phase 0 API reconnaissance, Phase 1's explicit projective-line geometry, and Phase 2's twisting-sheaf infrastructure are complete. `O(n)` is constructed globally for every integer `n`, trivialized on both standard charts, identified with the structure sheaf at `n = 0`, and equipped with canonical tensor addition isomorphisms `O(m) ⊗ O(n) ≅ O(m+n)`. The project also packages `O(-n)` as the two-sided tensor inverse of `O(n)`, giving the expected project-local duality formula. A normalized two-open Cech complex is available, together with the explicit polynomial/Laurent coordinate model for `O(n)`, whose differential is `(p,q) ↦ t^(-n)p(t) - q(t⁻¹)`. Phase 3 is now comparing these two complexes before computing global sections and first cohomology. The Riemann-Roch theorem itself has not yet been formalized.
 
 ## Mathematical goal
 
@@ -44,6 +44,7 @@ The repository currently provides:
 - the category of sheaves of modules on `P^1_k` and the structure sheaf as a module;
 - a specialization of Mathlib's canonical Cech-complex functor derived from the bundled standard cover;
 - a normalized two-term Cech complex for the standard cover, with differential `(s₀, s₁) ↦ s₀| - s₁|`;
+- the explicit coordinate Cech complex `k[t] ⊕ k[u] ⟶ k[t,t⁻¹]` for `O(n)`, with differential `(p,q) ↦ t^(-n)p(t) - q(t⁻¹)`;
 - the Phase 2 transition factors for `O(n)`, with the convention `e₁ = t^n e₀`, coefficient transport by `t^(-n)`, unit identities, and compatibility with the Laurent coordinate inversion;
 - the global twisting sheaf `twistingSheaf k n` for every `n : ℤ`, constructed as the kernel of the compatibility map between the two pushed-forward trivial rank-one chart modules and the overlap module;
 - canonical maps from `twistingSheaf k n` to both pushed-forward trivial chart modules, their overlap equation `a₁ = t^(-n) a₀`, and a universal gluing lift for compatible local data;
@@ -59,7 +60,7 @@ The repository currently provides:
   `restrict (M ⊗ N) ≅ restrict M ⊗ restrict N` for the scheme-general sheafified tensor product;
 - design notes recording the relevant Mathlib APIs and the completed Phase 2 comparison infrastructure.
 
-Phase 2 is complete. The tensor addition theorem is proved on both standard charts using the existing trivializations, a computation rule for the tensor-restriction comparison on pure tensors, and the standard-chart local-to-global criterion. Duality then follows from `O(n) ⊗ O(-n) ≅ O(0) ≅ O` (and similarly on the other side). Because the project-local sheafified tensor product is not yet registered as a monoidal structure on `Scheme.Modules`, the current API records this as explicit two-sided tensor-inverse data rather than an ambient categorical `Dual`. Phase 3 now begins with the explicit Cech calculation for `O(n)`.
+Phase 2 is complete. The tensor addition theorem is proved on both standard charts using the existing trivializations, a computation rule for the tensor-restriction comparison on pure tensors, and the standard-chart local-to-global criterion. Duality then follows from `O(n) ⊗ O(-n) ≅ O(0) ≅ O` (and similarly on the other side). Because the project-local sheafified tensor product is not yet registered as a monoidal structure on `Scheme.Modules`, the current API records this as explicit two-sided tensor-inverse data rather than an ambient categorical `Dual`. Phase 3 now has the explicit coordinate complex in hand; the next slice identifies it with the normalized sheaf-theoretic Cech complex before the kernel and cokernel calculations.
 
 ## Repository layout
 
@@ -76,6 +77,7 @@ Phase 2 is complete. The tensor addition theorem is proved on both standard char
 | `RiemannRoch.ProjectiveLine.StandardCover` | The bundled `Scheme.OpenCover`, affine chart components, and overlap presentation |
 | `RiemannRoch.ProjectiveLine.SheavesAndCech` | Module sheaves and the canonical Cech complex derived from the bundled cover |
 | `RiemannRoch.ProjectiveLine.NormalizedCech` | The normalized two-term Cech complex on the standard cover |
+| `RiemannRoch.ProjectiveLine.TwistingCechCoordinates` | The explicit polynomial/Laurent coordinate complex for `O(n)` |
 | `RiemannRoch.ProjectiveLine.TwistingTransition` | Laurent frame and coefficient transition factors for the twisting sheaves `O(n)` |
 | `RiemannRoch.ProjectiveLine.TwistingSheaf` | Global twisting sheaves as kernels of the two-chart overlap compatibility maps |
 | `RiemannRoch.ProjectiveLine.TwistingSheafCoordinates` | Canonical chart components, overlap compatibility, and the universal gluing lift for `O(n)` |

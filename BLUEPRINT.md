@@ -95,6 +95,10 @@ duality formulas established.
 - [x] Construct a normalized project-local two-open Cech complex.
 - [x] Construct the degree-zero Cech differential.
 - [x] Construct the degree-one Cech differential.
+- [x] Package the explicit polynomial/Laurent coordinate complex for `O(n)`,
+      with differential `(p,q) ↦ t^(-n)p(t) - q(t⁻¹)`.
+- [ ] Identify the coordinate complex with the normalized sheaf-theoretic Cech
+      complex of `O(n)`.
 - [ ] Identify global sections for `n >= 0`.
 - [ ] Prove vanishing of global sections for `n < 0`.
 - [ ] Compute first cohomology for all integers `n`.

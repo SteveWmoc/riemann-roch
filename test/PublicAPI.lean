@@ -20,6 +20,8 @@ open RiemannRoch.ProjectiveLine
 #check scheme
 #check standardOpenCover
 #check standardNormalizedCechComplex
+#check twistingCechCoordinateDifferential
+#check twistingCechCoordinateComplex
 #check twistingSheaf
 #check twistingSheafZeroIso
 #check twistingSheafTensorIso
