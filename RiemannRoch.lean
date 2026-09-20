@@ -17,6 +17,7 @@ import RiemannRoch.ProjectiveLine.StandardCover
 import RiemannRoch.ProjectiveLine.SheavesAndCech
 import RiemannRoch.ProjectiveLine.NormalizedCech
 import RiemannRoch.ProjectiveLine.TwistingTransition
+import RiemannRoch.ProjectiveLine.TwistingCechCoordinates
 import RiemannRoch.ProjectiveLine.TwistingSheaf
 import RiemannRoch.ProjectiveLine.TwistingSheafCoordinates
 import RiemannRoch.ProjectiveLine.TwistingSheafRestrictions
@@ -38,10 +39,11 @@ This is the main import file for the public Riemann-Roch development. It exports
 the current projective-line construction, its standard homogeneous opens, the
 two affine-line chart isomorphisms, the Laurent-polynomial overlap and its
 coordinate transition map, the bundled standard open cover, the module-sheaf
-and Cech-complex interfaces used by the planned cohomology calculation, and the
-transition-data construction and local-coordinate API of the twisting sheaves
-`O(n)` together with their standard-chart trivializations, the identification
-`O(0) ≅ O`, the canonical tensor addition isomorphisms, tensor-inverse duality,
-the tensor-unit comparisons, and the scheme-general sheafified tensor product
-used for restriction compatibility.
+and Cech-complex interfaces used by the planned cohomology calculation, the
+explicit polynomial/Laurent coordinate Cech complex for twisting sheaves, and
+the transition-data construction and local-coordinate API of the twisting
+sheaves `O(n)` together with their standard-chart trivializations, the
+identification `O(0) ≅ O`, the canonical tensor addition isomorphisms,
+tensor-inverse duality, the tensor-unit comparisons, and the scheme-general
+sheafified tensor product used for restriction compatibility.
 -/
