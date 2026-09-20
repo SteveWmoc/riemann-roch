@@ -21,6 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
+      - name: Verify Lean license headers
+        run: |
+          missing=0
+          while IFS= read -r file; do
+            if ! sed -n '1p' "${file}" | grep -Fxq '/-' ||
+               ! sed -n '2p' "${file}" | grep -Eq '^Copyright \(c\) [0-9]{4} Steven Sabean\. All rights reserved\.$' ||
+               ! sed -n '3p' "${file}" | grep -Fxq 'Released under MIT license as described in the file LICENSE.' ||
+               ! sed -n '4p' "${file}" | grep -Eq '^Authors: .+' ||
+               ! sed -n '5p' "${file}" | grep -Fxq -- '-/'; then
+              echo "Missing or malformed license header: ${file}"
+              missing=1
+            fi
+          done < <(find . -type f -name '*.lean' -not -path './.lake/*' -not -path './.git/*' | sort)
+          exit "${missing}"
+
       - name: Reject unfinished proofs
         run: |
           if grep -RInE --include='*.lean' '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' RiemannRoch RiemannRoch.lean; then
