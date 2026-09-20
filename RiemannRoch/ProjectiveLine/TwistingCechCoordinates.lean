@@ -36,7 +36,7 @@ kernel and cokernel computations a stable target.
 
 namespace RiemannRoch.ProjectiveLine
 
-open CategoryTheory ZeroObject
+open CategoryTheory Limits ZeroObject
 
 noncomputable section
 
