@@ -48,6 +48,17 @@ private noncomputable def sectionsRestrictTopIso
   change Γ(M, U) ≅ Γ(M, U.ι ''ᵁ ⊤)
   rw [U.ι_image_top]
 
+/-- A scheme isomorphism induces the contravariant isomorphism on global
+sections. -/
+private noncomputable def schemeIsoAppTop
+    {X Y : Scheme.{u}} (e : X ≅ Y) : Γ(Y, ⊤) ≅ Γ(X, ⊤) where
+  hom := e.hom.appTop
+  inv := e.inv.appTop
+  hom_inv_id := by
+    rw [← Scheme.Hom.comp_appTop, e.inv_hom_id, Scheme.Hom.id_appTop]
+  inv_hom_id := by
+    rw [← Scheme.Hom.comp_appTop, e.hom_inv_id, Scheme.Hom.id_appTop]
+
 /-- Global sections of the trivial module on the first standard chart are
 polynomials in the `X₀)-chart coordinate. -/
 private noncomputable def x0TrivialTopPolynomialIso
@@ -57,7 +68,7 @@ private noncomputable def x0TrivialTopPolynomialIso
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x0ChartScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
   exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (asIso (x0BasicOpenIsoAffineLine k).hom.appTop).symm ≪≫
+    (schemeIsoAppTop (x0BasicOpenIsoAffineLine k)).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
 /-- Global sections of the trivial module on the second standard chart are
@@ -69,7 +80,7 @@ private noncomputable def x1TrivialTopPolynomialIso
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x1ChartScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
   exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (asIso (x1BasicOpenIsoAffineLine k).hom.appTop).symm ≪≫
+    (schemeIsoAppTop (x1BasicOpenIsoAffineLine k)).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
 /-- Global sections of the trivial module on the overlap are Laurent
@@ -81,7 +92,7 @@ private noncomputable def overlapTrivialTopLaurentIso
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(overlapScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| LaurentPolynomial k)
   exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (asIso (standardOverlapIsoPuncturedAffineLine k).hom.appTop).symm ≪≫
+    (schemeIsoAppTop (standardOverlapIsoPuncturedAffineLine k)).symm ≪≫
       Scheme.ΓSpecIso (.of <| LaurentPolynomial k)
 
 /-- On the standard overlap, `O(n)` is trivialized using the `X₁` frame. -/
