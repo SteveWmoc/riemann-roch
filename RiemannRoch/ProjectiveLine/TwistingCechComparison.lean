@@ -166,7 +166,9 @@ theorem twistingCechX1Restriction_coordinates
         (twistingCechDegreeOneIso k n).hom =
       (x1TwistingCechSectionsIso k n).hom ≫
         AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
-  ext s
+  rw [← cancel_epi (x1TwistingCechSectionsIso k n).inv]
+  simp only [Category.assoc, Iso.inv_hom_id_assoc]
+  ext p
   simp [standardNormalizedCechX1Restriction, twistingCechDegreeOneIso,
     overlapTwistingCechSectionsIso, x1TwistingCechSectionsIso,
     modulesIsoApp, sectionsRestrictTopIso, overlapTwistingSheafIso,
