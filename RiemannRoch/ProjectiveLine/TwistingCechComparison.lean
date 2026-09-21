@@ -54,9 +54,9 @@ private noncomputable def x0TrivialTopPolynomialIso
     (k : Type u) [CommRing k] :
     Γ(x0TrivialModule k, ⊤) ≅ AddCommGrpCat.of (Polynomial k) := by
   change
-    (forget₂ CommRingCat AddCommGrpCat).obj Γ(x0ChartScheme k, ⊤) ≅
-      (forget₂ CommRingCat AddCommGrpCat).obj (.of <| Polynomial k)
-  exact (forget₂ CommRingCat AddCommGrpCat).mapIso <|
+    (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x0ChartScheme k, ⊤) ≅
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
+  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
     (asIso (x0BasicOpenIsoAffineLine k).hom.appTop).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
@@ -66,9 +66,9 @@ private noncomputable def x1TrivialTopPolynomialIso
     (k : Type u) [CommRing k] :
     Γ(x1TrivialModule k, ⊤) ≅ AddCommGrpCat.of (Polynomial k) := by
   change
-    (forget₂ CommRingCat AddCommGrpCat).obj Γ(x1ChartScheme k, ⊤) ≅
-      (forget₂ CommRingCat AddCommGrpCat).obj (.of <| Polynomial k)
-  exact (forget₂ CommRingCat AddCommGrpCat).mapIso <|
+    (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x1ChartScheme k, ⊤) ≅
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
+  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
     (asIso (x1BasicOpenIsoAffineLine k).hom.appTop).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
@@ -78,9 +78,9 @@ private noncomputable def overlapTrivialTopLaurentIso
     (k : Type u) [CommRing k] :
     Γ(overlapTrivialModule k, ⊤) ≅ AddCommGrpCat.of (LaurentPolynomial k) := by
   change
-    (forget₂ CommRingCat AddCommGrpCat).obj Γ(overlapScheme k, ⊤) ≅
-      (forget₂ CommRingCat AddCommGrpCat).obj (.of <| LaurentPolynomial k)
-  exact (forget₂ CommRingCat AddCommGrpCat).mapIso <|
+    (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(overlapScheme k, ⊤) ≅
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| LaurentPolynomial k)
+  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
     (asIso (standardOverlapIsoPuncturedAffineLine k).hom.appTop).symm ≪≫
       Scheme.ΓSpecIso (.of <| LaurentPolynomial k)
 
