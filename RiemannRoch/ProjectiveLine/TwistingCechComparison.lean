@@ -158,6 +158,20 @@ noncomputable def twistingCechDegreeOneIso
       twistingCechCoordinateDegreeOne k :=
   overlapTwistingCechSectionsIso k n
 
+/-- In the chosen coordinates, restriction from the second chart to the overlap
+is polynomial inclusion followed by the Laurent coordinate inversion. -/
+theorem twistingCechX1Restriction_coordinates
+    (k : Type u) [CommRing k] (n : ℤ) :
+    standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
+        (twistingCechDegreeOneIso k n).hom =
+      (x1TwistingCechSectionsIso k n).hom ≫
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
+  ext s
+  simp [standardNormalizedCechX1Restriction, twistingCechDegreeOneIso,
+    overlapTwistingCechSectionsIso, x1TwistingCechSectionsIso,
+    modulesIsoApp, sectionsRestrictTopIso, overlapTwistingSheafIso,
+    x1TrivialTopPolynomialIso, overlapTrivialTopLaurentIso, schemeIsoAppTop]
+
 end
 
 end RiemannRoch.ProjectiveLine
