@@ -188,8 +188,8 @@ theorem standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap
     x1BasicOpenIsoSpec, standardBasicOpenIsoSpec, standardOverlap,
     Category.assoc] using
     congrArg
-      (fun h => (scheme k).isoOfEq
-        (basicOpen_overlapDenominator_eq_standardOverlap k).symm |>.hom ≫ h)
+      (fun h => ((scheme k).isoOfEq
+        (basicOpen_overlapDenominator_eq_standardOverlap k).symm).hom ≫ h)
       (AlgebraicGeometry.Proj.basicOpenToSpec_SpecMap_awayMap
         (grading k) (coordinate_mem_grading_one k 0)
         (mul_comm (coordinate k 0) (coordinate k 1)))
