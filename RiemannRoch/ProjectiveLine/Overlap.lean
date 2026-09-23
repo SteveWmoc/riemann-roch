@@ -186,7 +186,7 @@ theorem standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap
         (x1BasicOpenIsoSpec k).hom := by
   simpa [standardOverlapIsoSpec, overlapBasicOpenIsoSpec,
     x1BasicOpenIsoSpec, standardBasicOpenIsoSpec, standardOverlap,
-    Category.assoc] using
+    AlgebraicGeometry.Proj.basicOpenIsoSpec_hom, Category.assoc] using
     congrArg
       (fun h => ((scheme k).isoOfEq
         (basicOpen_overlapDenominator_eq_standardOverlap k).symm).hom ≫ h)
