@@ -175,6 +175,25 @@ noncomputable def standardOverlapIsoSpec (k : Type u) [CommRing k] :
   (scheme k).isoOfEq (basicOpen_overlapDenominator_eq_standardOverlap k).symm ≪≫
     overlapBasicOpenIsoSpec k
 
+/-- The canonical affine presentation of the standard overlap is compatible
+with restriction from the second standard chart. -/
+theorem standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap
+    (k : Type u) [CommRing k] :
+    (standardOverlapIsoSpec k).hom ≫
+        Spec.map (CommRingCat.ofHom (x1ToOverlapMap k)) =
+      (scheme k).homOfLE
+          (show standardOverlap k ≤ x1BasicOpen k from inf_le_right) ≫
+        (x1BasicOpenIsoSpec k).hom := by
+  simpa [standardOverlapIsoSpec, overlapBasicOpenIsoSpec,
+    x1BasicOpenIsoSpec, standardBasicOpenIsoSpec, standardOverlap,
+    Category.assoc] using
+    congrArg
+      (fun h => (scheme k).isoOfEq
+        (basicOpen_overlapDenominator_eq_standardOverlap k).symm |>.hom ≫ h)
+      (AlgebraicGeometry.Proj.basicOpenToSpec_SpecMap_awayMap
+        (grading k) (coordinate_mem_grading_one k 0)
+        (mul_comm (coordinate k 0) (coordinate k 1)))
+
 /-- The spectrum of the overlap ring is the punctured affine line. -/
 noncomputable def overlapSpecIsoPuncturedAffineLine (k : Type u) [CommRing k] :
     Spec (.of <| overlapAway k) ≅ puncturedAffineLine k :=
