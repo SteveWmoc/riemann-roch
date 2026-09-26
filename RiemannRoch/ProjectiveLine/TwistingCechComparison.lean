@@ -151,7 +151,10 @@ private theorem x1ChartToOverlap_coordinates
   rw [← laurentPolynomialEquivOverlapAwayX1_toLaurent]
   change (overlapLaurentTransition k).symm (Polynomial.toLaurent p) =
     overlapLaurentTransition k (Polynomial.toLaurent p)
-  rw [overlapLaurentTransition_eq_invert, LaurentPolynomial.invert_symm]
+  rw [overlapLaurentTransition_eq_invert]
+  change (LaurentPolynomial.invert (R := k)).symm (Polynomial.toLaurent p) =
+    LaurentPolynomial.invert (Polynomial.toLaurent p)
+  rw [LaurentPolynomial.invert_symm]
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
