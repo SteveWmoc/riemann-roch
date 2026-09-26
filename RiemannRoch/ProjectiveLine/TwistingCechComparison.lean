@@ -279,10 +279,17 @@ private theorem x1TwistingRestriction_trivialization_top
           (homOfLE (show (overlapToX1 k) ''ᵁ
             (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
         (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
-  rw [← cancel_epi ((x1TwistingSheafIso k n).hom.app ⊤)]
-  simp [standardNormalizedCechX1Restriction, modulesIsoApp,
+  let r := overlapToX1 k
+  let e := x1TwistingSheafIso k n
+  let i :=
+    (homOfLE (show r ''ᵁ (⊤ : (overlapScheme k).Opens) ≤
+      (⊤ : (x1ChartScheme k).Opens) from le_top)).op
+  have hnat := e.hom.mapPresheaf.naturality_assoc i
+    ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
+  rw [← cancel_epi (e.hom.app ⊤)]
+  simpa [e, r, i, standardNormalizedCechX1Restriction, modulesIsoApp,
     sectionsRestrictTopIso, overlapTwistingSheafIso, Category.assoc,
-    ← Functor.map_comp]
+    ← Functor.map_comp] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
