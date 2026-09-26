@@ -228,6 +228,21 @@ private theorem x1TrivialTopRestriction_ring_coordinates
   ext p
   simp [x1CoordinateRestrictionRingHom]
 
+/-- The same second-chart restriction identity after forgetting to additive
+groups. -/
+private theorem x1TrivialTopRestriction_add_coordinates
+    (k : Type u) [CommRing k] :
+    (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+          (overlapToX1 k).appTop ≫
+        (overlapTrivialTopLaurentIso k).hom =
+      (x1TrivialTopPolynomialIso k).hom ≫
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
+  simpa [x1TrivialTopPolynomialIso, overlapTrivialTopLaurentIso,
+    x1CoordinateRestrictionRingHom_apply] using
+    congrArg
+      (fun f => (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map f)
+      (x1TrivialTopRestriction_ring_coordinates k)
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
