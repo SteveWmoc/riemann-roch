@@ -277,8 +277,10 @@ private theorem x1TwistingRestriction_trivialization_top
               (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
         (overlapToX1 k).appTop := by
+  rw [← cancel_epi ((x1TwistingSheafIso k n).hom.app ⊤)]
   simp [standardNormalizedCechX1Restriction, modulesIsoApp,
-    sectionsRestrictTopIso, overlapTwistingSheafIso, Category.assoc]
+    sectionsRestrictTopIso, overlapTwistingSheafIso, Category.assoc,
+    ← Functor.map_comp]
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
