@@ -141,6 +141,18 @@ noncomputable def overlapTwistingCechSectionsIso
     modulesIsoApp (overlapTwistingSheafIso k n) ⊤ ≪≫
     overlapTrivialTopLaurentIso k
 
+/-- Restricting an `X₁)-chart polynomial to the overlap and then
+rewriting in the `X₀) Laurent coordinate is Laurent inversion. -/
+private theorem x1ChartToOverlap_coordinates
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    (laurentPolynomialEquivOverlapAway k).symm
+        (x1ToOverlapMap k (x1ChartRingEquiv k p)) =
+      twistingCechX1CoordinateRestriction k p := by
+  rw [← laurentPolynomialEquivOverlapAwayX1_toLaurent]
+  change (overlapLaurentTransition k).symm (Polynomial.toLaurent p) =
+    overlapLaurentTransition k (Polynomial.toLaurent p)
+  rw [overlapLaurentTransition_eq_invert, LaurentPolynomial.invert_symm]
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
