@@ -197,6 +197,29 @@ private theorem standardOverlapIsoSpec_inv_comp_overlapToX1
   rw [← standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap]
   rw [← Category.assoc, Iso.inv_hom_id, Category.id_comp]
 
+@[reassoc]
+private theorem overlapToX1_appTop_affine_coordinates
+    (k : Type u) [CommRing k] :
+    (overlapToX1 k).appTop ≫ (standardOverlapIsoSpec k).inv.appTop =
+      (x1BasicOpenIsoSpec k).inv.appTop ≫
+        (Spec.map (CommRingCat.ofHom (x1ToOverlapMap k))).appTop := by
+  rw [← Scheme.Hom.comp_appTop, standardOverlapIsoSpec_inv_comp_overlapToX1,
+    Scheme.Hom.comp_appTop]
+
+/-- Restriction of functions from the second chart to the overlap, expressed
+in the chosen polynomial/Laurent ring coordinates. -/
+private theorem x1TrivialTopRestriction_ring_coordinates
+    (k : Type u) [CommRing k] :
+    (overlapToX1 k).appTop ≫ (overlapTrivialTopLaurentRingIso k).hom =
+      (x1TrivialTopPolynomialRingIso k).hom ≫
+        CommRingCat.ofHom (x1CoordinateRestrictionRingHom k) := by
+  simp only [overlapTrivialTopLaurentRingIso, x1TrivialTopPolynomialRingIso,
+    Iso.trans_hom, schemeIsoAppTop, Category.assoc]
+  rw [overlapToX1_appTop_affine_coordinates_assoc]
+  rw [Scheme.ΓSpecIso_naturality_assoc]
+  ext p
+  simp [x1CoordinateRestrictionRingHom]
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
