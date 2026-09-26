@@ -230,7 +230,7 @@ private theorem x1TrivialTopRestriction_ring_coordinates
           ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso.hom =
         ((x1ChartRingEquiv k).symm).toCommRingCatIso.hom ≫
           CommRingCat.ofHom (x1CoordinateRestrictionRingHom k) := by
-    ext z
+    ext z : 1
     change
       (laurentPolynomialEquivOverlapAway k).symm (x1ToOverlapMap k z) =
         (laurentPolynomialEquivOverlapAway k).symm
