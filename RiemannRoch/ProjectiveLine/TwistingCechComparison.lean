@@ -80,8 +80,9 @@ private noncomputable def x1TrivialTopPolynomialIso
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x1ChartScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
   exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (schemeIsoAppTop (x1BasicOpenIsoAffineLine k)).symm ≪≫
-      Scheme.ΓSpecIso (.of <| Polynomial k)
+    (schemeIsoAppTop (x1BasicOpenIsoSpec k)).symm ≪≫
+      Scheme.ΓSpecIso (.of <| standardAway k 1) ≪≫
+        ((x1ChartRingEquiv k).symm).toCommRingCatIso
 
 /-- Global sections of the trivial module on the overlap are Laurent
 polynomials in the `X₀)-chart coordinate. -/
@@ -92,8 +93,9 @@ private noncomputable def overlapTrivialTopLaurentIso
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(overlapScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| LaurentPolynomial k)
   exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (schemeIsoAppTop (standardOverlapIsoPuncturedAffineLine k)).symm ≪≫
-      Scheme.ΓSpecIso (.of <| LaurentPolynomial k)
+    (schemeIsoAppTop (standardOverlapIsoSpec k)).symm ≪≫
+      Scheme.ΓSpecIso (.of <| overlapAway k) ≪≫
+        ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso
 
 /-- On the standard overlap, `O(n)` is trivialized using the `X₁` frame. -/
 noncomputable def overlapTwistingSheafIso
