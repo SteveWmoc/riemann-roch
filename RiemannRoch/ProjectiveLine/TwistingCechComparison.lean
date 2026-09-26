@@ -265,6 +265,21 @@ private theorem x1TrivialTopRestriction_add_coordinates
   simpa only [Functor.map_comp] using
     congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
+/-- Restricting the chosen `X₁)-trivialization to the overlap agrees
+with the canonical restriction on the trivial module. -/
+@[reassoc]
+private theorem x1TwistingRestriction_trivialization_top
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (modulesIsoApp (x1TwistingSheafIso k n) ⊤).inv ≫
+        (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
+            (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
+              (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+        (overlapToX1 k).appTop := by
+  simp [standardNormalizedCechX1Restriction, modulesIsoApp,
+    sectionsRestrictTopIso, overlapTwistingSheafIso, Category.assoc]
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
