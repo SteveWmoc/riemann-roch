@@ -244,11 +244,20 @@ private theorem x1TrivialTopRestriction_add_coordinates
         (overlapTrivialTopLaurentIso k).hom =
       (x1TrivialTopPolynomialIso k).hom ≫
         AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
-  simpa [x1TrivialTopPolynomialIso, overlapTrivialTopLaurentIso,
-    x1CoordinateRestrictionRingHom_apply] using
-    congrArg
-      (fun f => (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map f)
-      (x1TrivialTopRestriction_ring_coordinates k)
+  let F := forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat
+  change
+    F.map (overlapToX1 k).appTop ≫
+        F.map (overlapTrivialTopLaurentRingIso k).hom =
+      F.map (x1TrivialTopPolynomialRingIso k).hom ≫
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k)
+  have hcoord :
+      F.map (CommRingCat.ofHom (x1CoordinateRestrictionRingHom k)) =
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
+    ext p
+    exact x1CoordinateRestrictionRingHom_apply k p
+  rw [← hcoord]
+  simpa only [Functor.map_comp] using
+    congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
