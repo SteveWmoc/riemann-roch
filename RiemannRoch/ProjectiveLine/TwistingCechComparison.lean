@@ -225,8 +225,15 @@ private theorem x1TrivialTopRestriction_ring_coordinates
             CommRingCat.ofHom (x1CoordinateRestrictionRingHom k)
   rw [overlapToX1_appTop_affine_coordinates_assoc]
   rw [Scheme.ΓSpecIso_naturality_assoc]
-  ext p
-  simp [x1CoordinateRestrictionRingHom]
+  rw [← cancel_epi ((x1BasicOpenIsoSpec k).inv.appTop ≫
+    (Scheme.ΓSpecIso (.of <| standardAway k 1)).hom)]
+  ext z
+  change
+    (laurentPolynomialEquivOverlapAway k).symm (x1ToOverlapMap k z) =
+      (laurentPolynomialEquivOverlapAway k).symm
+        (x1ToOverlapMap k
+          (x1ChartRingEquiv k ((x1ChartRingEquiv k).symm z)))
+  rw [(x1ChartRingEquiv k).apply_symm_apply]
 
 /-- The same second-chart restriction identity after forgetting to additive
 groups. -/
