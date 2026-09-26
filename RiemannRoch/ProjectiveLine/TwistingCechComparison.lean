@@ -170,6 +170,33 @@ private theorem x1ChartToOverlap_coordinates
     LaurentPolynomial.invert (Polynomial.toLaurent p)
   rw [LaurentPolynomial.invert_symm]
 
+/-- The second-chart restriction as a ring homomorphism in polynomial/Laurent
+coordinates. -/
+private noncomputable def x1CoordinateRestrictionRingHom
+    (k : Type u) [CommRing k] :
+    Polynomial k →+* LaurentPolynomial k :=
+  ((laurentPolynomialEquivOverlapAway k).symm).toRingHom.comp
+    ((x1ToOverlapMap k).comp (x1ChartRingEquiv k).toRingHom)
+
+@[simp]
+private theorem x1CoordinateRestrictionRingHom_apply
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    x1CoordinateRestrictionRingHom k p =
+      twistingCechX1CoordinateRestriction k p := by
+  simpa [x1CoordinateRestrictionRingHom] using x1ChartToOverlap_coordinates k p
+
+/-- The inverse affine presentations intertwine the overlap inclusion with the
+localization morphism from the second chart. -/
+private theorem standardOverlapIsoSpec_inv_comp_overlapToX1
+    (k : Type u) [CommRing k] :
+    (standardOverlapIsoSpec k).inv ≫ overlapToX1 k =
+      Spec.map (CommRingCat.ofHom (x1ToOverlapMap k)) ≫
+        (x1BasicOpenIsoSpec k).inv := by
+  rw [← cancel_mono (x1BasicOpenIsoSpec k).hom]
+  rw [Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  rw [← standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap]
+  rw [← Category.assoc, Iso.inv_hom_id, Category.id_comp]
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
