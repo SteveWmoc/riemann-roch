@@ -44,9 +44,9 @@ private noncomputable def modulesIsoApp
 restriction to the corresponding open subscheme. -/
 private noncomputable def sectionsRestrictTopIso
     {X : Scheme.{u}} (M : X.Modules) (U : X.Opens) :
-    Γ(M, U) ≅ Γ(M.restrict U.ι, ⊤) := by
-  change Γ(M, U) ≅ Γ(M, U.ι ''ᵁ ⊤)
-  rw [U.ι_image_top]
+    Γ(M, U) ≅ Γ(M.restrict U.ι, ⊤) :=
+  M.presheaf.mapIso (eqToIso U.ι_image_top).op ≪≫
+    (M.restrictAppIso U.ι ⊤).symm
 
 /-- A scheme isomorphism induces the contravariant isomorphism on global
 sections. -/
