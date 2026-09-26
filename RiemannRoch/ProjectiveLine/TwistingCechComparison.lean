@@ -71,6 +71,14 @@ private noncomputable def x0TrivialTopPolynomialIso
     (schemeIsoAppTop (x0BasicOpenIsoAffineLine k)).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
+/-- Ring coordinates on global sections of the second standard chart. -/
+private noncomputable def x1TrivialTopPolynomialRingIso
+    (k : Type u) [CommRing k] :
+    Γ(x1ChartScheme k, ⊤) ≅ CommRingCat.of (Polynomial k) :=
+  (schemeIsoAppTop (x1BasicOpenIsoSpec k)).symm ≪≫
+    Scheme.ΓSpecIso (.of <| standardAway k 1) ≪≫
+      ((x1ChartRingEquiv k).symm).toCommRingCatIso
+
 /-- Global sections of the trivial module on the second standard chart are
 polynomials in the `X₁)-chart coordinate. -/
 private noncomputable def x1TrivialTopPolynomialIso
@@ -79,10 +87,16 @@ private noncomputable def x1TrivialTopPolynomialIso
   change
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(x1ChartScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| Polynomial k)
-  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (schemeIsoAppTop (x1BasicOpenIsoSpec k)).symm ≪≫
-      Scheme.ΓSpecIso (.of <| standardAway k 1) ≪≫
-        ((x1ChartRingEquiv k).symm).toCommRingCatIso
+  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso
+    (x1TrivialTopPolynomialRingIso k)
+
+/-- Ring coordinates on global sections of the standard overlap. -/
+private noncomputable def overlapTrivialTopLaurentRingIso
+    (k : Type u) [CommRing k] :
+    Γ(overlapScheme k, ⊤) ≅ CommRingCat.of (LaurentPolynomial k) :=
+  (schemeIsoAppTop (standardOverlapIsoSpec k)).symm ≪≫
+    Scheme.ΓSpecIso (.of <| overlapAway k) ≪≫
+      ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso
 
 /-- Global sections of the trivial module on the overlap are Laurent
 polynomials in the `X₀)-chart coordinate. -/
@@ -92,10 +106,8 @@ private noncomputable def overlapTrivialTopLaurentIso
   change
     (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj Γ(overlapScheme k, ⊤) ≅
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj (.of <| LaurentPolynomial k)
-  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso <|
-    (schemeIsoAppTop (standardOverlapIsoSpec k)).symm ≪≫
-      Scheme.ΓSpecIso (.of <| overlapAway k) ≪≫
-        ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso
+  exact (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).mapIso
+    (overlapTrivialTopLaurentRingIso k)
 
 /-- On the standard overlap, `O(n)` is trivialized using the `X₁` frame. -/
 noncomputable def overlapTwistingSheafIso
