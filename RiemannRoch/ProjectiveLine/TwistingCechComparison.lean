@@ -275,8 +275,10 @@ private theorem x1TwistingRestriction_trivialization_top
           standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
             (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
               (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
-        (overlapToX1 k).appTop := by
+      (x1TrivialModule k).presheaf.map
+          (homOfLE (show (overlapToX1 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+        (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
   rw [← cancel_epi ((x1TwistingSheafIso k n).hom.app ⊤)]
   simp [standardNormalizedCechX1Restriction, modulesIsoApp,
     sectionsRestrictTopIso, overlapTwistingSheafIso, Category.assoc,
