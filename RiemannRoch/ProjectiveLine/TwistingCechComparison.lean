@@ -285,7 +285,8 @@ private theorem x1TrivialTopRestriction_apply
         (homOfLE (show r ''ᵁ (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
       (r.appIso ⊤).hom) s = r.appTop s
   rw [Scheme.Hom.appIso_hom', Scheme.Hom.map_appLE]
-  simp [Scheme.Hom.appLE]
+  change r.appLE ⊤ (r ⁻¹ᵁ ⊤) le_rfl s = r.app ⊤ s
+  rw [Scheme.Hom.appLE_eq_app]
 
 /-- The native trivial-module restriction has the expected polynomial/Laurent
 coordinate formula. -/
@@ -334,14 +335,17 @@ private theorem x1TwistingRestriction_trivialTop
               ((Scheme.Modules.restrictFunctorCongr hcomp).app M).inv.app ⊤ ≫
                 ((Scheme.Modules.restrictFunctorComp r j).app M).hom.app ⊤ =
         (M.restrict j).presheaf.map i := by
+    apply ConcreteCategory.hom_ext
+    intro s
     simp [M, r, j, w, i, sectionsRestrictTopIso,
       standardNormalizedCechX1Restriction, Scheme.Modules.restrictAppIso,
-      Category.assoc, ← Functor.map_comp]
+      Category.assoc]
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
   rw [← cancel_epi (e.hom.app ⊤)]
-  simp only [Category.assoc, modulesIsoApp, Iso.hom_inv_id_assoc]
-  rw [hrestrict_assoc]
+  simp only [Category.assoc, modulesIsoApp, IsIso.hom_inv_id_assoc]
+  simp only [overlapTwistingSheafIso, Iso.trans_hom, Category.assoc]
+  rw [hrestrict]
   change
     (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
         (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
