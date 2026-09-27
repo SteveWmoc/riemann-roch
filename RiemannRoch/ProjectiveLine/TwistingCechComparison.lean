@@ -268,7 +268,7 @@ private theorem x1TrivialTopRestriction_add_coordinates
   simpa only [Functor.map_comp] using
     congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
-/-- The native restriction map on the trivial `X₁)-module. -/
+/-- The native restriction map on the trivial `X₁`-module. -/
 private noncomputable def x1TrivialTopRestriction
     (k : Type u) [CommRing k] :
     Γ(x1TrivialModule k, ⊤) ⟶ Γ(overlapTrivialModule k, ⊤) :=
@@ -338,6 +338,8 @@ private theorem x1TwistingRestriction_trivialTop
     simp [M, r, j, i, sectionsRestrictTopIso,
       standardNormalizedCechX1Restriction, Scheme.Modules.restrictAppIso,
       Scheme.Modules.restrict_map, Category.assoc]
+    simp only [Iso.symm_inv, Iso.symm_hom, Iso.refl_inv, Iso.refl_hom,
+      Category.id_comp, Category.comp_id]
     repeat rw [← Functor.map_comp]
     apply congrArg (fun h => M.presheaf.map h)
     apply Subsingleton.elim
@@ -361,7 +363,7 @@ private theorem x1TwistingRestriction_trivialTop
                 ((Scheme.Modules.restrictFunctorComp r j).app M).hom.app ⊤ ≫
                   ((Scheme.Modules.restrictFunctor r).map e.hom).app ⊤ ≫
                     (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
-      x1TrivialTopRestriction k
+      e.hom.app ⊤ ≫ x1TrivialTopRestriction k
   simp only [Category.assoc]
   rw [hrestrict]
   change
