@@ -279,8 +279,13 @@ global functions induced by `overlapToX1`. -/
 private theorem x1TrivialTopRestriction_apply
     (k : Type u) [CommRing k] (s : Γ(x1TrivialModule k, ⊤)) :
     x1TrivialTopRestriction k s = (overlapToX1 k).appTop s := by
-  simp [x1TrivialTopRestriction, Scheme.Modules.restrictUnitIso,
-    Scheme.Hom.appIso_hom', Scheme.Hom.appLE, ← Functor.map_comp]
+  let r := overlapToX1 k
+  change
+    ((x1ChartScheme k).presheaf.map
+        (homOfLE (show r ''ᵁ (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+      (r.appIso ⊤).hom) s = r.appTop s
+  rw [Scheme.Hom.appIso_hom', Scheme.Hom.map_appLE]
+  simp [Scheme.Hom.appLE]
 
 /-- The native trivial-module restriction has the expected polynomial/Laurent
 coordinate formula. -/
@@ -289,13 +294,16 @@ private theorem x1TrivialTopRestriction_coordinates
     x1TrivialTopRestriction k ≫ (overlapTrivialTopLaurentIso k).hom =
       (x1TrivialTopPolynomialIso k).hom ≫
         AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
-  ext s : 1
+  apply ConcreteCategory.hom_ext
+  intro s
   change
     (overlapTrivialTopLaurentIso k).hom (x1TrivialTopRestriction k s) =
       twistingCechX1CoordinateRestriction k ((x1TrivialTopPolynomialIso k).hom s)
   rw [x1TrivialTopRestriction_apply]
-  have h := x1TrivialTopRestriction_add_coordinates k
-  exact congr($(h) s)
+  have h := congrArg
+    (fun f => (ConcreteCategory.hom f) s)
+    (x1TrivialTopRestriction_add_coordinates k)
+  exact h
 
 /-- After the chosen `X₁`-trivializations, the sheaf restriction from
 the second chart to the overlap is the native restriction on the trivial
@@ -309,18 +317,36 @@ private theorem x1TwistingRestriction_trivialTop
             (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
               (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
       x1TrivialTopRestriction k := by
+  let M := twistingSheaf k n
   let r := overlapToX1 k
+  let j := (x1BasicOpen k).ι
+  let w := (standardOverlap k).ι
   let e := x1TwistingSheafIso k n
+  have hcomp : r ≫ j = w := by
+    simp [r, j, w, standardOverlap]
   let i :=
     (homOfLE (show r ''ᵁ (⊤ : (overlapScheme k).Opens) ≤
       (⊤ : (x1ChartScheme k).Opens) from le_top)).op
+  have hrestrict :
+      (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M ≫
+            (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+              ((Scheme.Modules.restrictFunctorCongr hcomp).app M).inv.app ⊤ ≫
+                ((Scheme.Modules.restrictFunctorComp r j).app M).hom.app ⊤ =
+        (M.restrict j).presheaf.map i := by
+    simp [M, r, j, w, i, sectionsRestrictTopIso,
+      standardNormalizedCechX1Restriction, Scheme.Modules.restrictAppIso,
+      Category.assoc, ← Functor.map_comp]
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
   rw [← cancel_epi (e.hom.app ⊤)]
-  simpa [x1TrivialTopRestriction, e, r, i,
-    standardNormalizedCechX1Restriction, modulesIsoApp,
-    sectionsRestrictTopIso, overlapTwistingSheafIso,
-    Scheme.Modules.restrictAppIso, Category.assoc, ← Functor.map_comp] using hnat
+  simp only [Category.assoc, modulesIsoApp, Iso.hom_inv_id_assoc]
+  rw [hrestrict_assoc]
+  change
+    (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
+        (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
+      e.hom.app ⊤ ≫ x1TrivialTopRestriction k
+  simpa [x1TrivialTopRestriction, e, r, i, Category.assoc] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
