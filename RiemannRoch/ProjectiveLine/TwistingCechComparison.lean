@@ -312,6 +312,7 @@ private theorem x1TrivialTopRestriction_coordinates
 /-- After the chosen `X₁`-trivializations, the sheaf restriction from
 the second chart to the overlap is the native restriction on the trivial
 module. -/
+set_option backward.isDefEq.respectTransparency false in
 private theorem x1TwistingRestriction_trivialTop
     (k : Type u) [CommRing k] (n : ℤ) :
     (modulesIsoApp (x1TwistingSheafIso k n) ⊤).inv ≫
