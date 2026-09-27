@@ -265,7 +265,7 @@ private theorem x1TrivialTopRestriction_add_coordinates
   simpa only [Functor.map_comp] using
     congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
-/-- After the chosen `X₁)-trivializations, the sheaf restriction from
+/-- After the chosen `X₁`-trivializations, the sheaf restriction from
 the second chart to the overlap is the underlying additive map on structure
 sheaf sections induced by `overlapToX1`. -/
 @[reassoc]
@@ -278,9 +278,17 @@ private theorem x1TwistingRestriction_trivialTop
               (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
         (overlapToX1 k).appTop := by
-  ext s
-  simp [standardNormalizedCechX1Restriction, modulesIsoApp,
-    sectionsRestrictTopIso, overlapTwistingSheafIso]
+  let r := overlapToX1 k
+  let e := x1TwistingSheafIso k n
+  let i :=
+    (homOfLE (show r ''ᵁ (⊤ : (overlapScheme k).Opens) ≤
+      (⊤ : (x1ChartScheme k).Opens) from le_top)).op
+  have hnat := e.hom.mapPresheaf.naturality_assoc i
+    ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
+  rw [← cancel_epi (e.hom.app ⊤)]
+  simpa [e, r, i, standardNormalizedCechX1Restriction, modulesIsoApp,
+    sectionsRestrictTopIso, overlapTwistingSheafIso,
+    Scheme.Modules.restrictAppIso, Category.assoc, ← Functor.map_comp] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
@@ -313,7 +321,13 @@ theorem twistingCechX1Restriction_coordinates
     overlapTwistingCechSectionsIso, Iso.trans_inv, Iso.trans_hom, Category.assoc,
     Iso.inv_hom_id_assoc]
   rw [x1TwistingRestriction_trivialTop_assoc]
-  rw [x1TrivialTopRestriction_add_coordinates]
+  change
+    (x1TrivialTopPolynomialIso k).inv ≫
+        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+          (overlapToX1 k).appTop ≫
+        (overlapTrivialTopLaurentIso k).hom =
+      AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k)
+  rw [Category.assoc, x1TrivialTopRestriction_add_coordinates]
   simp
 
 
