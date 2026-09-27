@@ -277,6 +277,16 @@ private noncomputable def x1TrivialTopRestriction
         (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
     (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤
 
+/-- The native trivial-module restriction factors as restriction of sections
+followed by the canonical identification with the overlap structure sheaf. -/
+private theorem x1TrivialTopRestriction_eq
+    (k : Type u) [CommRing k] :
+    (x1TrivialModule k).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+      (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ =
+        x1TrivialTopRestriction k := rfl
+
 /-- On elements, the native trivial-module restriction is the usual map on
 global functions induced by `overlapToX1`. -/
 private theorem x1TrivialTopRestriction_apply
@@ -340,6 +350,7 @@ private theorem x1TwistingRestriction_trivialTop
     simp [M, r, j, i, sectionsRestrictTopIso,
       standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map,
       Category.assoc]
+    repeat rw [← Category.assoc]
     repeat rw [← Functor.map_comp]
     apply congrArg (fun h => M.presheaf.map h)
     apply Subsingleton.elim
@@ -370,8 +381,8 @@ private theorem x1TwistingRestriction_trivialTop
     (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
         (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
       e.hom.app ⊤ ≫ x1TrivialTopRestriction k
-  dsimp only [x1TrivialTopRestriction]
-  simpa only [Category.assoc] using hnat
+  rw [← x1TrivialTopRestriction_eq k]
+  simpa only [r, i, Category.assoc] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
