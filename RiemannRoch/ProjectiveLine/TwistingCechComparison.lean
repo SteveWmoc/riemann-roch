@@ -46,7 +46,7 @@ private noncomputable def sectionsRestrictTopIso
     {X : Scheme.{u}} (M : X.Modules) (U : X.Opens) :
     Γ(M, U) ≅ Γ(M.restrict U.ι, ⊤) := by
   change Γ(M, U) ≅ Γ(M, U.ι ''ᵁ ⊤)
-  rw [U.ι_image_top]
+  exact M.presheaf.mapIso (eqToIso U.ι_image_top).op
 
 /-- A scheme isomorphism induces the contravariant isomorphism on global
 sections. -/
@@ -370,12 +370,7 @@ private theorem x1TwistingRestriction_trivialTop
     (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
         (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
       e.hom.app ⊤ ≫ x1TrivialTopRestriction k
-  change
-    (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
-        (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
-      e.hom.app ⊤ ≫
-        ((x1TrivialModule k).presheaf.map i ≫
-          (Scheme.Modules.restrictUnitIso r).hom.app ⊤)
+  dsimp only [x1TrivialTopRestriction]
   simpa only [Category.assoc] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
