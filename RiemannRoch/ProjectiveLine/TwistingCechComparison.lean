@@ -350,8 +350,8 @@ private theorem x1TwistingRestriction_trivialTop
     simp [M, r, j, i, sectionsRestrictTopIso,
       standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map,
       Category.assoc]
-    simp only [← Functor.map_comp]
-    apply congrArg (fun h => M.presheaf.map h)
+    repeat rw [← (twistingSheaf k n).presheaf.map_comp]
+    apply congrArg (fun h => (twistingSheaf k n).presheaf.map h)
     apply Subsingleton.elim
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
