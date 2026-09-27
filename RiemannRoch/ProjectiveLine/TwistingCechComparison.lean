@@ -265,9 +265,41 @@ private theorem x1TrivialTopRestriction_add_coordinates
   simpa only [Functor.map_comp] using
     congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
+/-- The native restriction map on the trivial `X₁)-module. -/
+private noncomputable def x1TrivialTopRestriction
+    (k : Type u) [CommRing k] :
+    Γ(x1TrivialModule k, ⊤) ⟶ Γ(overlapTrivialModule k, ⊤) :=
+  (x1TrivialModule k).presheaf.map
+      (homOfLE (show (overlapToX1 k) ''ᵁ
+        (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+    (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤
+
+/-- On elements, the native trivial-module restriction is the usual map on
+global functions induced by `overlapToX1`. -/
+private theorem x1TrivialTopRestriction_apply
+    (k : Type u) [CommRing k] (s : Γ(x1TrivialModule k, ⊤)) :
+    x1TrivialTopRestriction k s = (overlapToX1 k).appTop s := by
+  simp [x1TrivialTopRestriction, Scheme.Modules.restrictUnitIso,
+    Scheme.Hom.appIso_hom', Scheme.Hom.appLE, ← Functor.map_comp]
+
+/-- The native trivial-module restriction has the expected polynomial/Laurent
+coordinate formula. -/
+private theorem x1TrivialTopRestriction_coordinates
+    (k : Type u) [CommRing k] :
+    x1TrivialTopRestriction k ≫ (overlapTrivialTopLaurentIso k).hom =
+      (x1TrivialTopPolynomialIso k).hom ≫
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
+  ext s : 1
+  change
+    (overlapTrivialTopLaurentIso k).hom (x1TrivialTopRestriction k s) =
+      twistingCechX1CoordinateRestriction k ((x1TrivialTopPolynomialIso k).hom s)
+  rw [x1TrivialTopRestriction_apply]
+  have h := x1TrivialTopRestriction_add_coordinates k
+  exact congr($(h) s)
+
 /-- After the chosen `X₁`-trivializations, the sheaf restriction from
-the second chart to the overlap is the underlying additive map on structure
-sheaf sections induced by `overlapToX1`. -/
+the second chart to the overlap is the native restriction on the trivial
+module. -/
 @[reassoc]
 private theorem x1TwistingRestriction_trivialTop
     (k : Type u) [CommRing k] (n : ℤ) :
@@ -276,8 +308,7 @@ private theorem x1TwistingRestriction_trivialTop
           standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
             (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
               (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
-        (overlapToX1 k).appTop := by
+      x1TrivialTopRestriction k := by
   let r := overlapToX1 k
   let e := x1TwistingSheafIso k n
   let i :=
@@ -286,7 +317,8 @@ private theorem x1TwistingRestriction_trivialTop
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
   rw [← cancel_epi (e.hom.app ⊤)]
-  simpa [e, r, i, standardNormalizedCechX1Restriction, modulesIsoApp,
+  simpa [x1TrivialTopRestriction, e, r, i,
+    standardNormalizedCechX1Restriction, modulesIsoApp,
     sectionsRestrictTopIso, overlapTwistingSheafIso,
     Scheme.Modules.restrictAppIso, Category.assoc, ← Functor.map_comp] using hnat
 
@@ -321,15 +353,8 @@ theorem twistingCechX1Restriction_coordinates
     overlapTwistingCechSectionsIso, Iso.trans_inv, Iso.trans_hom, Category.assoc,
     Iso.inv_hom_id_assoc]
   rw [x1TwistingRestriction_trivialTop_assoc]
-  change
-    (x1TrivialTopPolynomialIso k).inv ≫
-        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
-          (overlapToX1 k).appTop ≫
-        (overlapTrivialTopLaurentIso k).hom =
-      AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k)
-  rw [Category.assoc, x1TrivialTopRestriction_add_coordinates]
+  rw [x1TrivialTopRestriction_coordinates]
   simp
-
 
 end
 
