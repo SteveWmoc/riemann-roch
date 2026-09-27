@@ -44,9 +44,9 @@ private noncomputable def modulesIsoApp
 restriction to the corresponding open subscheme. -/
 private noncomputable def sectionsRestrictTopIso
     {X : Scheme.{u}} (M : X.Modules) (U : X.Opens) :
-    Γ(M, U) ≅ Γ(M.restrict U.ι, ⊤) :=
-  M.presheaf.mapIso (eqToIso U.ι_image_top).op ≪≫
-    (M.restrictAppIso U.ι ⊤).symm
+    Γ(M, U) ≅ Γ(M.restrict U.ι, ⊤) := by
+  change Γ(M, U) ≅ Γ(M, U.ι ''ᵁ ⊤)
+  rw [U.ι_image_top]
 
 /-- A scheme isomorphism induces the contravariant isomorphism on global
 sections. -/
@@ -338,10 +338,8 @@ private theorem x1TwistingRestriction_trivialTop
                 ((Scheme.Modules.restrictFunctorComp r j).app M).hom.app ⊤ =
         (M.restrict j).presheaf.map i := by
     simp [M, r, j, i, sectionsRestrictTopIso,
-      standardNormalizedCechX1Restriction, Scheme.Modules.restrictAppIso,
-      Scheme.Modules.restrict_map, Category.assoc]
-    simp only [Iso.symm_inv, Iso.symm_hom, Iso.refl_inv, Iso.refl_hom,
-      Category.id_comp, Category.comp_id]
+      standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map,
+      Category.assoc]
     repeat rw [← Functor.map_comp]
     apply congrArg (fun h => M.presheaf.map h)
     apply Subsingleton.elim
@@ -372,7 +370,13 @@ private theorem x1TwistingRestriction_trivialTop
     (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
         (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
       e.hom.app ⊤ ≫ x1TrivialTopRestriction k
-  simpa [x1TrivialTopRestriction, e, r, i, Category.assoc] using hnat
+  change
+    (M.restrict j).presheaf.map i ≫ e.hom.app (r ''ᵁ ⊤) ≫
+        (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
+      e.hom.app ⊤ ≫
+        ((x1TrivialModule k).presheaf.map i ≫
+          (Scheme.Modules.restrictUnitIso r).hom.app ⊤)
+  simpa only [Category.assoc] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
