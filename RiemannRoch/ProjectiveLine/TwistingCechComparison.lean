@@ -309,7 +309,8 @@ private theorem x1TrivialTopRestriction_coordinates
     (x1TrivialTopRestriction_add_coordinates k)
   exact h
 
-set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
+set_option backward.defeqAttrib.useBackward true in
 /-- After the chosen `X₁`-trivializations, the sheaf restriction from
 the second chart to the overlap is the native restriction on the trivial
 module. -/
