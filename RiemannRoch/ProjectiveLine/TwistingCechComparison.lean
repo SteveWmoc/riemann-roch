@@ -347,12 +347,10 @@ private theorem x1TwistingRestriction_trivialTop
                 (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
                 ((Scheme.Modules.restrictFunctorComp r j).app M).hom.app ⊤ =
         (M.restrict j).presheaf.map i := by
+    ext s
     simp [M, r, j, i, sectionsRestrictTopIso,
       standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map,
-      Category.assoc]
-    repeat rw [← (twistingSheaf k n).presheaf.map_comp]
-    apply congrArg (fun h => (twistingSheaf k n).presheaf.map h)
-    apply Subsingleton.elim
+      ← (twistingSheaf k n).presheaf.map_comp_apply]
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
   change
