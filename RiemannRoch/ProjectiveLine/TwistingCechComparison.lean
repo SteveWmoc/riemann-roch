@@ -265,6 +265,23 @@ private theorem x1TrivialTopRestriction_add_coordinates
   simpa only [Functor.map_comp] using
     congrArg (fun f => F.map f) (x1TrivialTopRestriction_ring_coordinates k)
 
+/-- After the chosen `X₁)-trivializations, the sheaf restriction from
+the second chart to the overlap is the underlying additive map on structure
+sheaf sections induced by `overlapToX1`. -/
+@[reassoc]
+private theorem x1TwistingRestriction_trivialTop
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (modulesIsoApp (x1TwistingSheafIso k n) ⊤).inv ≫
+        (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
+            (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
+              (modulesIsoApp (overlapTwistingSheafIso k n) ⊤).hom =
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+        (overlapToX1 k).appTop := by
+  ext s
+  simp [standardNormalizedCechX1Restriction, modulesIsoApp,
+    sectionsRestrictTopIso, overlapTwistingSheafIso]
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
@@ -292,13 +309,12 @@ theorem twistingCechX1Restriction_coordinates
       (x1TwistingCechSectionsIso k n).hom ≫
         AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
   rw [← cancel_epi (x1TwistingCechSectionsIso k n).inv]
-  simp only [Category.assoc, Iso.inv_hom_id_assoc]
-  ext p
-  simp [standardNormalizedCechX1Restriction, twistingCechDegreeOneIso,
-    overlapTwistingCechSectionsIso, x1TwistingCechSectionsIso,
-    modulesIsoApp, sectionsRestrictTopIso, overlapTwistingSheafIso,
-    x1TrivialTopPolynomialIso, overlapTrivialTopLaurentIso, schemeIsoAppTop,
-    x1ChartToOverlap_coordinates]
+  simp only [x1TwistingCechSectionsIso, twistingCechDegreeOneIso,
+    overlapTwistingCechSectionsIso, Iso.trans_inv, Iso.trans_hom, Category.assoc,
+    Iso.inv_hom_id_assoc]
+  rw [x1TwistingRestriction_trivialTop_assoc]
+  rw [x1TrivialTopRestriction_add_coordinates]
+  simp
 
 
 end
