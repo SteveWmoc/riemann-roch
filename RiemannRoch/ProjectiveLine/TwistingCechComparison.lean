@@ -349,8 +349,13 @@ private theorem x1TwistingRestriction_trivialTop
         (M.restrict j).presheaf.map i := by
     ext s
     simp [M, r, j, i, sectionsRestrictTopIso,
-      standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map,
-      ← (twistingSheaf k n).presheaf.map_comp_apply]
+      standardNormalizedCechX1Restriction, Scheme.Modules.restrict_map]
+    erw [← (twistingSheaf k n).presheaf.map_comp_apply]
+    erw [← (twistingSheaf k n).presheaf.map_comp_apply]
+    erw [← (twistingSheaf k n).presheaf.map_comp_apply]
+    erw [← (twistingSheaf k n).presheaf.map_comp_apply]
+    apply congrArg (fun h => (twistingSheaf k n).presheaf.map h s)
+    apply Subsingleton.elim
   have hnat := e.hom.mapPresheaf.naturality_assoc i
     ((Scheme.Modules.restrictUnitIso r).hom.app ⊤)
   change
@@ -379,7 +384,7 @@ private theorem x1TwistingRestriction_trivialTop
         (Scheme.Modules.restrictUnitIso r).hom.app ⊤ =
       e.hom.app ⊤ ≫ x1TrivialTopRestriction k
   dsimp only [r, i] at hnat
-  rw [← x1TrivialTopRestriction_eq k]
+  erw [← x1TrivialTopRestriction_eq k]
   simpa only [Category.assoc] using hnat
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
