@@ -319,6 +319,30 @@ private theorem x1TrivialTopRestriction_coordinates
     (x1TrivialTopRestriction_add_coordinates k)
   exact h
 
+/-- Naturality of the `X₁` trivialization for restriction to the standard
+overlap, followed by the canonical identification of the restricted trivial
+module with the overlap structure sheaf.
+
+This is the local-frame square, before identifying sections on an ambient
+open with top sections of its open subscheme. -/
+@[reassoc]
+theorem x1TwistingSheafIso_overlap_naturality
+    (k : Type u) [CommRing k] (n : ℤ) :
+    ((twistingSheaf k n).restrict (x1BasicOpen k).ι).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+      (x1TwistingSheafIso k n).hom.app ((overlapToX1 k) ''ᵁ ⊤) ≫
+        (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ =
+    (x1TwistingSheafIso k n).hom.app ⊤ ≫
+      (x1TrivialModule k).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+        (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
+  exact (x1TwistingSheafIso k n).hom.mapPresheaf.naturality_assoc
+    (homOfLE (show (overlapToX1 k) ''ᵁ
+      (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op
+    ((Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤)
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
