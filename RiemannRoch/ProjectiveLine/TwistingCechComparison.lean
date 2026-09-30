@@ -336,11 +336,14 @@ private theorem standardNormalizedCechX1Restriction_restrictTop
         (homOfLE (show (overlapToX1 k) ''ᵁ
           (⊤ : (overlapScheme k).Opens) ≤
             (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
-  ext s
-  simp [sectionsRestrictTopIso, standardNormalizedCechX1Restriction,
+  simp only [sectionsRestrictTopIso, standardNormalizedCechX1Restriction,
+    Functor.mapIso_inv, Functor.mapIso_hom, Iso.op_inv, Iso.op_hom,
+    eqToIso.inv, eqToIso.hom, eqToHom_op,
+    Scheme.Modules.restrictFunctorCongr_inv_app_app,
+    Scheme.Modules.restrictFunctorComp_hom_app_app,
     Scheme.Modules.restrict_map]
-  repeat rw [← M.presheaf.map_comp_apply]
-  apply congrArg (fun h => M.presheaf.map h s)
+  repeat rw [← M.presheaf.map_comp]
+  apply congrArg M.presheaf.map
   apply Subsingleton.elim
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
