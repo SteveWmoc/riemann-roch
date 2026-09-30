@@ -319,6 +319,30 @@ private theorem x1TrivialTopRestriction_coordinates
     (x1TrivialTopRestriction_add_coordinates k)
   exact h
 
+/-- The normalized restriction from the second standard chart to the overlap
+agrees with restriction between top sections after passing to the corresponding
+open subschemes. -/
+@[reassoc]
+private theorem standardNormalizedCechX1Restriction_restrictTop
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M ≫
+          (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+            ((Scheme.Modules.restrictFunctorCongr
+              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+              ((Scheme.Modules.restrictFunctorComp
+                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
+      (M.restrict (x1BasicOpen k).ι).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤
+            (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
+  ext s
+  simp [sectionsRestrictTopIso, standardNormalizedCechX1Restriction,
+    Scheme.Modules.restrict_map]
+  repeat rw [← M.presheaf.map_comp_apply]
+  apply congrArg (fun h => M.presheaf.map h s)
+  apply Subsingleton.elim
+
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
 module with the overlap structure sheaf.
