@@ -319,6 +319,24 @@ private theorem x1TrivialTopRestriction_coordinates
     (x1TrivialTopRestriction_add_coordinates k)
   exact h
 
+/-- The canonical identification of ambient-open sections with top sections
+of the restricted sheaf is the presheaf map induced by `ι(U) = U`. -/
+@[simp]
+private theorem sectionsRestrictTopIso_hom
+    {X : Scheme.{u}} (M : X.Modules) (U : X.Opens) :
+    (sectionsRestrictTopIso M U).hom =
+      (M.presheaf.mapIso (eqToIso U.ι_image_top).op).hom := by
+  rfl
+
+/-- The inverse canonical identification of top sections of a restricted sheaf
+with ambient-open sections is the inverse of the same presheaf `mapIso`. -/
+@[simp]
+private theorem sectionsRestrictTopIso_inv
+    {X : Scheme.{u}} (M : X.Modules) (U : X.Opens) :
+    (sectionsRestrictTopIso M U).inv =
+      (M.presheaf.mapIso (eqToIso U.ι_image_top).op).inv := by
+  rfl
+
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
 module with the overlap structure sheaf.
