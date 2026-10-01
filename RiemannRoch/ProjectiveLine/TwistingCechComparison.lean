@@ -337,36 +337,30 @@ private theorem sectionsRestrictTopIso_inv
       (M.presheaf.mapIso (eqToIso U.ι_image_top).op).inv := by
   rfl
 
-set_option backward.isDefEq.respectTransparency.types false in
-set_option backward.defeqAttrib.useBackward true in
-/-- The normalized restriction from the second standard chart to the overlap
-agrees with restriction between top sections after passing to the corresponding
-open subschemes. -/
-@[reassoc]
-theorem standardNormalizedCechX1Restriction_restrictTop
+/-- The inverse component of the restriction-congruence isomorphism on the
+standard overlap is the corresponding presheaf transport map. -/
+@[simp]
+private theorem overlapRestrictFunctorCongr_inv_app_top
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
-    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
-        standardNormalizedCechX1Restriction M ≫
-          (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
-            ((Scheme.Modules.restrictFunctorCongr
-              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
-              ((Scheme.Modules.restrictFunctorComp
-                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
-      (M.restrict (x1BasicOpen k).ι).presheaf.map
-        (homOfLE (show (overlapToX1 k) ''ᵁ
-          (⊤ : (overlapScheme k).Opens) ≤
-            (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
-  rw [sectionsRestrictTopIso_inv, sectionsRestrictTopIso_hom]
-  rw [Iso.app_inv, Iso.app_hom]
-  unfold standardNormalizedCechX1Restriction
-  simp only [Functor.mapIso_inv, Functor.mapIso_hom, Iso.op_inv, Iso.op_hom,
-    eqToIso.inv, eqToIso.hom, eqToHom_op,
-    Scheme.Modules.restrictFunctorCongr_inv_app_app,
-    Scheme.Modules.restrictFunctorComp_hom_app_app,
-    Scheme.Modules.restrict_map]
-  simp only [← Functor.map_comp]
-  congr 1
-  apply Subsingleton.elim
+    ((Scheme.Modules.restrictFunctorCongr
+      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ =
+      M.presheaf.map (eqToHom (by
+        simp [overlapToX1_comp_x1BasicOpen_ι])).op := by
+  rw [Iso.app_inv]
+  exact Scheme.Modules.restrictFunctorCongr_inv_app_app
+    (overlapToX1_comp_x1BasicOpen_ι k) M
+
+/-- The hom component of restriction along the composite overlap inclusion is
+the corresponding presheaf transport map on top sections. -/
+@[simp]
+private theorem overlapRestrictFunctorComp_hom_app_top
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    ((Scheme.Modules.restrictFunctorComp
+      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
+      M.presheaf.map (eqToHom (by simp)).op := by
+  rw [Iso.app_hom]
+  exact Scheme.Modules.restrictFunctorComp_hom_app_app
+    (overlapToX1 k) (x1BasicOpen k).ι M
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
