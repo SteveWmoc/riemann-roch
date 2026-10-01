@@ -337,6 +337,8 @@ private theorem sectionsRestrictTopIso_inv
       (M.presheaf.mapIso (eqToIso U.ι_image_top).op).inv := by
   rfl
 
+set_option backward.isDefEq.respectTransparency.types false in
+set_option backward.defeqAttrib.useBackward true in
 /-- The normalized restriction from the second standard chart to the overlap
 agrees with restriction between top sections after passing to the corresponding
 open subschemes. -/
