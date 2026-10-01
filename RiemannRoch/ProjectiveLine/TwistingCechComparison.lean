@@ -337,30 +337,25 @@ private theorem sectionsRestrictTopIso_inv
       (M.presheaf.mapIso (eqToIso U.ι_image_top).op).inv := by
   rfl
 
-/-- The inverse component of the restriction-congruence isomorphism on the
-standard overlap is the corresponding presheaf transport map. -/
-@[simp]
-private theorem overlapRestrictFunctorCongr_inv_app_top
+/-- For the overlap restriction-congruence isomorphism, the inverse of the
+component is the component of the inverse natural isomorphism. -/
+private theorem overlapRestrictFunctorCongr_app_inv
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
     ((Scheme.Modules.restrictFunctorCongr
-      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ =
-      M.presheaf.map (eqToHom (by
-        simp [overlapToX1_comp_x1BasicOpen_ι])).op := by
+      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv =
+      (Scheme.Modules.restrictFunctorCongr
+        (overlapToX1_comp_x1BasicOpen_ι k)).inv.app M := by
   rw [Iso.app_inv]
-  exact Scheme.Modules.restrictFunctorCongr_inv_app_app
-    (overlapToX1_comp_x1BasicOpen_ι k) M
 
-/-- The hom component of restriction along the composite overlap inclusion is
-the corresponding presheaf transport map on top sections. -/
-@[simp]
-private theorem overlapRestrictFunctorComp_hom_app_top
+/-- For restriction along the composite overlap inclusion, the hom of the
+component is the component of the hom natural isomorphism. -/
+private theorem overlapRestrictFunctorComp_app_hom
     (k : Type u) [CommRing k] (M : ModuleSheaf k) :
     ((Scheme.Modules.restrictFunctorComp
-      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
-      M.presheaf.map (eqToHom (by simp)).op := by
+      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom =
+      (Scheme.Modules.restrictFunctorComp
+        (overlapToX1 k) (x1BasicOpen k).ι).hom.app M := by
   rw [Iso.app_hom]
-  exact Scheme.Modules.restrictFunctorComp_hom_app_app
-    (overlapToX1 k) (x1BasicOpen k).ι M
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
