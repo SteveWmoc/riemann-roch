@@ -337,6 +337,26 @@ private theorem sectionsRestrictTopIso_inv
       (M.presheaf.mapIso (eqToIso U.ι_image_top).op).inv := by
   rfl
 
+/-- For the overlap restriction-congruence isomorphism, the inverse of the
+component is the component of the inverse natural isomorphism. -/
+private theorem overlapRestrictFunctorCongr_app_inv
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    ((Scheme.Modules.restrictFunctorCongr
+      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv =
+      (Scheme.Modules.restrictFunctorCongr
+        (overlapToX1_comp_x1BasicOpen_ι k)).inv.app M := by
+  rw [Iso.app_inv]
+
+/-- For restriction along the composite overlap inclusion, the hom of the
+component is the component of the hom natural isomorphism. -/
+private theorem overlapRestrictFunctorComp_app_hom
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    ((Scheme.Modules.restrictFunctorComp
+      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom =
+      (Scheme.Modules.restrictFunctorComp
+        (overlapToX1 k) (x1BasicOpen k).ι).hom.app M := by
+  rw [Iso.app_hom]
+
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
 module with the overlap structure sheaf.
