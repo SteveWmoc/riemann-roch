@@ -362,8 +362,8 @@ theorem standardNormalizedCechX1Restriction_restrictTop
     Scheme.Modules.restrictFunctorCongr_inv_app_app,
     Scheme.Modules.restrictFunctorComp_hom_app_app,
     Scheme.Modules.restrict_map]
-  repeat rw [← M.presheaf.map_comp]
-  apply congrArg M.presheaf.map
+  simp only [← Functor.map_comp]
+  congr 1
   apply Subsingleton.elim
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
