@@ -356,6 +356,7 @@ theorem standardNormalizedCechX1Restriction_restrictTop
             (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
   rw [sectionsRestrictTopIso_inv, sectionsRestrictTopIso_hom]
   rw [Iso.app_inv, Iso.app_hom]
+  unfold standardNormalizedCechX1Restriction
   simp only [Functor.mapIso_inv, Functor.mapIso_hom, Iso.op_inv, Iso.op_hom,
     eqToIso.inv, eqToIso.hom, eqToHom_op,
     Scheme.Modules.restrictFunctorCongr_inv_app_app,
