@@ -52,6 +52,35 @@ noncomputable abbrev overlapToX1 (k : Type u) [CommRing k] :
     overlapScheme k ⟶ x1ChartScheme k :=
   (scheme k).homOfLE inf_le_right
 
+/-- Mapping the top open of the overlap first into the `X₁` chart and then
+back into `P¹` recovers the standard overlap. -/
+theorem x1BasicOpen_image_overlapToX1_top
+    (k : Type u) [CommRing k] :
+    (x1BasicOpen k).ι ''ᵁ
+        ((overlapToX1 k) ''ᵁ (⊤ : (overlapScheme k).Opens)) =
+      standardOverlap k := by
+  rw [Scheme.Hom.image_top_eq_opensRange]
+  have hcomp : overlapToX1 k ≫ (x1BasicOpen k).ι =
+      (standardOverlap k).ι := by
+    simp [standardOverlap]
+  calc
+    (x1BasicOpen k).ι ''ᵁ (overlapToX1 k).opensRange =
+        (overlapToX1 k ≫ (x1BasicOpen k).ι).opensRange :=
+      (Scheme.Hom.opensRange_comp _ _).symm
+    _ = (standardOverlap k).ι.opensRange := by rw [hcomp]
+    _ = standardOverlap k := Scheme.Opens.opensRange_ι
+
+/-- Inside the `X₁` chart, the image of the overlap is exactly the preimage
+of the standard overlap under the chart inclusion. -/
+theorem overlapToX1_image_top_eq_preimage_standardOverlap
+    (k : Type u) [CommRing k] :
+    (overlapToX1 k) ''ᵁ (⊤ : (overlapScheme k).Opens) =
+      (x1BasicOpen k).ι ⁻¹ᵁ (standardOverlap k) := by
+  apply (x1BasicOpen k).ι.image_injective
+  rw [x1BasicOpen_image_overlapToX1_top]
+  rw [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
+  simp [standardOverlap]
+
 /-- The trivial rank-one module sheaf on the first standard chart. -/
 noncomputable abbrev x0TrivialModule (k : Type u) [CommRing k] :
     (x0ChartScheme k).Modules :=
