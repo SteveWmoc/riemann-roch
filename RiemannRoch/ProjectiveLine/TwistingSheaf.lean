@@ -67,8 +67,12 @@ theorem x1BasicOpen_image_overlapToX1_top
     (x1BasicOpen k).ι ''ᵁ (overlapToX1 k).opensRange =
         (overlapToX1 k ≫ (x1BasicOpen k).ι).opensRange :=
       (Scheme.Hom.opensRange_comp _ _).symm
-    _ = (standardOverlap k).ι.opensRange := by rw [hcomp]
-    _ = standardOverlap k := Scheme.Opens.opensRange_ι
+    _ = standardOverlap k := by
+      apply Opens.ext
+      change Set.range (overlapToX1 k ≫ (x1BasicOpen k).ι) =
+        (standardOverlap k : Set (scheme k))
+      rw [hcomp]
+      exact Scheme.Opens.range_ι (standardOverlap k)
 
 /-- Inside the `X₁` chart, the image of the overlap is exactly the preimage
 of the standard overlap under the chart inclusion. -/
@@ -77,9 +81,15 @@ theorem overlapToX1_image_top_eq_preimage_standardOverlap
     (overlapToX1 k) ''ᵁ (⊤ : (overlapScheme k).Opens) =
       (x1BasicOpen k).ι ⁻¹ᵁ (standardOverlap k) := by
   apply (x1BasicOpen k).ι.image_injective
-  rw [x1BasicOpen_image_overlapToX1_top]
-  rw [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
-  simp [standardOverlap]
+  calc
+    (x1BasicOpen k).ι ''ᵁ
+        ((overlapToX1 k) ''ᵁ (⊤ : (overlapScheme k).Opens)) =
+      standardOverlap k := x1BasicOpen_image_overlapToX1_top k
+    _ = (x1BasicOpen k).ι ''ᵁ
+        ((x1BasicOpen k).ι ⁻¹ᵁ (standardOverlap k)) := by
+      rw [Scheme.Hom.image_preimage_eq_opensRange_inf,
+        Scheme.Opens.opensRange_ι]
+      simp [standardOverlap]
 
 /-- The trivial rank-one module sheaf on the first standard chart. -/
 noncomputable abbrev x0TrivialModule (k : Type u) [CommRing k] :
