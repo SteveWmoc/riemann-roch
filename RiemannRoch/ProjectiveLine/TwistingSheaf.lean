@@ -91,6 +91,20 @@ theorem overlapToX1_image_top_eq_preimage_standardOverlap
         Scheme.Opens.opensRange_ι]
       simp [standardOverlap]
 
+/-- After transporting source and target along the canonical open-set
+identifications, the image under the `X₁` chart inclusion of the overlap-to-`X₁`
+inclusion is the standard overlap inclusion in `P¹`. -/
+theorem x1BasicOpen_opensFunctor_map_overlapToX1_top
+    (k : Type u) [CommRing k] :
+    eqToHom (x1BasicOpen_image_overlapToX1_top k).symm ≫
+        (x1BasicOpen k).ι.opensFunctor.map
+          (homOfLE (show (overlapToX1 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤
+              (⊤ : (x1ChartScheme k).Opens) from le_top)) ≫
+      eqToHom (x1BasicOpen k).ι_image_top =
+    homOfLE (show standardOverlap k ≤ x1BasicOpen k from inf_le_right) := by
+  apply Subsingleton.elim
+
 /-- The trivial rank-one module sheaf on the first standard chart. -/
 noncomputable abbrev x0TrivialModule (k : Type u) [CommRing k] :
     (x0ChartScheme k).Modules :=
