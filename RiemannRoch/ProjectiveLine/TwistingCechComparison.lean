@@ -357,6 +357,24 @@ private theorem overlapRestrictFunctorComp_app_hom
         (overlapToX1 k) (x1BasicOpen k).ι).hom.app M := by
   rw [Iso.app_hom]
 
+/-- Applying the module presheaf to the transported overlap inclusion from
+`X₁` gives the normalized second-chart Cech restriction map. -/
+@[reassoc]
+theorem standardNormalizedCechX1Restriction_eq_transport
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
+        M.presheaf.map ((x1BasicOpen k).ι.opensFunctor.map
+          (homOfLE (show (overlapToX1 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤
+              (⊤ : (x1ChartScheme k).Opens) from le_top))).op ≫
+      M.presheaf.map
+        (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op =
+    standardNormalizedCechX1Restriction M := by
+  unfold standardNormalizedCechX1Restriction
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  simp only [← op_comp]
+  rw [x1BasicOpen_opensFunctor_map_overlapToX1_top]
+
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
 module with the overlap structure sheaf.
