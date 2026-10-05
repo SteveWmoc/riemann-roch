@@ -373,7 +373,9 @@ theorem standardNormalizedCechX1Restriction_eq_transport
   unfold standardNormalizedCechX1Restriction
   rw [← Functor.map_comp, ← Functor.map_comp]
   simp only [← op_comp]
-  rw [x1BasicOpen_opensFunctor_map_overlapToX1_top]
+  have h := congrArg (fun f => M.presheaf.map f.op)
+    (x1BasicOpen_opensFunctor_map_overlapToX1_top k)
+  simpa only [Category.assoc] using h
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
