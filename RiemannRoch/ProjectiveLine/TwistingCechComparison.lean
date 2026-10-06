@@ -376,7 +376,7 @@ private theorem overlapRestrictionTransport_cancel
   simp only [Functor.mapIso_hom, Iso.op_hom, eqToIso.hom, eqToHom_op,
     Scheme.Modules.restrictFunctorCongr_inv_app_app,
     Scheme.Modules.restrictFunctorComp_hom_app_app]
-  rw [← Functor.map_comp, ← Functor.map_comp, ← Functor.map_comp]
+  erw [← Functor.map_comp, ← Functor.map_comp, ← Functor.map_comp]
   rw [← M.presheaf.map_id]
   apply congrArg M.presheaf.map
   apply Subsingleton.elim
