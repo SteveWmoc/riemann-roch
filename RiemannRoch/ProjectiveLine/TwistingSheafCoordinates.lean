@@ -127,7 +127,7 @@ theorem twistingSheaf_hom_ext
     (h0 : f ≫ twistingSheafToX0 k n = g ≫ twistingSheafToX0 k n)
     (h1 : f ≫ twistingSheafToX1 k n = g ≫ twistingSheafToX1 k n) :
     f = g := by
-  letI : Mono (twistingSheafι k n) := by
+  let : Mono (twistingSheafι k n) := by
     change Mono (equalizer.ι (twistingCompatibilityMap k n) 0)
     infer_instance
   rw [← cancel_mono (twistingSheafι k n)]

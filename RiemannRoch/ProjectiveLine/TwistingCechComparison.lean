@@ -357,6 +357,30 @@ private theorem overlapRestrictFunctorComp_app_hom
         (overlapToX1 k) (x1BasicOpen k).ι).hom.app M := by
   rw [Iso.app_hom]
 
+/-- The overlap-side section transport cancels the final ambient-presheaf
+transport appearing in `standardNormalizedCechX1Restriction_eq_transport`. -/
+@[reassoc]
+private theorem overlapRestrictionTransport_cancel
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+        ((Scheme.Modules.restrictFunctorCongr
+          (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+          ((Scheme.Modules.restrictFunctorComp
+            (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫
+            M.presheaf.map
+              (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op =
+      𝟙 _ := by
+  rw [sectionsRestrictTopIso_hom]
+  rw [overlapRestrictFunctorCongr_app_inv,
+    overlapRestrictFunctorComp_app_hom]
+  simp only [Functor.mapIso_hom, Iso.op_hom, eqToIso.hom, eqToHom_op,
+    Scheme.Modules.restrictFunctorCongr_inv_app_app,
+    Scheme.Modules.restrictFunctorComp_hom_app_app]
+  erw [← Functor.map_comp, ← Functor.map_comp, ← Functor.map_comp]
+  rw [← M.presheaf.map_id]
+  apply congrArg M.presheaf.map
+  apply Subsingleton.elim
+
 /-- Applying the module presheaf to the transported overlap inclusion from
 `X₁` gives the normalized second-chart Cech restriction map. -/
 @[reassoc]

@@ -194,8 +194,7 @@ theorem standardOverlapIsoSpec_hom_SpecMap_x1ToOverlapMap
   rw [← Category.assoc]
   congr 1
   rw [← cancel_mono (x1BasicOpen k).ι]
-  simp [Category.assoc, standardOverlap,
-    basicOpen_overlapDenominator_eq_standardOverlap]
+  simp [Category.assoc, standardOverlap]
 
 /-- The spectrum of the overlap ring is the punctured affine line. -/
 noncomputable def overlapSpecIsoPuncturedAffineLine (k : Type u) [CommRing k] :

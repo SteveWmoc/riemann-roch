@@ -43,8 +43,8 @@ theorem laurentPolynomialEquivOverlapAway_toLaurent
     (k : Type u) [CommRing k] (p : Polynomial k) :
     laurentPolynomialEquivOverlapAway k (Polynomial.toLaurent p) =
       x0ToOverlapMap k (x0ChartRingEquiv k p) := by
-  letI := (x0ToOverlapMap k).toAlgebra
-  letI : IsLocalization.Away (x0AffineCoordinate k) (overlapAway k) :=
+  let := (x0ToOverlapMap k).toAlgebra
+  let : IsLocalization.Away (x0AffineCoordinate k) (overlapAway k) :=
     overlapAway_isLocalization_x0AffineCoordinate k
   change laurentPolynomialEquivOverlapAway k
       (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
@@ -60,8 +60,8 @@ theorem laurentPolynomialEquivOverlapAwayX1_toLaurent
     (k : Type u) [CommRing k] (p : Polynomial k) :
     laurentPolynomialEquivOverlapAwayX1 k (Polynomial.toLaurent p) =
       x1ToOverlapMap k (x1ChartRingEquiv k p) := by
-  letI := (x1ToOverlapMap k).toAlgebra
-  letI : IsLocalization.Away (x1AffineCoordinate k) (overlapAway k) :=
+  let := (x1ToOverlapMap k).toAlgebra
+  let : IsLocalization.Away (x1AffineCoordinate k) (overlapAway k) :=
     overlapAway_isLocalization_x1AffineCoordinate k
   change laurentPolynomialEquivOverlapAwayX1 k
       (algebraMap (Polynomial k) (LaurentPolynomial k) p) =
