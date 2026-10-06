@@ -40,7 +40,7 @@ private theorem restrictFunctor_additive {X Y : Scheme.{u}} (f : X ⟶ Y)
 private theorem modulesHom_app_isIso
     {X : Scheme.{u}} {M N : X.Modules} (f : M ⟶ N) (hf : IsIso f) (U : X.Opens) :
     IsIso (f.app U) := by
-  letI : IsIso f := hf
+  let : IsIso f := hf
   exact (Scheme.Modules.Hom.isIso_iff_isIso_app).mp hf U
 
 /-- A module-presheaf map induced by equality of opens is an isomorphism. -/
@@ -196,13 +196,13 @@ theorem x0Restrict_twistingSheafToX0_isIso
   let f : A ⟶ D :=
     x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n
   let g : B ⟶ D := x1RestrictionToOverlap k
-  letI : F.Additive := restrictFunctor_additive (x0BasicOpen k).ι
-  letI : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
-  letI : PreservesBinaryBiproduct A B F :=
+  let : F.Additive := restrictFunctor_additive (x0BasicOpen k).ι
+  let : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
+  let : PreservesBinaryBiproduct A B F :=
     preservesBinaryBiproduct_of_preservesBiproduct F A B
-  letI : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
+  let : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
     x0Restrict_preserves_twisting_kernel k n
-  letI : IsIso (F.map g) := by
+  let : IsIso (F.map g) := by
     dsimp [g, F]
     exact x0Restrict_x1RestrictionToOverlap_isIso k
   let e := F.mapBiprod A B
