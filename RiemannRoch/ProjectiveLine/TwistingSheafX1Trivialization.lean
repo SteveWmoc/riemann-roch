@@ -35,7 +35,7 @@ private theorem restrictFunctor_additive' {X Y : Scheme.{u}} (f : X ⟶ Y)
 private theorem modulesHom_app_isIso'
     {X : Scheme.{u}} {M N : X.Modules} (f : M ⟶ N) (hf : IsIso f) (U : X.Opens) :
     IsIso (f.app U) := by
-  letI : IsIso f := hf
+  let : IsIso f := hf
   exact (Scheme.Modules.Hom.isIso_iff_isIso_app).mp hf U
 
 /-- A module-presheaf map induced by equality of opens is an isomorphism. -/
@@ -230,7 +230,7 @@ pushed-forward trivial overlap module. -/
 theorem pushedOverlapCoefficientTransitionEnd_isIso
     (k : Type u) [CommRing k] (n : ℤ) :
     IsIso (pushedOverlapCoefficientTransitionEnd k n) := by
-  letI : IsIso (overlapCoefficientTransitionEnd k n) :=
+  let : IsIso (overlapCoefficientTransitionEnd k n) :=
     overlapCoefficientTransitionEnd_isIso k n
   dsimp [pushedOverlapCoefficientTransitionEnd]
   infer_instance
@@ -248,17 +248,17 @@ theorem x1Restrict_twistingSheafToX1_isIso
   let f : A ⟶ D :=
     x0RestrictionToOverlap k ≫ pushedOverlapCoefficientTransitionEnd k n
   let g : B ⟶ D := x1RestrictionToOverlap k
-  letI : F.Additive := restrictFunctor_additive' (x1BasicOpen k).ι
-  letI : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
-  letI : PreservesBinaryBiproduct A B F :=
+  let : F.Additive := restrictFunctor_additive' (x1BasicOpen k).ι
+  let : PreservesFiniteBiproducts F := Functor.preservesFiniteBiproductsOfAdditive F
+  let : PreservesBinaryBiproduct A B F :=
     preservesBinaryBiproduct_of_preservesBiproduct F A B
-  letI : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
+  let : PreservesLimit (parallelPair (twistingCompatibilityMap k n) 0) F :=
     x1Restrict_preserves_twisting_kernel k n
-  letI : IsIso (F.map (x0RestrictionToOverlap k)) :=
+  let : IsIso (F.map (x0RestrictionToOverlap k)) :=
     x1Restrict_x0RestrictionToOverlap_isIso k
-  letI : IsIso (pushedOverlapCoefficientTransitionEnd k n) :=
+  let : IsIso (pushedOverlapCoefficientTransitionEnd k n) :=
     pushedOverlapCoefficientTransitionEnd_isIso k n
-  letI : IsIso (F.map f) := by
+  let : IsIso (F.map f) := by
     dsimp [f]
     rw [Functor.map_comp]
     infer_instance
