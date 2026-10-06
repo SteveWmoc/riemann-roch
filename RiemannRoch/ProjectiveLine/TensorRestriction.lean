@@ -58,9 +58,9 @@ private theorem restrictScalarsTensorator_bijective
     (M N : ModuleCat.{u} S) :
     Function.Bijective
       (μ (ModuleCat.restrictScalars (e : R →+* S)) M N) := by
-  letI : RingHomInvPair (e : R →+* S) (e.symm : S →+* R) :=
+  let : RingHomInvPair (e : R →+* S) (e.symm : S →+* R) :=
     RingHomInvPair.of_ringEquiv e
-  letI : RingHomInvPair (e.symm : S →+* R) (e : R →+* S) :=
+  let : RingHomInvPair (e.symm : S →+* R) (e : R →+* S) :=
     RingHomInvPair.of_ringEquiv e.symm
   let eM :
       LinearEquiv (σ' := (e.symm : S →+* R)) (e : R →+* S)
