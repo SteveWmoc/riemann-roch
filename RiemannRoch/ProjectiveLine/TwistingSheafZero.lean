@@ -69,7 +69,7 @@ private theorem restrict_structureModuleToPushedUnit_isIso
     change F.map ((Scheme.Modules.restrictAdjunction f).unit.app O) ≫
       (Scheme.Modules.restrictAdjunction f).counit.app (F.obj O) = 𝟙 _
     exact (Scheme.Modules.restrictAdjunction f).left_triangle_components O
-  haveI : IsIso
+  have : IsIso
       (F.map ((Scheme.Modules.restrictAdjunction f).unit.app O)) := by
     rw [hunit]
     infer_instance
@@ -218,9 +218,9 @@ theorem x0Restrict_structureModuleToTwistingSheafZero_isIso
     IsIso ((Scheme.Modules.restrictFunctor (x0BasicOpen k).ι).map
       (structureModuleToTwistingSheafZero k)) := by
   let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
-  letI : IsIso (F.map (twistingSheafToX0 k 0)) :=
+  let : IsIso (F.map (twistingSheafToX0 k 0)) :=
     x0Restrict_twistingSheafToX0_isIso k 0
-  letI : IsIso (F.map (structureModuleToX0 k)) :=
+  let : IsIso (F.map (structureModuleToX0 k)) :=
     x0Restrict_structureModuleToX0_isIso k
   have hfac :
       F.map (structureModuleToTwistingSheafZero k) ≫
@@ -236,9 +236,9 @@ theorem x1Restrict_structureModuleToTwistingSheafZero_isIso
     IsIso ((Scheme.Modules.restrictFunctor (x1BasicOpen k).ι).map
       (structureModuleToTwistingSheafZero k)) := by
   let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
-  letI : IsIso (F.map (twistingSheafToX1 k 0)) :=
+  let : IsIso (F.map (twistingSheafToX1 k 0)) :=
     x1Restrict_twistingSheafToX1_isIso k 0
-  letI : IsIso (F.map (structureModuleToX1 k)) :=
+  let : IsIso (F.map (structureModuleToX1 k)) :=
     x1Restrict_structureModuleToX1_isIso k
   have hfac :
       F.map (structureModuleToTwistingSheafZero k) ≫
@@ -267,7 +267,7 @@ private theorem isIso_of_standard_chart_restrictions
           exact N.isSheaf⟩ :
           TopCat.Sheaf AddCommGrpCat.{u} (scheme k)) :=
     ⟨(Scheme.Modules.toPresheaf (scheme k)).map φ⟩
-  haveI hstalk : ∀ x : scheme k,
+  have hstalk : ∀ x : scheme k,
       IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x).map ψ.hom) :=
     fun x => by
       have hx : x ∈ x0BasicOpen k ∨ x ∈ x1BasicOpen k := by
@@ -279,14 +279,14 @@ private theorem isIso_of_standard_chart_restrictions
       · let y : x0ChartScheme k := ⟨x, hx0⟩
         let F := Scheme.Modules.restrictFunctor (x0BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x0BasicOpen k).ι y
-        letI : IsIso (e.inv.app M) := by
+        let : IsIso (e.inv.app M) := by
           change IsIso (e.app M).inv
           infer_instance
-        letI : IsIso (e.hom.app N) := by
+        let : IsIso (e.hom.app N) := by
           change IsIso (e.app N).hom
           infer_instance
-        letI : IsIso (F.map φ) := h0
-        haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
+        let : IsIso (F.map φ) := h0
+        have : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x0ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
           change IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map
             ((Scheme.Modules.toPresheaf (x0ChartScheme k)).map (F.map φ)))
@@ -312,14 +312,14 @@ private theorem isIso_of_standard_chart_restrictions
       · let y : x1ChartScheme k := ⟨x, hx1⟩
         let F := Scheme.Modules.restrictFunctor (x1BasicOpen k).ι
         let e := Scheme.Modules.restrictStalkNatIso (x1BasicOpen k).ι y
-        letI : IsIso (e.inv.app M) := by
+        let : IsIso (e.inv.app M) := by
           change IsIso (e.app M).inv
           infer_instance
-        letI : IsIso (e.hom.app N) := by
+        let : IsIso (e.hom.app N) := by
           change IsIso (e.app N).hom
           infer_instance
-        letI : IsIso (F.map φ) := h1
-        haveI : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
+        let : IsIso (F.map φ) := h1
+        have : IsIso ((F ⋙ Scheme.Modules.toPresheaf (x1ChartScheme k) ⋙
             TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map φ) := by
           change IsIso ((TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} y).map
             ((Scheme.Modules.toPresheaf (x1ChartScheme k)).map (F.map φ)))
@@ -342,14 +342,14 @@ private theorem isIso_of_standard_chart_restrictions
           infer_instance
         dsimp only [Functor.comp_obj, Functor.comp_map] at hglobal
         simpa only [ψ, y, Scheme.Opens.ι_apply] using hglobal
-  letI hψ : IsIso ψ :=
+  let hψ : IsIso ψ :=
     TopCat.Presheaf.isIso_of_stalkFunctor_map_iso ψ
   let eψ := asIso ψ
-  haveI : IsIso ψ.hom := by
+  have : IsIso ψ.hom := by
     change IsIso
       ((TopCat.Sheaf.forget AddCommGrpCat.{u} (scheme k)).map ψ)
     exact ((TopCat.Sheaf.forget AddCommGrpCat.{u} (scheme k)).mapIso eψ).isIso_hom
-  haveI : IsIso ((Scheme.Modules.toPresheaf (scheme k)).map φ) := by
+  have : IsIso ((Scheme.Modules.toPresheaf (scheme k)).map φ) := by
     change IsIso ψ.hom
     infer_instance
   exact isIso_of_reflects_iso φ (Scheme.Modules.toPresheaf (scheme k))
