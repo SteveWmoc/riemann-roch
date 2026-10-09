@@ -456,13 +456,13 @@ theorem standardNormalizedCechX1Restriction_restrictTop
         q ≫ p := by
     exact x1SectionsRestrictTopTransport_cancel_assoc k M (q ≫ p)
   have h₁ :
-      (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
-          standardNormalizedCechX1Restriction M ≫
-            (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
-              ((Scheme.Modules.restrictFunctorCongr
-                (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
-                ((Scheme.Modules.restrictFunctorComp
-                  (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p =
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M) ≫
+        ((sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+          ((Scheme.Modules.restrictFunctorCongr
+            (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+            ((Scheme.Modules.restrictFunctorComp
+              (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p) =
         (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
           standardNormalizedCechX1Restriction M := by
     simpa only [p, Category.comp_id] using hcancel
@@ -478,7 +478,7 @@ theorem standardNormalizedCechX1Restriction_restrictTop
           (M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
             q ≫ p) =
         q ≫ p := by
-    simpa only [Category.assoc] using htop
+    exact htop
   simpa only [Category.assoc] using h₁.trans (h₂.trans h₃)
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
