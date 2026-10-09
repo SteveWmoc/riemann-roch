@@ -381,6 +381,16 @@ private theorem overlapRestrictionTransport_cancel
   apply congrArg M.presheaf.map
   apply Subsingleton.elim
 
+/-- The `X₁` top-section identification cancels its ambient-presheaf transport. -/
+@[reassoc]
+private theorem x1SectionsRestrictTopTransport_cancel
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op =
+      𝟙 _ := by
+  rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
+  exact Iso.inv_hom_id_assoc _ (𝟙 _)
+
 /-- Applying the module presheaf to the transported overlap inclusion from
 `X₁` gives the normalized second-chart Cech restriction map. -/
 @[reassoc]
@@ -446,8 +456,8 @@ theorem standardNormalizedCechX1Restriction_restrictTop
           (homOfLE (show (overlapToX1 k) ''ᵁ
             (⊤ : (overlapScheme k).Opens) ≤
               (⊤ : (x1ChartScheme k).Opens) from le_top))).op ≫ p := by
-      rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
-      simp only [Category.assoc, Iso.inv_hom_id_assoc]
+      rw [← Category.assoc]
+      rw [x1SectionsRestrictTopTransport_cancel_assoc]
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
