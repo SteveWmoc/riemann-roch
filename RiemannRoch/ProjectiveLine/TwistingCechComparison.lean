@@ -419,14 +419,35 @@ theorem standardNormalizedCechX1Restriction_restrictTop
           (⊤ : (overlapScheme k).Opens) ≤
             (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
   rw [Scheme.Modules.restrict_map]
-  erw [← cancel_mono
-    (M.presheaf.map
-      (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op)]
-  erw [Category.assoc, Category.assoc]
-  erw [overlapRestrictionTransport_cancel_assoc]
-  rw [← standardNormalizedCechX1Restriction_eq_transport k M]
-  rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
-  simp only [Category.assoc, Iso.inv_hom_id_assoc]
+  let p :=
+    M.presheaf.map
+      (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op
+  erw [← cancel_mono p]
+  have hcancel := congrArg
+    (fun f =>
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M) ≫ f)
+    (overlapRestrictionTransport_cancel k M)
+  have htransport := congrArg
+    (fun f => (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫ f)
+    (standardNormalizedCechX1Restriction_eq_transport k M).symm
+  calc
+    _ = (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M := by
+      simpa only [p, Category.assoc, Category.comp_id] using hcancel
+    _ = (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        (M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
+          M.presheaf.map ((x1BasicOpen k).ι.opensFunctor.map
+            (homOfLE (show (overlapToX1 k) ''ᵁ
+              (⊤ : (overlapScheme k).Opens) ≤
+                (⊤ : (x1ChartScheme k).Opens) from le_top))).op ≫ p) := by
+      simpa only [p] using htransport
+    _ = M.presheaf.map ((x1BasicOpen k).ι.opensFunctor.map
+          (homOfLE (show (overlapToX1 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤
+              (⊤ : (x1ChartScheme k).Opens) from le_top))).op ≫ p := by
+      rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
+      simp only [Category.assoc, Iso.inv_hom_id_assoc]
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
