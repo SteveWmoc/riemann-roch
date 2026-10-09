@@ -381,6 +381,19 @@ private theorem overlapRestrictionTransport_cancel
   apply congrArg M.presheaf.map
   apply Subsingleton.elim
 
+/-- The `X₁` top-section identification cancels its ambient-presheaf transport. -/
+@[reassoc]
+private theorem x1SectionsRestrictTopTransport_cancel
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op =
+      𝟙 _ := by
+  change
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        (sectionsRestrictTopIso M (x1BasicOpen k)).hom =
+      𝟙 _
+  exact (sectionsRestrictTopIso M (x1BasicOpen k)).inv_hom_id
+
 /-- Applying the module presheaf to the transported overlap inclusion from
 `X₁` gives the normalized second-chart Cech restriction map. -/
 @[reassoc]
@@ -400,6 +413,104 @@ theorem standardNormalizedCechX1Restriction_eq_transport
   have h := congrArg (fun f => M.presheaf.map f.op)
     (x1BasicOpen_opensFunctor_map_overlapToX1_top k)
   simpa only [Category.assoc] using h
+
+/-- Reassociate the five maps in a restriction square before cancelling its tail. -/
+private theorem reassociateRestrictionSquare
+    {C : Type*} [Category C] {A B D E F G H : C}
+    (a : A ⟶ B) (b : B ⟶ D) (c : D ⟶ E)
+    (d : E ⟶ F) (e : F ⟶ G) (p : G ⟶ H) :
+    (a ≫ b ≫ c ≫ d ≫ e) ≫ p = (a ≫ b) ≫ c ≫ d ≫ e ≫ p := by
+  simp only [Category.assoc]
+
+/-- The normalized restriction from the second standard chart to the overlap
+agrees with restriction between top sections after passing to the corresponding
+open subschemes. -/
+@[reassoc]
+theorem standardNormalizedCechX1Restriction_restrictTop
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M ≫
+          (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+            ((Scheme.Modules.restrictFunctorCongr
+              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+              ((Scheme.Modules.restrictFunctorComp
+                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
+      (M.restrict (x1BasicOpen k).ι).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤
+            (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
+  rw [Scheme.Modules.restrict_map]
+  let p :=
+    M.presheaf.map
+      (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op
+  let q :=
+    M.presheaf.map ((x1BasicOpen k).ι.opensFunctor.map
+      (homOfLE (show (overlapToX1 k) ''ᵁ
+        (⊤ : (overlapScheme k).Opens) ≤
+          (⊤ : (x1ChartScheme k).Opens) from le_top))).op
+  erw [← cancel_mono p]
+  have hcancel := congrArg
+    (fun f =>
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M) ≫ f)
+    (overlapRestrictionTransport_cancel k M)
+  have htransport := congrArg
+    (fun f => (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫ f)
+    (standardNormalizedCechX1Restriction_eq_transport k M).symm
+  have htop :
+      (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
+            q ≫ p =
+        q ≫ p := by
+    exact x1SectionsRestrictTopTransport_cancel_assoc k M (q ≫ p)
+  have h₁ :
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M) ≫
+        ((sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+          ((Scheme.Modules.restrictFunctorCongr
+            (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+            ((Scheme.Modules.restrictFunctorComp
+              (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p) =
+        (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M := by
+    simpa only [p, Category.comp_id] using hcancel
+  have h₂ :
+      (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M =
+        (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          (M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
+            q ≫ p) := by
+    simpa only [p, q] using htransport
+  have h₃ :
+      (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          (M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op ≫
+            q ≫ p) =
+        q ≫ p := by
+    exact htop
+  have hassoc :
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M ≫
+            (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+              ((Scheme.Modules.restrictFunctorCongr
+                (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+                ((Scheme.Modules.restrictFunctorComp
+                  (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤) ≫ p =
+        ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+            standardNormalizedCechX1Restriction M) ≫
+          ((sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+            ((Scheme.Modules.restrictFunctorCongr
+              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+              ((Scheme.Modules.restrictFunctorComp
+                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p) := by
+    let a := (sectionsRestrictTopIso M (x1BasicOpen k)).inv
+    let b := standardNormalizedCechX1Restriction M
+    let c := (sectionsRestrictTopIso M (standardOverlap k)).hom
+    let d := ((Scheme.Modules.restrictFunctorCongr
+      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤
+    let e := ((Scheme.Modules.restrictFunctorComp
+      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤
+    exact reassociateRestrictionSquare a b c d e p
+  exact hassoc.trans (h₁.trans (h₂.trans h₃))
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
