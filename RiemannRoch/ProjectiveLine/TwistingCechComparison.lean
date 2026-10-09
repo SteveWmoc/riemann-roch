@@ -494,7 +494,18 @@ theorem standardNormalizedCechX1Restriction_restrictTop
               (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
               ((Scheme.Modules.restrictFunctorComp
                 (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p) := by
-    simp only [Category.assoc]
+    let a := (sectionsRestrictTopIso M (x1BasicOpen k)).inv
+    let b := standardNormalizedCechX1Restriction M
+    let c := (sectionsRestrictTopIso M (standardOverlap k)).hom
+    let d := ((Scheme.Modules.restrictFunctorCongr
+      (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤
+    let e := ((Scheme.Modules.restrictFunctorComp
+      (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤
+    exact (Category.assoc a (b ≫ c ≫ d ≫ e) p).trans
+      ((congrArg (fun f => a ≫ f) (Category.assoc b (c ≫ d ≫ e) p)).trans
+        ((congrArg (fun f => a ≫ b ≫ f) (Category.assoc c (d ≫ e) p)).trans
+          ((congrArg (fun f => a ≫ b ≫ c ≫ f) (Category.assoc d e p)).trans
+            (Category.assoc a b (c ≫ d ≫ e ≫ p)).symm)))
   exact hassoc.trans (h₁.trans (h₂.trans h₃))
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
