@@ -422,9 +422,8 @@ theorem standardNormalizedCechX1Restriction_restrictTop
   erw [← cancel_mono
     (M.presheaf.map
       (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op)]
-  simp only [Category.assoc]
-  rw [overlapRestrictionTransport_cancel]
-  simp only [Category.comp_id]
+  erw [Category.assoc, Category.assoc]
+  rw [overlapRestrictionTransport_cancel_assoc]
   rw [← standardNormalizedCechX1Restriction_eq_transport k M]
   rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
   simp only [Category.assoc, Iso.inv_hom_id_assoc]
