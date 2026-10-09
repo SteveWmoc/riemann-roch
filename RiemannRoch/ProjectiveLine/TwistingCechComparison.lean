@@ -479,7 +479,23 @@ theorem standardNormalizedCechX1Restriction_restrictTop
             q ≫ p) =
         q ≫ p := by
     exact htop
-  simpa only [Category.assoc] using h₁.trans (h₂.trans h₃)
+  have hassoc :
+      ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+          standardNormalizedCechX1Restriction M ≫
+            (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+              ((Scheme.Modules.restrictFunctorCongr
+                (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+                ((Scheme.Modules.restrictFunctorComp
+                  (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤) ≫ p =
+        ((sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+            standardNormalizedCechX1Restriction M) ≫
+          ((sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+            ((Scheme.Modules.restrictFunctorCongr
+              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+              ((Scheme.Modules.restrictFunctorComp
+                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ ≫ p) := by
+    simp only [Category.assoc]
+  exact hassoc.trans (h₁.trans (h₂.trans h₃))
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
