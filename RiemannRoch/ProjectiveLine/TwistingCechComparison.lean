@@ -388,8 +388,11 @@ private theorem x1SectionsRestrictTopTransport_cancel
     (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
         M.presheaf.map (eqToHom (x1BasicOpen k).ι_image_top).op =
       𝟙 _ := by
-  rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
-  exact Iso.inv_hom_id_assoc _ (𝟙 _)
+  change
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        (sectionsRestrictTopIso M (x1BasicOpen k)).hom =
+      𝟙 _
+  exact (sectionsRestrictTopIso M (x1BasicOpen k)).inv_hom_id
 
 /-- Applying the module presheaf to the transported overlap inclusion from
 `X₁` gives the normalized second-chart Cech restriction map. -/
