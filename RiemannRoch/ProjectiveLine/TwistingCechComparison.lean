@@ -418,6 +418,7 @@ theorem standardNormalizedCechX1Restriction_restrictTop
         (homOfLE (show (overlapToX1 k) ''ᵁ
           (⊤ : (overlapScheme k).Opens) ≤
             (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
+  rw [Scheme.Modules.restrict_map]
   rw [← cancel_mono
     (M.presheaf.map
       (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op)]
@@ -427,7 +428,6 @@ theorem standardNormalizedCechX1Restriction_restrictTop
   rw [← standardNormalizedCechX1Restriction_eq_transport k M]
   rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
   simp only [Category.assoc, Iso.inv_hom_id_assoc]
-  rw [Scheme.Modules.restrict_map]
 
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
