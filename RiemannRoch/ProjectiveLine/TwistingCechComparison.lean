@@ -401,6 +401,34 @@ theorem standardNormalizedCechX1Restriction_eq_transport
     (x1BasicOpen_opensFunctor_map_overlapToX1_top k)
   simpa only [Category.assoc] using h
 
+/-- The normalized restriction from the second standard chart to the overlap
+agrees with restriction between top sections after passing to the corresponding
+open subschemes. -/
+@[reassoc]
+theorem standardNormalizedCechX1Restriction_restrictTop
+    (k : Type u) [CommRing k] (M : ModuleSheaf k) :
+    (sectionsRestrictTopIso M (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction M ≫
+          (sectionsRestrictTopIso M (standardOverlap k)).hom ≫
+            ((Scheme.Modules.restrictFunctorCongr
+              (overlapToX1_comp_x1BasicOpen_ι k)).app M).inv.app ⊤ ≫
+              ((Scheme.Modules.restrictFunctorComp
+                (overlapToX1 k) (x1BasicOpen k).ι).app M).hom.app ⊤ =
+      (M.restrict (x1BasicOpen k).ι).presheaf.map
+        (homOfLE (show (overlapToX1 k) ''ᵁ
+          (⊤ : (overlapScheme k).Opens) ≤
+            (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
+  rw [← cancel_mono
+    (M.presheaf.map
+      (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op)]
+  simp only [Category.assoc]
+  rw [overlapRestrictionTransport_cancel]
+  simp only [Category.comp_id]
+  rw [← standardNormalizedCechX1Restriction_eq_transport k M]
+  rw [← sectionsRestrictTopIso_hom M (x1BasicOpen k)]
+  simp only [Category.assoc, Iso.inv_hom_id_assoc]
+  rw [Scheme.Modules.restrict_map]
+
 /-- Naturality of the `X₁` trivialization for restriction to the standard
 overlap, followed by the canonical identification of the restricted trivial
 module with the overlap structure sheaf.
