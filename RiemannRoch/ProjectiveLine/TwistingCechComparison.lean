@@ -419,7 +419,7 @@ theorem standardNormalizedCechX1Restriction_restrictTop
           (⊤ : (overlapScheme k).Opens) ≤
             (⊤ : (x1ChartScheme k).Opens) from le_top)).op := by
   rw [Scheme.Modules.restrict_map]
-  rw [← cancel_mono
+  erw [← cancel_mono
     (M.presheaf.map
       (eqToHom (x1BasicOpen_image_overlapToX1_top k).symm).op)]
   simp only [Category.assoc]
