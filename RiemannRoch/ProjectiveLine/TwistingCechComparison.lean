@@ -536,6 +536,40 @@ theorem x1TwistingSheafIso_overlap_naturality
       (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op
     ((Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤)
 
+/-- At the top open, the overlap trivialization is the two restriction
+transports followed by the restricted `X₁` frame and the structure-module
+identification. -/
+private theorem overlapTwistingSheafIso_hom_app_top
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (overlapTwistingSheafIso k n).hom.app ⊤ =
+      ((Scheme.Modules.restrictFunctorCongr
+        (overlapToX1_comp_x1BasicOpen_ι k)).app (twistingSheaf k n)).inv.app ⊤ ≫
+        ((Scheme.Modules.restrictFunctorComp
+          (overlapToX1 k) (x1BasicOpen k).ι).app (twistingSheaf k n)).hom.app ⊤ ≫
+          (x1TwistingSheafIso k n).hom.app ((overlapToX1 k) ''ᵁ ⊤) ≫
+            (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
+  rfl
+
+/-- Restriction from the second standard chart to the overlap commutes with
+the `X₁` frame of `O(n)`, after identifying ambient-open sections with top
+sections of the corresponding open subschemes. -/
+@[reassoc]
+theorem standardNormalizedCechX1Restriction_twistingFrame
+    (k : Type u) [CommRing k] (n : ℤ) :
+    (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).inv ≫
+        standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
+          (sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom ≫
+            (overlapTwistingSheafIso k n).hom.app ⊤ =
+      (x1TwistingSheafIso k n).hom.app ⊤ ≫
+        (x1TrivialModule k).presheaf.map
+          (homOfLE (show (overlapToX1 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
+          (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
+  rw [overlapTwistingSheafIso_hom_app_top]
+  simp only [Category.assoc]
+  rw [standardNormalizedCechX1Restriction_restrictTop_assoc]
+  exact x1TwistingSheafIso_overlap_naturality k n
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
