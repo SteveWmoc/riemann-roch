@@ -566,8 +566,7 @@ theorem standardNormalizedCechX1Restriction_twistingFrame
             (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op ≫
           (Scheme.Modules.restrictUnitIso (overlapToX1 k)).hom.app ⊤ := by
   rw [overlapTwistingSheafIso_hom_app_top]
-  simp only [Category.assoc]
-  rw [standardNormalizedCechX1Restriction_restrictTop_assoc]
+  erw [standardNormalizedCechX1Restriction_restrictTop_assoc]
   exact x1TwistingSheafIso_overlap_naturality k n
 
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
