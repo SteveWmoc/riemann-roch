@@ -37,9 +37,9 @@ noncomputable def modulePresheafTensorLeftUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
     modulePresheafTensor X (SheafOfModules.unit X.ringCatSheaf).val M ≅ M := by
   letI : MonoidalCategoryStruct X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategoryStruct (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategoryStruct (R := X.presheaf)
   letI : MonoidalCategory X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategory (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategory (R := X.presheaf)
   change ((SheafOfModules.unit X.ringCatSheaf).val ⊗ M) ≅ M
   exact λ_ M
 
@@ -50,9 +50,9 @@ noncomputable def modulePresheafTensorRightUnitor
     (X : Scheme.{u}) (M : X.PresheafOfModules) :
     modulePresheafTensor X M (SheafOfModules.unit X.ringCatSheaf).val ≅ M := by
   letI : MonoidalCategoryStruct X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategoryStruct (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategoryStruct (R := X.presheaf)
   letI : MonoidalCategory X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategory (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategory (R := X.presheaf)
   change (M ⊗ (SheafOfModules.unit X.ringCatSheaf).val) ≅ M
   exact ρ_ M
 
