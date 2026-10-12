@@ -2,7 +2,7 @@
 
 This note began as an inventory of the Mathlib `v4.32.1` declarations used for
 the standard homogeneous basic opens of the projective line. The repository now
-targets Lean/Mathlib 4.33.1, and the construction described here is implemented
+targets Lean/Mathlib 4.34.1, and the construction described here is implemented
 in `RiemannRoch.ProjectiveLine.BasicOpens` and its downstream chart modules.
 
 ## Projective spectrum as a scheme

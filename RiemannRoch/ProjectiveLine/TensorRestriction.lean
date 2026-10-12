@@ -85,8 +85,7 @@ private theorem restrictScalarsTensorator_bijective
   let eTensor := TensorProduct.congr eM eN
   have h : ∀ x, μ (ModuleCat.restrictScalars (e : R →+* S)) M N x = eTensor x := by
     intro x
-    induction x using TensorProduct.induction_on with
-    | zero => simp
+    induction x using TensorProduct.inductionOn with
     | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
     | tmul m n =>
         simp [eTensor, eM, eN, ModuleCat.restrictScalars_μ_tmul]
@@ -135,7 +134,7 @@ monoidal structure on presheaves of modules. -/
 private theorem modulePresheafTensor_eq_tensorObj
     (X : Scheme.{u}) (M N : X.PresheafOfModules) :
     modulePresheafTensor X M N =
-      PresheafOfModules.Monoidal.tensorObj (R := X.presheaf) M N :=
+      PresheafOfModulesOfCommRing.Monoidal.tensorObj (R := X.presheaf) M N :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
@@ -211,26 +210,25 @@ immersion. -/
 private noncomputable def restrictTensorObjIso
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
     (M N : Y.Modules) :
-    PresheafOfModules.Monoidal.tensorObj (R := X.presheaf)
+    PresheafOfModulesOfCommRing.Monoidal.tensorObj (R := X.presheaf)
         ((Scheme.Modules.restrictFunctor f).obj M).val
         ((Scheme.Modules.restrictFunctor f).obj N).val ≅
       (PresheafOfModules.pushforward (restrictionRingHom f)).obj
-        (PresheafOfModules.Monoidal.tensorObj (R := Y.presheaf) M.val N.val) := by
+        (PresheafOfModulesOfCommRing.Monoidal.tensorObj (R := Y.presheaf) M.val N.val) := by
   refine PresheafOfModules.isoMk
     (fun U ↦ restrictionTensoratorIsoApp f M N U) ?_
   intro U V g
   apply ModuleCat.MonoidalCategory.tensor_ext
   intro m n
   rw [ModuleCat.comp_apply, ModuleCat.comp_apply]
-  erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
-  rw [ModuleCat.restrictScalars.map_apply]
+  erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
+  erw [ModuleCat.restrictScalars.map_apply]
   erw [restrictionTensoratorIsoApp_hom_tmul]
   erw [restrictionTensoratorIsoApp_hom_tmul]
-  rw [PresheafOfModules.pushforward_obj_map_apply]
-  erw [PresheafOfModules.Monoidal.tensorObj_map_tmul]
+  erw [PresheafOfModules.pushforward_obj_map_apply]
+  erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
   erw [restrict_val_map_apply f M g m,
     restrict_val_map_apply f N g n]
-  rfl
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in

@@ -2,7 +2,7 @@
 
 This note began as an inventory of the Mathlib `v4.32.1` declarations relevant
 to sheaves of modules on `P^1_k`, the standard two-open Cech complex, and
-abstract sheaf cohomology. The repository now targets Lean/Mathlib 4.33.1.
+abstract sheaf cohomology. The repository now targets Lean/Mathlib 4.34.1.
 The project code using the interfaces below has been ported to that pin; the
 historical limitations are retained here, with the project-local infrastructure
 added since the original survey recorded separately.

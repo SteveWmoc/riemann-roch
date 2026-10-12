@@ -2,7 +2,7 @@
 
 This note began as an inventory of the Mathlib `v4.32.1` declarations chosen to
 represent the standard graded coordinate ring of the projective line. The
-repository now targets Lean/Mathlib 4.33.1, and the implementation described
+repository now targets Lean/Mathlib 4.34.1, and the implementation described
 below is in place in `RiemannRoch.ProjectiveLine.GradedPolynomialRing`.
 
 ## Chosen representation
