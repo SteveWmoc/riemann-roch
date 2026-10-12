@@ -42,9 +42,9 @@ private def trivialTensorPresheafIso (X : Scheme.{u}) (M N : X.Modules)
       (PresheafOfModules.restrictScalars (𝟙 X.ringCatSheaf.obj)).obj
         (SheafOfModules.unit X.ringCatSheaf).val := by
   letI : MonoidalCategoryStruct X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategoryStruct (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategoryStruct (R := X.presheaf)
   letI : MonoidalCategory X.PresheafOfModules :=
-    PresheafOfModules.monoidalCategory (R := X.presheaf)
+    PresheafOfModulesOfCommRing.monoidalCategory (R := X.presheaf)
   exact tensorIso ((SheafOfModules.forget _).mapIso eM)
       ((SheafOfModules.forget _).mapIso eN) ≪≫
     modulePresheafTensorLeftUnitor X (SheafOfModules.unit X.ringCatSheaf).val ≪≫
