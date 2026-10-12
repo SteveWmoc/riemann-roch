@@ -229,7 +229,6 @@ private noncomputable def restrictTensorObjIso
   erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
   erw [restrict_val_map_apply f M g m,
     restrict_val_map_apply f N g n]
-  rfl
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.isDefEq.respectTransparency.types false in
