@@ -86,7 +86,6 @@ private theorem restrictScalarsTensorator_bijective
   have h : ∀ x, μ (ModuleCat.restrictScalars (e : R →+* S)) M N x = eTensor x := by
     intro x
     induction x using TensorProduct.inductionOn with
-    | zero => simp
     | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
     | tmul m n =>
         simp [eTensor, eM, eN, ModuleCat.restrictScalars_μ_tmul]
@@ -223,10 +222,10 @@ private noncomputable def restrictTensorObjIso
   intro m n
   rw [ModuleCat.comp_apply, ModuleCat.comp_apply]
   erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
-  rw [ModuleCat.restrictScalars.map_apply]
+  erw [ModuleCat.restrictScalars.map_apply]
   erw [restrictionTensoratorIsoApp_hom_tmul]
   erw [restrictionTensoratorIsoApp_hom_tmul]
-  rw [PresheafOfModules.pushforward_obj_map_apply]
+  erw [PresheafOfModules.pushforward_obj_map_apply]
   erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
   erw [restrict_val_map_apply f M g m,
     restrict_val_map_apply f N g n]
