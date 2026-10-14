@@ -569,6 +569,50 @@ theorem standardNormalizedCechX1Restriction_twistingFrame
   erw [standardNormalizedCechX1Restriction_restrictTop_assoc]
   exact x1TwistingSheafIso_overlap_naturality k n
 
+/-- In the polynomial/Laurent section coordinates, restriction from the
+second chart sends `q(u)` to `q(t⁻¹)`. The overlap uses the same `X₁` frame,
+so this restriction has no additional twisting factor. -/
+@[reassoc]
+theorem standardNormalizedCechX1Restriction_coordinates
+    (k : Type u) [CommRing k] (n : ℤ) :
+    standardNormalizedCechX1Restriction (twistingSheaf k n) ≫
+        (overlapTwistingCechSectionsIso k n).hom =
+      (x1TwistingCechSectionsIso k n).hom ≫
+        AddCommGrpCat.ofHom (twistingCechX1CoordinateRestriction k) := by
+  apply ConcreteCategory.hom_ext
+  intro s
+  let top := (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).hom s
+  have hframe := congrArg (fun f => (ConcreteCategory.hom f) top)
+    (standardNormalizedCechX1Restriction_twistingFrame k n)
+  change
+    (overlapTwistingSheafIso k n).hom.app ⊤
+        ((sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom
+          (standardNormalizedCechX1Restriction (twistingSheaf k n)
+            ((sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).inv top))) =
+      x1TrivialTopRestriction k ((x1TwistingSheafIso k n).hom.app ⊤ top) at hframe
+  have hcancel := congrArg (fun f => (ConcreteCategory.hom f) s)
+    (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).hom_inv_id
+  change
+    (sectionsRestrictTopIso (twistingSheaf k n) (x1BasicOpen k)).inv top = s at hcancel
+  rw [hcancel] at hframe
+  have hcoord := congrArg
+    (fun f => (ConcreteCategory.hom f) ((x1TwistingSheafIso k n).hom.app ⊤ top))
+    (x1TrivialTopRestriction_coordinates k)
+  change
+    (overlapTrivialTopLaurentIso k).hom
+        (x1TrivialTopRestriction k ((x1TwistingSheafIso k n).hom.app ⊤ top)) =
+      twistingCechX1CoordinateRestriction k
+        ((x1TrivialTopPolynomialIso k).hom ((x1TwistingSheafIso k n).hom.app ⊤ top))
+    at hcoord
+  change
+    (overlapTrivialTopLaurentIso k).hom
+        ((overlapTwistingSheafIso k n).hom.app ⊤
+          ((sectionsRestrictTopIso (twistingSheaf k n) (standardOverlap k)).hom
+            (standardNormalizedCechX1Restriction (twistingSheaf k n) s))) =
+      twistingCechX1CoordinateRestriction k
+        ((x1TrivialTopPolynomialIso k).hom ((x1TwistingSheafIso k n).hom.app ⊤ top))
+  exact (congrArg (fun z => (overlapTrivialTopLaurentIso k).hom z) hframe).trans hcoord
+
 /-- The degree-zero term of the normalized Cech complex of `O(n)` is the
 pair of polynomial coordinate rings. -/
 noncomputable def twistingCechDegreeZeroIso
