@@ -55,7 +55,6 @@ theorem laurentPolynomialEquivOverlapAway_toLaurent
 
 /-- In the first-chart Laurent coordinates, localization of a chart
 polynomial is the ordinary polynomial-to-Laurent inclusion. -/
-@[simp]
 theorem laurentPolynomialEquivOverlapAway_symm_x0ToOverlapMap
     (k : Type u) [CommRing k] (p : Polynomial k) :
     (laurentPolynomialEquivOverlapAway k).symm
