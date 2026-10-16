@@ -53,6 +53,17 @@ theorem laurentPolynomialEquivOverlapAway_toLaurent
   rw [← LaurentPolynomial.algebraMap_eq_toLaurent, IsLocalization.map_eq]
   rfl
 
+/-- In the first-chart Laurent coordinates, localization of a chart
+polynomial is the ordinary polynomial-to-Laurent inclusion. -/
+@[simp]
+theorem laurentPolynomialEquivOverlapAway_symm_x0ToOverlapMap
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    (laurentPolynomialEquivOverlapAway k).symm
+        (x0ToOverlapMap k (x0ChartRingEquiv k p)) =
+      Polynomial.toLaurent p := by
+  rw [← laurentPolynomialEquivOverlapAway_toLaurent]
+  exact (laurentPolynomialEquivOverlapAway k).symm_apply_apply _
+
 /-- On ordinary polynomials, the `X₁` Laurent presentation is the chart-ring
 map followed by localization to the overlap. -/
 @[simp]
