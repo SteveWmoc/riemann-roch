@@ -71,6 +71,14 @@ private noncomputable def x0TrivialTopPolynomialIso
     (schemeIsoAppTop (x0BasicOpenIsoAffineLine k)).symm ≪≫
       Scheme.ΓSpecIso (.of <| Polynomial k)
 
+/-- Ring coordinates on global sections of the first standard chart. -/
+noncomputable def x0TrivialTopPolynomialRingIso
+    (k : Type u) [CommRing k] :
+    Γ(x0ChartScheme k, ⊤) ≅ CommRingCat.of (Polynomial k) :=
+  (schemeIsoAppTop (x0BasicOpenIsoSpec k)).symm ≪≫
+    Scheme.ΓSpecIso (.of <| standardAway k 0) ≪≫
+      ((x0ChartRingEquiv k).symm).toCommRingCatIso
+
 /-- Ring coordinates on global sections of the second standard chart. -/
 private noncomputable def x1TrivialTopPolynomialRingIso
     (k : Type u) [CommRing k] :
@@ -187,6 +195,92 @@ private theorem x1CoordinateRestrictionRingHom_apply
     x1CoordinateRestrictionRingHom k p =
       twistingCechX1CoordinateRestriction k p := by
   simpa [x1CoordinateRestrictionRingHom] using x1ChartToOverlap_coordinates k p
+
+/-- The first-chart restriction as a ring homomorphism in polynomial/Laurent
+coordinates. -/
+private noncomputable def x0CoordinateRestrictionRingHom
+    (k : Type u) [CommRing k] :
+    Polynomial k →+* LaurentPolynomial k :=
+  ((laurentPolynomialEquivOverlapAway k).symm).toRingHom.comp
+    ((x0ToOverlapMap k).comp (x0ChartRingEquiv k).toRingHom)
+
+/-- In first-chart coordinates the restriction ring homomorphism is the
+ordinary polynomial-to-Laurent inclusion. -/
+private theorem x0CoordinateRestrictionRingHom_apply
+    (k : Type u) [CommRing k] (p : Polynomial k) :
+    x0CoordinateRestrictionRingHom k p = Polynomial.toLaurent p := by
+  exact laurentPolynomialEquivOverlapAway_symm_x0ToOverlapMap k p
+
+/-- The inverse affine presentations intertwine the overlap inclusion with
+localization from the first chart. -/
+private theorem standardOverlapIsoSpec_inv_comp_overlapToX0
+    (k : Type u) [CommRing k] :
+    (standardOverlapIsoSpec k).inv ≫ overlapToX0 k =
+      Spec.map (CommRingCat.ofHom (x0ToOverlapMap k)) ≫
+        (x0BasicOpenIsoSpec k).inv := by
+  rw [← cancel_mono (x0BasicOpenIsoSpec k).hom]
+  rw [Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  rw [← standardOverlapIsoSpec_hom_SpecMap_x0ToOverlapMap]
+  rw [← Category.assoc, Iso.inv_hom_id, Category.id_comp]
+
+@[reassoc]
+private theorem overlapToX0_appTop_affine_coordinates
+    (k : Type u) [CommRing k] :
+    (overlapToX0 k).appTop ≫ (standardOverlapIsoSpec k).inv.appTop =
+      (x0BasicOpenIsoSpec k).inv.appTop ≫
+        (Spec.map (CommRingCat.ofHom (x0ToOverlapMap k))).appTop := by
+  rw [← Scheme.Hom.comp_appTop, standardOverlapIsoSpec_inv_comp_overlapToX0,
+    Scheme.Hom.comp_appTop]
+
+/-- Restriction of global functions from the first chart to the overlap
+becomes the polynomial-to-Laurent inclusion in the canonical ring coordinates. -/
+theorem x0TrivialTopRestriction_ring_coordinates
+    (k : Type u) [CommRing k] :
+    (overlapToX0 k).appTop ≫ (overlapTrivialTopLaurentRingIso k).hom =
+      (x0TrivialTopPolynomialRingIso k).hom ≫
+        CommRingCat.ofHom (x0CoordinateRestrictionRingHom k) := by
+  simp only [overlapTrivialTopLaurentRingIso, x0TrivialTopPolynomialRingIso,
+    Iso.trans_hom, schemeIsoAppTop, Category.assoc]
+  change
+    (overlapToX0 k).appTop ≫ (standardOverlapIsoSpec k).inv.appTop ≫
+        (Scheme.ΓSpecIso (.of <| overlapAway k)).hom ≫
+          ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso.hom =
+      (x0BasicOpenIsoSpec k).inv.appTop ≫
+        (Scheme.ΓSpecIso (.of <| standardAway k 0)).hom ≫
+          ((x0ChartRingEquiv k).symm).toCommRingCatIso.hom ≫
+            CommRingCat.ofHom (x0CoordinateRestrictionRingHom k)
+  rw [overlapToX0_appTop_affine_coordinates_assoc]
+  rw [Scheme.ΓSpecIso_naturality_assoc]
+  have htail :
+      CommRingCat.ofHom (x0ToOverlapMap k) ≫
+          ((laurentPolynomialEquivOverlapAway k).symm).toCommRingCatIso.hom =
+        ((x0ChartRingEquiv k).symm).toCommRingCatIso.hom ≫
+          CommRingCat.ofHom (x0CoordinateRestrictionRingHom k) := by
+    apply CommRingCat.hom_ext
+    apply RingHom.ext
+    intro z
+    change
+      (laurentPolynomialEquivOverlapAway k).symm (x0ToOverlapMap k z) =
+        (laurentPolynomialEquivOverlapAway k).symm
+          (x0ToOverlapMap k
+            (x0ChartRingEquiv k ((x0ChartRingEquiv k).symm z)))
+    rw [(x0ChartRingEquiv k).apply_symm_apply]
+  rw [htail]
+
+/-- On elements, restricting a first-chart function preserves its polynomial
+when the result is expressed as a Laurent polynomial. -/
+theorem x0TrivialTopRestriction_coordinates_apply
+    (k : Type u) [CommRing k] (s : Γ(x0ChartScheme k, ⊤)) :
+    (overlapTrivialTopLaurentRingIso k).hom ((overlapToX0 k).appTop s) =
+      Polynomial.toLaurent ((x0TrivialTopPolynomialRingIso k).hom s) := by
+  have h := congrArg (fun f => (ConcreteCategory.hom f) s)
+    (x0TrivialTopRestriction_ring_coordinates k)
+  change
+    (overlapTrivialTopLaurentRingIso k).hom ((overlapToX0 k).appTop s) =
+      x0CoordinateRestrictionRingHom k ((x0TrivialTopPolynomialRingIso k).hom s)
+    at h
+  rw [x0CoordinateRestrictionRingHom_apply] at h
+  exact h
 
 /-- The inverse affine presentations intertwine the overlap inclusion with the
 localization morphism from the second chart. -/
