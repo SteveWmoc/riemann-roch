@@ -187,6 +187,7 @@ theorem overlapCoefficientTransitionEnd_app_top_apply
         (overlapLaurentTopSection k (twistCoefficientTransition k n)) =
       s * overlapLaurentTopSection k (twistCoefficientTransition k n)
   rw [h, (overlapScheme k).presheaf.map_id]
+  rfl
 
 /-- The coefficient transition sends a global Laurent section `f` to the
 section represented by `f * t^(-n)`. -/
