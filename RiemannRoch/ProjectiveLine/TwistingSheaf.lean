@@ -182,7 +182,6 @@ theorem overlapCoefficientTransitionEnd_app_top_apply
         𝟙 (Opposite.op (⊤ : (overlapScheme k).Opens)) :=
     Subsingleton.elim _ _
   rw [h, Functor.map_id]
-  rfl
 
 /-- The coefficient transition sends a global Laurent section `f` to the
 section represented by `f * t^(-n)`. -/
