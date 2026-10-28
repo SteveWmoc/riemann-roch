@@ -159,6 +159,40 @@ noncomputable def overlapCoefficientTransitionEnd
   (overlapTrivialModule k).unitHomEquiv.symm
     (overlapLaurentSection k (twistCoefficientTransition k n))
 
+/-- On any open of the overlap, the coefficient transition multiplies a
+section by the restriction of the global coefficient factor `t^(-n)`. -/
+theorem overlapCoefficientTransitionEnd_app_apply
+    (k : Type u) [CommRing k] (n : ℤ) (U : (overlapScheme k).Opens)
+    (s : Γ(overlapScheme k, U)) :
+    (overlapCoefficientTransitionEnd k n).app U s =
+      s * (overlapScheme k).presheaf.map
+        (homOfLE (show U ≤ ⊤ from le_top)).op
+        (overlapLaurentTopSection k (twistCoefficientTransition k n)) := by
+  rfl
+
+/-- On global overlap sections, the coefficient transition is multiplication
+by the global section represented by `t^(-n)`. -/
+theorem overlapCoefficientTransitionEnd_app_top_apply
+    (k : Type u) [CommRing k] (n : ℤ) (s : Γ(overlapScheme k, ⊤)) :
+    (overlapCoefficientTransitionEnd k n).app ⊤ s =
+      s * overlapLaurentTopSection k (twistCoefficientTransition k n) := by
+  rw [overlapCoefficientTransitionEnd_app_apply]
+  have h :
+      (homOfLE (show (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op =
+        𝟙 (Opposite.op (⊤ : (overlapScheme k).Opens)) :=
+    Subsingleton.elim _ _
+  rw [h, Functor.map_id]
+  rfl
+
+/-- The coefficient transition sends a global Laurent section `f` to the
+section represented by `f * t^(-n)`. -/
+theorem overlapCoefficientTransitionEnd_app_top_laurent
+    (k : Type u) [CommRing k] (n : ℤ) (f : LaurentPolynomial k) :
+    (overlapCoefficientTransitionEnd k n).app ⊤ (overlapLaurentTopSection k f) =
+      overlapLaurentTopSection k (f * twistCoefficientTransition k n) := by
+  rw [overlapCoefficientTransitionEnd_app_top_apply]
+  simp only [overlapLaurentTopSection, map_mul]
+
 /-- The first trivial chart sheaf, pushed forward to `P¹_k`. -/
 noncomputable abbrev x0PushedTrivialModule (k : Type u) [CommRing k] : ModuleSheaf k :=
   (Scheme.Modules.pushforward (x0BasicOpen k).ι).obj (x0TrivialModule k)
