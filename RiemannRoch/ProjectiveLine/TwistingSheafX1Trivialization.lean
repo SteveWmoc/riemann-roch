@@ -180,17 +180,6 @@ private theorem overlapLaurentTopSection_mul'
       overlapLaurentTopSection k (f * g) := by
   simp [overlapLaurentTopSection]
 
-/-- On every open of the overlap, the transition endomorphism acts by
-multiplication by the restricted Laurent transition section. -/
-private theorem overlapCoefficientTransitionEnd_app_apply
-    (k : Type u) [CommRing k] (n : ℤ) (U : (overlapScheme k).Opens)
-    (x : Γ(overlapScheme k, U)) :
-    (overlapCoefficientTransitionEnd k n).app U x =
-      x * (overlapScheme k).presheaf.map
-        (homOfLE (show U ≤ ⊤ from le_top)).op
-        (overlapLaurentTopSection k (twistCoefficientTransition k n)) := by
-  rfl
-
 set_option backward.isDefEq.respectTransparency false in
 /-- Multiplication by the coefficient transition `t^(-n)` is an automorphism
 of the trivial module sheaf on the standard overlap. -/
