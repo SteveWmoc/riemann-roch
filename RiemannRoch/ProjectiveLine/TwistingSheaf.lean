@@ -181,7 +181,12 @@ theorem overlapCoefficientTransitionEnd_app_top_apply
       (homOfLE (show (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op =
         𝟙 (Opposite.op (⊤ : (overlapScheme k).Opens)) :=
     Subsingleton.elim _ _
-  rw [h, Functor.map_id]
+  change
+    s * (overlapScheme k).presheaf.map
+        (homOfLE (show (⊤ : (overlapScheme k).Opens) ≤ ⊤ from le_top)).op
+        (overlapLaurentTopSection k (twistCoefficientTransition k n)) =
+      s * overlapLaurentTopSection k (twistCoefficientTransition k n)
+  rw [h, (overlapScheme k).presheaf.map_id]
 
 /-- The coefficient transition sends a global Laurent section `f` to the
 section represented by `f * t^(-n)`. -/
@@ -190,7 +195,12 @@ theorem overlapCoefficientTransitionEnd_app_top_laurent
     (overlapCoefficientTransitionEnd k n).app ⊤ (overlapLaurentTopSection k f) =
       overlapLaurentTopSection k (f * twistCoefficientTransition k n) := by
   rw [overlapCoefficientTransitionEnd_app_top_apply]
-  simp only [overlapLaurentTopSection, map_mul]
+  let F : LaurentPolynomial k →+* Γ(overlapScheme k, ⊤) :=
+    ((standardOverlapIsoPuncturedAffineLine k).hom.appTop).hom.comp
+      (Scheme.ΓSpecIso (.of <| LaurentPolynomial k)).inv.hom
+  change F f * F (twistCoefficientTransition k n) =
+    F (f * twistCoefficientTransition k n)
+  exact (F.map_mul _ _).symm
 
 /-- The first trivial chart sheaf, pushed forward to `P¹_k`. -/
 noncomputable abbrev x0PushedTrivialModule (k : Type u) [CommRing k] : ModuleSheaf k :=
