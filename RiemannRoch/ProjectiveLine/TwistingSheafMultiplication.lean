@@ -346,19 +346,9 @@ private theorem tensorCoordinates_compatible
   let b₁ : Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ V) :=
     (x1RestrictionToOverlap k).app V x₁n
   have hm : a₀ * c m = a₁ := by
-    have h :=
-      congrArg (fun f ↦ f.app V x) (twistingSheaf_overlap_condition k m)
-    simp only [Scheme.Modules.Hom.comp_app, ConcreteCategory.comp_apply] at h
-    rw [pushedOverlapCoefficientTransitionEnd_app_apply] at h
-    change a₀ * c m = a₁ at h
-    exact h
+    exact twistingSheaf_overlap_condition_apply k m V x
   have hn : b₀ * c n = b₁ := by
-    have h :=
-      congrArg (fun f ↦ f.app V y) (twistingSheaf_overlap_condition k n)
-    simp only [Scheme.Modules.Hom.comp_app, ConcreteCategory.comp_apply] at h
-    rw [pushedOverlapCoefficientTransitionEnd_app_apply] at h
-    change b₀ * c n = b₁ at h
-    exact h
+    exact twistingSheaf_overlap_condition_apply k n V y
   have hc : c (m + n) = c m * c n := by
     dsimp [c]
     rw [twistCoefficientTransition_add]
