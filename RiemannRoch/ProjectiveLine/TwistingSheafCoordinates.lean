@@ -71,20 +71,24 @@ theorem twistingSheaf_overlap_condition
 /-- On sections over any ambient open, the first chart coefficient,
 restricted to the overlap and multiplied by the restricted `t^(-n)` factor,
 equals the restricted second chart coefficient. -/
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
 theorem twistingSheaf_overlap_condition_apply
     (k : Type u) [CommRing k] (n : ℤ) (U : (scheme k).Opens)
     (s : Γ(twistingSheaf k n, U)) :
-    (x0RestrictionToOverlap k).app U ((twistingSheafToX0 k n).app U s) *
+    (show Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U) from
+      (x0RestrictionToOverlap k).app U ((twistingSheafToX0 k n).app U s)) *
         (overlapScheme k).presheaf.map
           (homOfLE (show (standardOverlap k).ι ⁻¹ᵁ U ≤ ⊤ from le_top)).op
           (overlapLaurentTopSection k (twistCoefficientTransition k n)) =
-      (x1RestrictionToOverlap k).app U ((twistingSheafToX1 k n).app U s) := by
+      (show Γ(overlapScheme k, (standardOverlap k).ι ⁻¹ᵁ U) from
+        (x1RestrictionToOverlap k).app U ((twistingSheafToX1 k n).app U s)) := by
   have h := congrArg (fun f => f.app U s) (twistingSheaf_overlap_condition k n)
   change
     (overlapCoefficientTransitionEnd k n).app ((standardOverlap k).ι ⁻¹ᵁ U)
         ((x0RestrictionToOverlap k).app U ((twistingSheafToX0 k n).app U s)) =
       (x1RestrictionToOverlap k).app U ((twistingSheafToX1 k n).app U s) at h
-  rw [overlapCoefficientTransitionEnd_app_apply] at h
+  erw [overlapCoefficientTransitionEnd_app_apply] at h
   exact h
 
 /-- Glue a compatible pair of maps to the two pushed-forward trivial chart
