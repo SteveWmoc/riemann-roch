@@ -68,11 +68,11 @@ theorem twistingSheaf_overlap_condition
       Preadditive.comp_neg, Preadditive.neg_comp, sub_eq_add_neg] using h
   exact sub_eq_zero.mp hzero
 
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.isDefEq.respectTransparency.types false in
 /-- On sections over any ambient open, the first chart coefficient,
 restricted to the overlap and multiplied by the restricted `t^(-n)` factor,
 equals the restricted second chart coefficient. -/
-set_option backward.isDefEq.respectTransparency false in
-set_option backward.isDefEq.respectTransparency.types false in
 theorem twistingSheaf_overlap_condition_apply
     (k : Type u) [CommRing k] (n : ℤ) (U : (scheme k).Opens)
     (s : Γ(twistingSheaf k n, U)) :
