@@ -52,6 +52,42 @@ noncomputable abbrev overlapToX1 (k : Type u) [CommRing k] :
     overlapScheme k ⟶ x1ChartScheme k :=
   (scheme k).homOfLE inf_le_right
 
+/-- Mapping the top open of the overlap first into the `X₀` chart and then
+back into `P¹` recovers the standard overlap. -/
+theorem x0BasicOpen_image_overlapToX0_top
+    (k : Type u) [CommRing k] :
+    (x0BasicOpen k).ι ''ᵁ
+        ((overlapToX0 k) ''ᵁ (⊤ : (overlapScheme k).Opens)) =
+      standardOverlap k := by
+  rw [Scheme.Hom.image_top_eq_opensRange]
+  have hcomp : overlapToX0 k ≫ (x0BasicOpen k).ι =
+      (standardOverlap k).ι := by
+    simp [standardOverlap]
+  calc
+    (x0BasicOpen k).ι ''ᵁ (overlapToX0 k).opensRange =
+        (overlapToX0 k ≫ (x0BasicOpen k).ι).opensRange :=
+      (Scheme.Hom.opensRange_comp _ _).symm
+    _ = standardOverlap k := by
+      apply Opens.ext
+      change Set.range (overlapToX0 k ≫ (x0BasicOpen k).ι) =
+        (standardOverlap k : Set (scheme k))
+      rw [hcomp]
+      exact Scheme.Opens.range_ι (standardOverlap k)
+
+/-- After transporting source and target along the canonical open-set
+identifications, the image under the `X₀` chart inclusion of the overlap-to-`X₀`
+inclusion is the standard overlap inclusion in `P¹`. -/
+theorem x0BasicOpen_opensFunctor_map_overlapToX0_top
+    (k : Type u) [CommRing k] :
+    eqToHom (x0BasicOpen_image_overlapToX0_top k).symm ≫
+        (x0BasicOpen k).ι.opensFunctor.map
+          (homOfLE (show (overlapToX0 k) ''ᵁ
+            (⊤ : (overlapScheme k).Opens) ≤
+              (⊤ : (x0ChartScheme k).Opens) from le_top)) ≫
+      eqToHom (x0BasicOpen k).ι_image_top =
+    homOfLE (show standardOverlap k ≤ x0BasicOpen k from inf_le_left) := by
+  apply Subsingleton.elim
+
 /-- Mapping the top open of the overlap first into the `X₁` chart and then
 back into `P¹` recovers the standard overlap. -/
 theorem x1BasicOpen_image_overlapToX1_top
